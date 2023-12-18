@@ -1,29 +1,5 @@
-.togglePosition {
-  align-self: center;
-}
-.marginNavItem {
-  margin-right: 300px;
-}
-.gapNavItem {
-  gap: 70px;
-}
-@media (max-width: 1400px) {
-  .marginNavItem {
-    margin-right: 200px;
-  }
-}
-@media (max-width: 991px) {
-  .togglePosition {
-    align-self: flex-start;
-  }
-  .gapNavItem {
-    gap: 0px;
-  }
-  .marginNavItem {
-    margin-right: 0px;
-  }
-}
-.minHeightContainer{
+
+.minHeightContainer {
   min-height: calc(100vh - 56px);
 }
 .clockInfo {
