@@ -28,12 +28,12 @@ function App() {
             onToggleClick={toggleTheme}
             themeSwitch={themeSwitch}
           />
-          <Container>
+          <Container className="minHeightContainer">
             <Row>
-              <Col sm="4">
+              <Col lg="4">
                 <Clock />
               </Col>
-              <Col sm="8">
+              <Col lg="8">
                 <Routes>
                   <Route path="" element={<Todo />} />
                   <Route path="/incognito-todo" element={<IncognitoTodo />} />

@@ -1,30 +1,60 @@
 .togglePosition {
   align-self: center;
 }
-.marginNavItem{
-    margin-right: 300px;
+.marginNavItem {
+  margin-right: 300px;
 }
-.gapNavItem{
-    gap:70px
+.gapNavItem {
+  gap: 70px;
 }
-@media (max-width:1400px)
-{
-    .marginNavItem{
-        margin-right: 200px;
-    }
+@media (max-width: 1400px) {
+  .marginNavItem {
+    margin-right: 200px;
+  }
 }
 @media (max-width: 991px) {
   .togglePosition {
     align-self: flex-start;
   }
-  .gapNavItem{
-      gap:0px
+  .gapNavItem {
+    gap: 0px;
   }
-  .marginNavItem{
-      margin-right: 0px;
+  .marginNavItem {
+    margin-right: 0px;
   }
 }
-.clockInfo{
-  height: 35vh;
+.minHeightContainer{
+  min-height: calc(100vh - 56px);
+}
+.clockInfo {
+  height: 193.85px;
   width: auto;
+}
+.border {
+  background-color: gray;
+  padding: 20px;
+}
+#secHand {
+  height: 72px;
+  top: 25.5px;
+  left: 95.5px;
+  width: 2px;
+  transform-origin: bottom;
+  background-color: #ddc01b;
+}
+#minHand {
+  height: 55px;
+  top: 42.5px;
+  left: 95.5px;
+  width: 2px;
+  transform-origin: bottom;
+  background-color: #ddc01b;
+}
+#hourHand {
+  height: 50px;
+  top: 47.5px;
+  left: 95.5px;
+  width: 2px;
+  transform-origin: bottom;
+  background-color: #ddc01b;
 }

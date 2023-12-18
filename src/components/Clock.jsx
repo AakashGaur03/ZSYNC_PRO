@@ -1,33 +1,51 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 
 const Clock = () => {
-  const [currentTime,setCurrentTime]=useState(new Date())
-  
-  useEffect(()=>{
-    const intervalId =setInterval(()=>{
-      setCurrentTime(new Date())
-    },1000)
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [getSec, setGetSec] = useState(0);
+  const [getmin, setGetMin] = useState(0);
+  const [getHour, setGetHour] = useState(0);
+  const formatTimeComponent = (component) => {
+    return component < 10 ? `0${component}` : component;
+  };
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = new Date();
+      setCurrentTime(now);
+      setGetSec(now.getSeconds());
+      setGetMin(now.getMinutes());
+      setGetHour(now.getHours());
+    }, 1000);
 
-    return () => clearInterval(intervalId)
-  },[])
+    return () => clearInterval(intervalId);
+  }, []);
 
-  const formattedTime=currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-  const hour=currentTime.toLocaleTimeString([], {hour: '2-digit', hour12: false })
-  const minute=currentTime.toLocaleTimeString([], {minute: '2-digit'})
-  const second=currentTime.toLocaleTimeString([], {second: '2-digit' })
-  const ampm=currentTime.toLocaleTimeString([], {hour: 'numeric', hour12: true }).split(' ')[1]
+  const secondRotateDegrees = (360 / 60) * getSec;
+  const minuteRotateDegrees = (360 / 60) * getmin;
+  const hourRotateDegrees = (360 / 12) * (getHour % 12) + (30 / 60) * getHour;
+  const hour = currentTime.toLocaleTimeString([], { hour: "2-digit", hour12: true }).split(" ")[0];
+  const minute = currentTime.toLocaleTimeString([], { minute: "2-digit" });
+  const second = formatTimeComponent(currentTime.toLocaleTimeString([], { second: "2-digit" }));
+  const ampm = currentTime.toLocaleTimeString([], { hour: "numeric", hour12: true }).split(" ")[1];
   return (
     <>
-    <div>Clock</div>
-    <img src="/Clock.png" alt="" className='clockInfo' />
-    <p>{formattedTime}</p>
-    <p>{hour}</p>
-    <p>{minute}</p>
-    <p>{second}</p>
-    <p>{ampm}</p>
-    </>
-  )
-}
+      <div>Clock</div>
 
-export default Clock
+      <div className="position-relative">
+        <img src="/Clock2.webp" alt="" className="clockInfo" />
+        <div className="position-absolute" id="secHand" style={{ transform: `rotate(${secondRotateDegrees}deg)` }}></div>
+        <div className="position-absolute" id="minHand" style={{ transform: `rotate(${minuteRotateDegrees}deg)` }}></div>
+        <div className="position-absolute" id="hourHand" style={{ transform: `rotate(${hourRotateDegrees}deg)` }}></div>
+      </div>
+      <div className="d-flex">
+        <div className="border hour">{hour} &nbsp;</div>
+        <div className="border minute">{minute}&nbsp;</div>
+        <div className="border second">{second}&nbsp;</div>
+        <div className="border ampn">{ampm}&nbsp;</div>
+      </div>
+    </>
+  );
+};
+
+export default Clock;
