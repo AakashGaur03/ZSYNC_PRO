@@ -34,3 +34,7 @@
   transform-origin: bottom;
   background-color: #ddc01b;
 }
+.activeClockClass
+{
+  border: 2px solid black;
+}

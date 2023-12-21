@@ -19,8 +19,18 @@ const NavbarComp = ({ theme, onToggleClick, themeSwitch }) => {
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   const navbarColorClass = theme === "Light" ? "bg-light" : "bg-dark";
 
+  const [activeClock, setActiveClock] = useState(1);
   const [showClockModal, setShowClockModal] = useState(false);
-  const handleCloseClockModal = () => setShowClockModal(false);
+  const handleCloseClockModal = () => {
+    // Dont Update Active Clock
+    setShowClockModal(false);
+  };
+  const handleUpdateClockModal = () => {
+    // Update Active Clock
+
+    console.log(activeClock);
+    setShowClockModal(false);
+  };
   const handleShowClockModal = () => setShowClockModal(true);
 
   return (
@@ -78,7 +88,13 @@ const NavbarComp = ({ theme, onToggleClick, themeSwitch }) => {
               </NavDropdown.Item>
             </NavDropdown>
           </Navbar.Collapse>
-          <ClockModal showClockModal={showClockModal} handleCloseClockModal={handleCloseClockModal}/>
+          <ClockModal
+            activeClock={activeClock}
+            setActiveClock={setActiveClock}
+            showClockModal={showClockModal}
+            handleCloseClockModal={handleCloseClockModal}
+            handleUpdateClockModal={handleUpdateClockModal}
+          />
         </Container>
       </Navbar>
     </>
