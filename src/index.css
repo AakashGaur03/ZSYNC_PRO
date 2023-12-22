@@ -1,4 +1,3 @@
-
 .minHeightContainer {
   min-height: calc(100vh - 56px);
 }
@@ -34,6 +33,16 @@
   transform-origin: bottom;
   background-color: #ddc01b;
 }
-.activeClockClass{
-  border: 1px solid brown;
+.mhexcludingNav {
+  min-height: calc(100vh - 56px);
+}
+.bgSlighDarkWhite{
+  background-color: #d9d9d9 !important
+}
+.ClockDataClass{
+  display: flex;
+  justify-content: center;
+}
+.activeClockDataClass{
+  border:2px solid olivedrab;
 }

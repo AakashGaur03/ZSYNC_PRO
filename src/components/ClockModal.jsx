@@ -1,30 +1,28 @@
-import React from 'react'
-import {
-    Button,
-    Modal,
-  } from "react-bootstrap";
-import ClockData from "./ClockData";
+import { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import ClockData from './ClockData';
+
+function ClockModal({showClockModal,handleCloseClockModal ,handleUpdateClockModal}) {
 
 
-const ClockModal = ({showClockModal,handleCloseClockModal ,handleUpdateClockModal}) => {
   return (
-  <>
-            <Modal show={showClockModal} onHide={handleCloseClockModal} centered>
-            <Modal.Body className="d-flex flex-column align-self-center">
-              <ClockData />
-            </Modal.Body>
-            <div className="d-flex justify-content-end p-3">
-              <Button className="me-3" variant="primary" onClick={handleCloseClockModal}>
-                Cancel
-              </Button>
-              <Button variant="success" onClick={handleUpdateClockModal}>
-                Save
-              </Button>
-            </div>
-            {/* </Modal.Footer> */}
-          </Modal>
-  </>
-    )
+    <>
+      <Modal show={showClockModal} onHide={handleCloseClockModal} centered>
+        <Modal.Body>
+            <ClockData Clock1 Clock2/>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseClockModal}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleUpdateClockModal}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 }
 
-export default ClockModal
+export default ClockModal;

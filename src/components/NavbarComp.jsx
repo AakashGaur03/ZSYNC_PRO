@@ -1,29 +1,30 @@
-import {
-  Container,
-  Nav,
-  NavDropdown,
-  Navbar,
-  Form,
-  Button,
-  Modal,
-} from "react-bootstrap";
+import { Container, Nav, NavDropdown, Navbar, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { IoSettings, IoSettingsOutline } from "react-icons/io5";
 import { FaRegClock, FaTrash } from "react-icons/fa";
-import { useState } from "react";
 
 import "../NavbarCSS.css";
+import { useContext, useEffect, useState } from "react";
+import ThemeContext from "../Contexts/ThemeContext";
 import ClockModal from "./ClockModal";
 
-const NavbarComp = ({ theme, onToggleClick, themeSwitch }) => {
+const NavbarComp = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
-  const navbarColorClass = theme === "Light" ? "bg-light" : "bg-dark";
+  const navbarColorClass = theme === "Light" ? "bgSlighDarkWhite" : "bg-black";
+
+  useEffect(() => {
+    // Update the className of the <html> element based on the theme
+    document.body.className = theme === 'Light' ? 'bg-light' : 'bg-dark';
+  }, [theme]);
 
   const [showClockModal, setShowClockModal] = useState(false);
+
   const handleCloseClockModal = () => {
     setShowClockModal(false);
   }
   const handleShowClockModal = () => setShowClockModal(true);
+
   const handleUpdateClockModal = () => {
     setShowClockModal(false);
   };
@@ -52,10 +53,10 @@ const NavbarComp = ({ theme, onToggleClick, themeSwitch }) => {
             </Nav>
             <Form className="togglePosition">
               <Form.Check
-                checked={themeSwitch}
-                onChange={onToggleClick}
+                checked={theme === "Dark"} // Adjust this based on your theme values
+                onChange={toggleTheme}
                 type="switch"
-                label={`${theme} Mode `}
+                label={`${theme} Mode`}
               />
             </Form>
             <NavDropdown
@@ -68,6 +69,7 @@ const NavbarComp = ({ theme, onToggleClick, themeSwitch }) => {
               }
               id="settingDropdown"
             >
+
               <NavDropdown.Item
                 className={`${navbarColorClass} ${textColorClass}`}
                 onClick={handleShowClockModal}
@@ -83,9 +85,10 @@ const NavbarComp = ({ theme, onToggleClick, themeSwitch }) => {
               </NavDropdown.Item>
             </NavDropdown>
           </Navbar.Collapse>
-          <ClockModal showClockModal={showClockModal} handleCloseClockModal={handleCloseClockModal} handleUpdateClockModal={handleUpdateClockModal}/>
+      <ClockModal showClockModal={showClockModal} handleCloseClockModal={handleCloseClockModal} handleUpdateClockModal={handleUpdateClockModal} />
         </Container>
       </Navbar>
+
     </>
   );
 };
