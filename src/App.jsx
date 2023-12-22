@@ -6,6 +6,7 @@ import IncognitoTodo from "./components/IncognitoTodo";
 import Clock from "./components/Clock";
 import { Row, Col, Container } from "react-bootstrap";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import ClockContextProvider from "./Context/ClockContextProvider";
 
 function App() {
   const [theme, setTheme] = useState("Light");
@@ -22,7 +23,7 @@ function App() {
   return (
     <>
       <Router>
-        <>
+        <ClockContextProvider>
           <NavbarComp
             theme={theme}
             onToggleClick={toggleTheme}
@@ -41,7 +42,7 @@ function App() {
               </Col>
             </Row>
           </Container>
-        </>
+        </ClockContextProvider>
       </Router>
     </>
   );
