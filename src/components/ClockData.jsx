@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import ClockContext from "../Contexts/ClockContext";
 
-const ClockData = ({Clock1 , Clock2}) => {
+const ClockData = ({Clock1 , Clock2 , parentComponent}) => {
+  const borderClass = parentComponent === 'Clock' ? 'border-0' : 'activeClockDataClass';
   const [currentTime, setCurrentTime] = useState(new Date());
   const [getSec, setGetSec] = useState(0);
   const [getmin, setGetMin] = useState(0);
@@ -9,9 +11,12 @@ const ClockData = ({Clock1 , Clock2}) => {
   const formatTimeComponent = (component) => {
     return component < 10 ? `0${component}` : component;
   };
+  const {activeClass,setActiveClass}=useContext(ClockContext)
 
-  const handleAciveClock=()=>{
-    
+  const handleActiveClock=(id)=>{
+    if (id !== activeClass) {
+      setActiveClass(id);
+    }
   }
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -42,7 +47,7 @@ const ClockData = ({Clock1 , Clock2}) => {
     .split(" ")[1];
   return (
     <>
-    <div className="ClockDataClass" onClick={handleAciveClock}>
+    <div className={`ClockDataClass ${activeClass === 1 ? `${borderClass}` : ""}`} onClick={()=>handleActiveClock(1)}>
       {Clock1 && <div
         className={`position-relative align-self-center `}
       >
@@ -65,7 +70,7 @@ const ClockData = ({Clock1 , Clock2}) => {
       </div>}
     </div>
 
-    <div className="ClockDataClass" onClick={handleAciveClock}>
+    <div className={`ClockDataClass ${activeClass === 2 ? `${borderClass}` : ""}`} onClick={()=>handleActiveClock(2)}>
       {Clock2 && <div
         className={`d-inline-flex `}
       >

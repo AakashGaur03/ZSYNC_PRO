@@ -5,7 +5,7 @@ const Clock = () => {
   const { activeClock, setActiveClock } = useContext(ClockContext);
   return (
     <>
-  <ClockData  Clock1={activeClock === "clock1"} Clock2={activeClock === "clock2"} />
+  <ClockData parentComponent="Clock" Clock1={activeClock === "clock1"} Clock2={activeClock === "clock2"} />
     </>
   );
 };
