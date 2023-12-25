@@ -11,11 +11,13 @@ const ClockData = ({Clock1 , Clock2 , parentComponent}) => {
   const formatTimeComponent = (component) => {
     return component < 10 ? `0${component}` : component;
   };
-  const {activeClass,setActiveClass}=useContext(ClockContext)
+  // const {activeClass,setActiveClass}=useContext(ClockContext)
+  const activeClass=localStorage.getItem("activeClockID")?localStorage.getItem("activeClockID"):1
+  // console.log(activeClass)
 
   const handleActiveClock=(id)=>{
     if (id !== activeClass) {
-      setActiveClass(id);
+      localStorage.setItem("activeClockID",id);
     }
   }
   useEffect(() => {

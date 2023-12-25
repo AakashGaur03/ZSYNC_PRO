@@ -11,7 +11,6 @@ import ClockContext from "../Contexts/ClockContext";
 
 const NavbarComp = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const {activeClock,setActiveClock,activeClass,setActiveClass} =useContext(ClockContext)
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   const navbarColorClass = theme === "Light" ? "bgSlighDarkWhite" : "bg-black";
 
@@ -23,13 +22,19 @@ const NavbarComp = () => {
 
   const handleCloseClockModal = () => {
     // + converts string in number
-    setActiveClass(+activeClock.split("").pop());
+    // setActiveClass(+activeClock.split("").pop());
+    localStorage.setItem("activeClockID",+localStorage.getItem("ClockName").split("").pop());
     setShowClockModal(false);
   }
   const handleShowClockModal = () => setShowClockModal(true);
 
   const handleUpdateClockModal = () => {
-    setActiveClock(`clock${activeClass}`)
+    // setActiveClock(`clock${activeClass}`)
+    const ClockName=localStorage.getItem("activeClockID")
+    
+    // const ClockName=`clock${activeClass}`
+    console.log(ClockName)
+    localStorage.setItem("ClockName",`clock${ClockName}`)
     setShowClockModal(false);
   };
 
