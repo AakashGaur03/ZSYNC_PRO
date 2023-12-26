@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import ClockData from "./ClockData";
+import ClockContext from "../Contexts/ClockContext";
 const Clock = () => {
-  const clockName = localStorage.getItem("ClockName");
-  console.log("ClockName from localStorage:", clockName);
+  const { activeClock } = useContext(ClockContext);
   return (
     <>
-  <ClockData parentComponent="Clock" Clock1={clockName === "clock1"} Clock2={clockName === "clock2"} />
+  <ClockData parentComponent="Clock" Clock1={activeClock === "clock1"} Clock2={activeClock === "clock2"} />
     </>
   );
 };

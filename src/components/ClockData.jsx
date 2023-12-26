@@ -11,13 +11,11 @@ const ClockData = ({Clock1 , Clock2 , parentComponent}) => {
   const formatTimeComponent = (component) => {
     return component < 10 ? `0${component}` : component;
   };
-  // const {activeClass,setActiveClass}=useContext(ClockContext)
-  const activeClass=localStorage.getItem("activeClockID")?localStorage.getItem("activeClockID"):1
-  // console.log(activeClass)
+  const {activeClass,setActiveClass}=useContext(ClockContext)
 
   const handleActiveClock=(id)=>{
     if (id !== activeClass) {
-      localStorage.setItem("activeClockID",id);
+      setActiveClass(id);
     }
   }
   useEffect(() => {
@@ -49,7 +47,7 @@ const ClockData = ({Clock1 , Clock2 , parentComponent}) => {
     .split(" ")[1];
   return (
     <>
-    <div className={`ClockDataClass ${activeClass === 1 ? `${borderClass}` : ""}`} onClick={()=>handleActiveClock(1)}>
+    <div className={`ClockDataClass ${activeClass == 1 ? `${borderClass}` : ""}`} onClick={()=>handleActiveClock(1)}>
       {Clock1 && <div
         className={`position-relative align-self-center `}
       >
@@ -72,7 +70,7 @@ const ClockData = ({Clock1 , Clock2 , parentComponent}) => {
       </div>}
     </div>
 
-    <div className={`ClockDataClass ${activeClass === 2 ? `${borderClass}` : ""}`} onClick={()=>handleActiveClock(2)}>
+    <div className={`ClockDataClass ${activeClass == 2 ? `${borderClass}` : ""}`} onClick={()=>handleActiveClock(2)}>
       {Clock2 && <div
         className={`d-inline-flex `}
       >
