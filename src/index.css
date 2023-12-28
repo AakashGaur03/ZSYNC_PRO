@@ -46,3 +46,6 @@
 .activeClockDataClass{
   border:2px solid olivedrab;
 }
+.cursorPointer{
+  cursor: pointer;
+}
