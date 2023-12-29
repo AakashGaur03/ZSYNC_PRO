@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
-import { FaTrash } from "react-icons/fa6";
-import { FaEdit } from "react-icons/fa";
+import { FaTrash ,FaEdit } from "react-icons/fa";
 
 const Todo = () => {
   const [newTask, setNewTask] = useState("");
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("taskArray"))?JSON.parse(localStorage.getItem("taskArray")):[]);
+  const [editingTaskId,setEditingTaskId]=useState(null)
+
+  useEffect(() => {
+    const storedTask = JSON.parse(localStorage.getItem("taskArray")) || []
+    setTasks(storedTask);
+  },[]);
+
+  useEffect(()=>{
+    localStorage.setItem("taskArray",JSON.stringify(tasks));
+  },[tasks])
 
   const addTask = () => {
     if (newTask.trim() !== "") {
@@ -23,20 +32,20 @@ const Todo = () => {
     const updatedTasks = tasks.filter((task) => task.id !== taskId);
     setTasks(updatedTasks);
   };
-  // const editTask =(taskId)=>{
-  //   const task = tasks.find((task)=>task.id === taskId)
-  //   if(task)
-  //   {
-  //     setNewTask(task.text)
-  //   }
-  // }
   const editTask = (taskId) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === taskId ? { ...task, text: newTask } : task
-    );
-    setTasks(updatedTasks);
-    setNewTask(""); // Clear the input field after editing
+    setEditingTaskId(taskId)
+    const taskToEdit = tasks.find((task)=>task.id===taskId)
+    if(taskToEdit)
+    {
+      setNewTask(taskToEdit.text)
+    }
   };
+  const saveEditing =()=>{
+    const updatedTask = tasks.map((task)=>task.id===editingTaskId? {...task , text:newTask} : task )
+    setTasks(updatedTask)
+    setEditingTaskId(null)
+    setNewTask("")
+  }
   return (
     <>
       <div>Todo</div>
@@ -51,11 +60,11 @@ const Todo = () => {
           aria-label=""
           aria-describedby="addTask"
         />
-        <Button variant="primary" id="" onClick={addTask}>
-          Add Task
+        <Button variant="primary" id="" onClick={editingTaskId? saveEditing :addTask}>
+          {editingTaskId ? "Save Task" :"Add Task"}
         </Button>
       </InputGroup>
-      <div>{newTask}</div>
+      {/* <div>{newTask}</div> */}
       <ul style={{ overflowY: "auto", maxHeight: "75vh" }}>
         {tasks.map((task) => (
           <li key={task.id} style={{ display: "flex" }}>

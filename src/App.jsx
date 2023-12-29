@@ -8,18 +8,23 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Clock from "./components/Clock";
 import ThemeContext from "./Contexts/ThemeContext";
 
-
 function App() {
-  const {theme} = useContext(ThemeContext)
+  const { theme } = useContext(ThemeContext);
   return (
     <>
       <Router>
         <>
-          <NavbarComp/>
+          <NavbarComp />
           <Container className="minHeightContainer">
-            <Row className={`${theme==="Dark"?'bg-secondary text-white':'bgSlighDarkWhite text-black'} mhexcludingNav`}>
+            <Row
+              className={`${
+                theme === "Dark"
+                  ? "bg-secondary text-white"
+                  : "bgSlighDarkWhite text-black"
+              } mhexcludingNav`}
+            >
               <Col lg="4">
-                <Clock/>
+                <Clock />
               </Col>
               <Col lg="8">
                 <Routes>
