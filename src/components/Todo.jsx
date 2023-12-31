@@ -84,7 +84,7 @@ const Todo = () => {
             />
             <FaEdit
               size={20}
-              className="me-3"
+              className="me-3 cursorPointer"
               onClick={() => editTask(task.id)}
             />
             <FaTrash

@@ -15,7 +15,7 @@ const Stopwatch = () => {
     const miliSeconds = time % 1000;
     const seconds = Math.floor(time / 1000) % 60;
     const minutes = Math.floor(time / (1000 * 60)) % 60;
-    const hours = Math.floor(time / (1000 * 60 * 60)) % 60;
+    const hours = Math.floor(time / (1000 * 60 * 60)) % 24;
     const formatNumber = (num) => (num < 10 ? `0${num}` : num);
     const formattedMilliseconds = formatNumber(Math.floor(miliSeconds / 10));
 
@@ -47,7 +47,7 @@ const Stopwatch = () => {
     setElapsedTime(0);
     setIsActiveStopwatch(false);
     setIsStopwatchStart(false);
-    setFlagElapsedTime(0)
+    setFlagElapsedTime(0);
     setFlagElapsedTimeArr([]);
   };
   const flagTime = () => {
@@ -61,37 +61,56 @@ const Stopwatch = () => {
   };
 
   return (
-    <div className="stopwatch-container mb-2">
-      <div className="stopwatch mb-4">
-        <span>{formatTime(elapsedTime)}</span>
+    <div className="clockSubModulesContainer mb-2">
+      <div className="clockSubModules mb-4">
+        <span
+          className={`${
+            isStopwatchStart && !isActiveStopwatch ? "blink" : ""
+          } fs-5`}
+        >
+          {formatTime(elapsedTime)}
+        </span>
       </div>
       <div className="d-flex w-100 justify-content-around">
         {isStopwatchStart && (
           <GrPowerReset
-            className="stopwatchIcons"
+            className="clockSubModulesIcons cursorPointer"
             onClick={handleResetStopwatch}
             size={30}
           />
         )}
-        <div className="stopwatchIcons" onClick={handleToggleStopwatch}>
+        <div className="clockSubModulesIcons" onClick={handleToggleStopwatch}>
           {isActiveStopwatch ? (
-            <IoIosPause size={30} />
+            <IoIosPause size={30} className="cursorPointer" />
           ) : (
-            <VscDebugStart size={30} />
+            <VscDebugStart size={30} className="cursorPointer" />
           )}
         </div>
         {isStopwatchStart && (
-          <FaRegFlag onClick={flagTime} className="stopwatchIcons" size={30} />
+          <FaRegFlag
+            onClick={flagTime}
+            className="clockSubModulesIcons cursorPointer"
+            size={30}
+          />
         )}
       </div>
+      {flagElapsedTimeArr.length > 0 && (
+        <div className="d-flex w-100 justify-content-around">
+          <div>{flagElapsedTimeArr.length + 1}</div>
+          <div>{formatTime(flagElapsedTime)}</div>
+          <div>{formatTime(elapsedTime)}</div>
+        </div>
+      )}
       {flagElapsedTimeArr
         .slice()
         .reverse()
         .map((x, index) => (
-          <div key={index} className="d-flex w-100 justify-content-around">
-            <div>{flagElapsedTimeArr.length - index}</div>
-            <div>{formatTime(x.flagElapsedTime)}</div>
-            <div>{formatTime(x.elapsedTime)}</div>
+          <div key={index} className="w-100">
+            <div className="d-flex w-100 justify-content-around">
+              <div>{flagElapsedTimeArr.length - index}</div>
+              <div>{formatTime(x.flagElapsedTime)}</div>
+              <div>{formatTime(x.elapsedTime)}</div>
+            </div>
           </div>
         ))}
     </div>
