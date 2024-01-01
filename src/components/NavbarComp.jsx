@@ -2,21 +2,22 @@ import { Container, Nav, NavDropdown, Navbar, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { IoSettings, IoSettingsOutline } from "react-icons/io5";
 import { FaRegClock, FaTrash } from "react-icons/fa";
-
+import { IoIosMusicalNotes } from "react-icons/io";
 import "../NavbarCSS.css";
 import { useContext, useEffect, useState } from "react";
 import ThemeContext from "../Contexts/ThemeContext";
-import ClockModal from "./ClockModal";
+import ClockModal from "./Clock/ClockModal";
 import ClockContext from "../Contexts/ClockContext";
 
 const NavbarComp = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const {activeClock,setActiveClock,activeClass,setActiveClass} =useContext(ClockContext)
+  const { activeClock, setActiveClock, activeClass, setActiveClass } =
+    useContext(ClockContext);
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   const navbarColorClass = theme === "Light" ? "bgSlighDarkWhite" : "bg-black";
 
   useEffect(() => {
-    document.body.className = theme === 'Light' ? 'bg-light' : 'bg-dark';
+    document.body.className = theme === "Light" ? "bg-light" : "bg-dark";
   }, [theme]);
 
   const [showClockModal, setShowClockModal] = useState(false);
@@ -24,15 +25,15 @@ const NavbarComp = () => {
   const handleCloseClockModal = () => {
     // + converts string in number
     setActiveClass(+activeClock.split("").pop());
-    localStorage.setItem("ClockID",+activeClock.split("").pop())
+    localStorage.setItem("ClockID", +activeClock.split("").pop());
     setShowClockModal(false);
-  }
+  };
   const handleShowClockModal = () => setShowClockModal(true);
 
   const handleUpdateClockModal = () => {
-    setActiveClock(`clock${activeClass}`)
-    localStorage.setItem("ClockName",`clock${activeClass}`)
-    localStorage.setItem("ClockID",activeClass)
+    setActiveClock(`clock${activeClass}`);
+    localStorage.setItem("ClockName", `clock${activeClass}`);
+    localStorage.setItem("ClockID", activeClass);
     setShowClockModal(false);
   };
 
@@ -76,7 +77,6 @@ const NavbarComp = () => {
               }
               id="settingDropdown"
             >
-
               <NavDropdown.Item
                 className={`${navbarColorClass} ${textColorClass}`}
                 onClick={handleShowClockModal}
@@ -90,12 +90,21 @@ const NavbarComp = () => {
                 <FaTrash size="20px" className="me-3" />
                 Recently Deleted
               </NavDropdown.Item>
+              <NavDropdown.Item
+                className={`${navbarColorClass} ${textColorClass}`}
+              >
+                <IoIosMusicalNotes size="20px" className="me-3" />
+                Sounds
+              </NavDropdown.Item>
             </NavDropdown>
           </Navbar.Collapse>
-      <ClockModal showClockModal={showClockModal} handleCloseClockModal={handleCloseClockModal} handleUpdateClockModal={handleUpdateClockModal} />
+          <ClockModal
+            showClockModal={showClockModal}
+            handleCloseClockModal={handleCloseClockModal}
+            handleUpdateClockModal={handleUpdateClockModal}
+          />
         </Container>
       </Navbar>
-
     </>
   );
 };

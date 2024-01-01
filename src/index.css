@@ -85,3 +85,21 @@
 .clockSubModulesIcons:active{
   transform: scale(2);
 }
+.questionMark{
+  text-align: end;
+  margin-right: 35px;
+}
+@media (max-width:991px)
+{
+  .questionMark{
+    margin-right: 75px;
+
+  }
+}
+@media (max-width:767px)
+{
+  .questionMark{
+    margin-right: 35px;
+
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import ClockContext from "../Contexts/ClockContext";
+import ClockContext from "../../Contexts/ClockContext";
 
 const ClockData = ({Clock1 , Clock2 , parentComponent}) => {
   const borderClass = parentComponent === 'Clock' ? 'border-0' : 'activeClockDataClass';

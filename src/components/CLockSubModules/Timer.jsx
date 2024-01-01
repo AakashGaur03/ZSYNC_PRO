@@ -3,7 +3,9 @@ import { Button } from "react-bootstrap";
 import { VscDebugStart } from "react-icons/vsc";
 import { IoIosPause } from "react-icons/io";
 import { GrPowerReset } from "react-icons/gr";
-import { FaRegStopCircle } from "react-icons/fa";
+import { FaRegStopCircle,FaQuestion } from "react-icons/fa";
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
 
 export const Timer = () => {
   const [timer, setTimer] = useState(0);
@@ -41,9 +43,17 @@ export const Timer = () => {
     }
   });
   return (
+    <>
+    <div className="questionMark">
+
+     <Tooltip title="To Change Timer Sound Go To Settings" placement="top" style={{color:"yellow"}} arrow>
+    <IconButton>
+      <FaQuestion size={15}/>
+      </IconButton>
+      </Tooltip> 
+    </div>
     <div className="clockSubModulesContainer mb-2">
       <div className="clockSubModules mb-4">
-        {/* <div>{formatTime(timer)}</div> */}
         <div className={timer < 0 ? "blink" : ""}>
           {timer < 0 ? `- ${formatTime(Math.abs(timer))}` : formatTime(timer)}
         </div>
@@ -62,7 +72,11 @@ export const Timer = () => {
                   <VscDebugStart size={30} className="cursorPointer" />
                 )
               ) : (
-                <FaRegStopCircle size={30} className="cursorPointer" onClick={resetTimer}  />
+                <FaRegStopCircle
+                  size={30}
+                  className="cursorPointer"
+                  onClick={resetTimer}
+                />
               )}
             </div>
             <GrPowerReset
@@ -88,5 +102,6 @@ export const Timer = () => {
         </Button>
       </div>
     </div>
+    </>
   );
 };

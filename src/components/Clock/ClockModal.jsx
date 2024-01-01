@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ClockData from './ClockData';
 
+// props coming from NavbarComp.jsx
 function ClockModal({showClockModal,handleCloseClockModal ,handleUpdateClockModal}) {
 
 
