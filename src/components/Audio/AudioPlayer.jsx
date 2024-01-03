@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import ReactAudioPlayer from "react-audio-player";
+import { Row, Col ,Form,Button} from "react-bootstrap";
 
-const AudioPlayer = () => {
-    const [audio,setaudio] = useState(null) 
+const AudioPlayer = ({currentSound ,setCurrentSound,handleRadioChange,selectedSound,setSelectedSound}) => {
+  const [audio, setaudio] = useState(null);
+
+  // Local Storage 
   const sounds = [
     {
       name: "alarm-tone",
@@ -20,23 +22,49 @@ const AudioPlayer = () => {
     { name: "simple-notification-alarm", src: "simple-notification-alarm.mp3" },
   ];
 
-  const playAudio =(src)=>{
-    if(audio)
-    {
-        audio.pause()
+  const playAudio = (src) => {
+    if (audio) {
+      audio.pause();
     }
-    const newAudio = new Audio(`Sounds/${src}`)
-    newAudio.play()
-    setaudio(newAudio)
-  }
+    const newAudio = new Audio(`Sounds/${src}`);
+    newAudio.play();
+    setaudio(newAudio);
+  };
+
 
   return (
     <>
-        {sounds.map((sound,index)=>(
-            <div style={{border:"2px solid black"}} key={index} onClick={()=> playAudio(sound.src)}>
-                <p>{sound.name}</p>
+    <div className="d-flex justify-content-around mb-4">
+    <Button variant="secondary" onClick={()=>setCurrentSound("Timer")}>Timer</Button>
+    <Button variant="secondary" onClick={()=>setCurrentSound("Stopwatch")}>Stopwatch</Button>
+    </div>
+
+    {currentSound==="Timer" ?
+    <div className="mb-4 text-center">Set Timer Sounds</div> :
+    <div className="mb-4 text-center">Set Stopwatch Sounds</div>
+  }
+      <Row>
+        {sounds.map((sound, index) => (
+          <Col lg="4" key={index} className="d-flex justify-content-between cursorPointer">
+            <div className="w-100"
+              onClick={() => {
+                playAudio(sound.src)
+                handleRadioChange(index);
+              }}
+            >
+              <p>{sound.name}</p>
             </div>
+              <Form.Check
+              type="radio"
+              checked={selectedSound===index}
+              onChange={()=>{
+                playAudio(sound.src)
+                handleRadioChange(index)}}
+              className="me-3"
+            />
+          </Col>
         ))}
+      </Row>
     </>
   );
 };

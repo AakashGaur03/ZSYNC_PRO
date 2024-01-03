@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from "react";
 import ThemeContext from "../Contexts/ThemeContext";
 import ClockModal from "./Clock/ClockModal";
 import ClockContext from "../Contexts/ClockContext";
+import SoundModal from "./CLockSubModules/SoundModal";
 
 const NavbarComp = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -36,6 +37,23 @@ const NavbarComp = () => {
     localStorage.setItem("ClockID", activeClass);
     setShowClockModal(false);
   };
+
+  const [currentSound,setCurrentSound]=useState("Timer")
+
+
+  const [showSoundModal, setShowSoundModal] = useState(false);
+
+  const handleCloseSoundModal = () => setShowSoundModal(false);
+  const handleShowSoundModal = () => setShowSoundModal(true);
+  const handleUpdateSoundModal =()=> {
+    setShowSoundModal(false)
+  }
+
+  const [selectedSound,setSelectedSound]=useState(null)
+
+  const handleRadioChange=(index)=>{
+    setSelectedSound(index)
+  }
 
   return (
     <>
@@ -92,16 +110,29 @@ const NavbarComp = () => {
               </NavDropdown.Item>
               <NavDropdown.Item
                 className={`${navbarColorClass} ${textColorClass}`}
+                onClick={handleShowSoundModal}
               >
                 <IoIosMusicalNotes size="20px" className="me-3" />
                 Sounds
               </NavDropdown.Item>
             </NavDropdown>
           </Navbar.Collapse>
+
           <ClockModal
             showClockModal={showClockModal}
             handleCloseClockModal={handleCloseClockModal}
             handleUpdateClockModal={handleUpdateClockModal}
+          />
+
+          <SoundModal
+            showSoundModal={showSoundModal}
+            handleCloseSoundModal={handleCloseSoundModal}
+            handleUpdateSoundModal={handleUpdateSoundModal}
+            currentSound={currentSound}
+            setCurrentSound={setCurrentSound}
+            handleRadioChange={handleRadioChange}
+            selectedSound={selectedSound}
+            setSelectedSound={selectedSound}
           />
         </Container>
       </Navbar>
