@@ -9,14 +9,16 @@ import IconButton from "@mui/material/IconButton";
 
 export const Timer = () => {
   const [timer, setTimer] = useState(0);
+  const [isAudioPlaying, setAudioPlaying] = useState(false);
   const [isActiveTimer, setIsActiveTimer] = useState(false);
   const [isTimerAvailable, setIsTimerAvailable] = useState(false);
-  const defaultAlaramSound = [
+  const defaultTimerSound = [
     { name: "classic-alarm", src: "classic-alarm.wav" },
   ];
-  const storedAlaramSound = localStorage.getItem("alarmSound")?localStorage.getItem("alarmSound"):localStorage.setItem("alarmSound",JSON.stringify(defaultAlaramSound));
+  const storedTimerSound = localStorage.getItem("timerSound")?localStorage.getItem("timerSound"):localStorage.setItem("timerSound",JSON.stringify(defaultTimerSound));
+
   const [timerSound, setTimerSound] = useState(
-    JSON.parse(storedAlaramSound));
+    JSON.parse(storedTimerSound));
   const [audio, setAudio] = useState(null);
   const [timeoutId, setTimeoutId] = useState(null);
   const formatTime = (time) => {
@@ -40,6 +42,7 @@ export const Timer = () => {
     setTimer(0);
     setIsTimerAvailable(false);
     setIsActiveTimer(false);
+    setAudioPlaying(false)
     if (audio) {
       audio.pause();
       audio.currentTime = 0;
@@ -47,29 +50,44 @@ export const Timer = () => {
       clearTimeout(timeoutId);
     }
   };
+
+  useEffect(() => {
+    const storedTimerSound = localStorage.getItem('timerSound');
+    setTimerSound(JSON.parse(storedTimerSound));
+  }, [localStorage.getItem('timerSound')]);
+
   useEffect(() => {
     if (isActiveTimer) {
       const intervalId = setInterval(() => {
         setTimer((prev) => prev - 1000);
-        if (timer === 0 || timer < 0) {
-          const newAudio = new Audio(`Sounds/${timerSound[0].src}`);
-          newAudio.play();
-          setAudio(newAudio);
+      }, 1000);
+  
+      if (timer <= 0 && !isAudioPlaying) {
+        const newAudio = new Audio(`Sounds/${timerSound.src}`);
+        setAudio(newAudio);
+  
+        newAudio.addEventListener('ended', () => {
           const newTimeoutId = setTimeout(() => {
             newAudio.pause();
             newAudio.currentTime = 0;
             setAudio(null);
+            setAudioPlaying(false);
           }, 1000);
           setTimeoutId(newTimeoutId);
-        }
-      }, 1000);
-
+        });
+  
+        setAudioPlaying(true);
+        newAudio.play();
+      }
+  
       return () => {
         clearInterval(intervalId);
         clearTimeout(timeoutId);
       };
     }
-  }, [isActiveTimer, timer, timerSound, timeoutId]);
+  }, [isActiveTimer, timer, timerSound, timeoutId, isAudioPlaying]);
+
+  
   return (
     <>
       <div className="questionMark">
@@ -120,7 +138,7 @@ export const Timer = () => {
           )}
         </div>
         <div>
-          <Button className="" onClick={() => addMins(0.5)}>
+          <Button className="" onClick={() => addMins(0.1)}>
             +30 sec
           </Button>
           <Button className="" onClick={() => addMins(1)}>

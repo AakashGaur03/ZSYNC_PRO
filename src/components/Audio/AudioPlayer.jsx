@@ -1,26 +1,11 @@
 import React, { useState } from "react";
 import { Row, Col ,Form,Button} from "react-bootstrap";
 
-const AudioPlayer = ({currentSound ,setCurrentSound,handleRadioChange,selectedSound,setSelectedSound}) => {
+const AudioPlayer = ({currentSound ,setCurrentSound,handleRadioChange,selectedSound,setSelectedSound,SetCurrentSoundParent,sounds}) => {
   const [audio, setaudio] = useState(null);
 
   // Local Storage 
-  const sounds = [
-    {
-      name: "alarm-tone",
-      src: "alarm-tone.wav",
-    },
-    { name: "classic-alarm", src: "classic-alarm.wav" },
-    { name: "classic-short-alarm", src: "classic-short-alarm.wav" },
-    { name: "clock-alarm", src: "clock-alarm.mp3" },
-    { name: "critical-alarm", src: "critical-alarm.wav" },
-    { name: "emergency-alert-alarm", src: "emergency-alert-alarm.wav" },
-    { name: "error-alarm", src: "error-alarm.mp3" },
-    { name: "facility-alarm", src: "facility-alarm.wav" },
-    { name: "rooster-alarm", src: "rooster-alarm.wav" },
-    { name: "security-breach-alarm", src: "security-breach-alarm.wav" },
-    { name: "simple-notification-alarm", src: "simple-notification-alarm.mp3" },
-  ];
+
 
   const playAudio = (src) => {
     if (audio) {
@@ -35,13 +20,13 @@ const AudioPlayer = ({currentSound ,setCurrentSound,handleRadioChange,selectedSo
   return (
     <>
     <div className="d-flex justify-content-around mb-4">
-    <Button variant="secondary" onClick={()=>setCurrentSound("Timer")}>Timer</Button>
-    <Button variant="secondary" onClick={()=>setCurrentSound("Stopwatch")}>Stopwatch</Button>
+    <Button variant="secondary" onClick={()=>SetCurrentSoundParent("Timer")}>Timer</Button>
+    <Button variant="secondary" onClick={()=>SetCurrentSoundParent("Alarm")}>Alarm</Button>
     </div>
 
     {currentSound==="Timer" ?
     <div className="mb-4 text-center">Set Timer Sounds</div> :
-    <div className="mb-4 text-center">Set Stopwatch Sounds</div>
+    <div className="mb-4 text-center">Set Alarm Sounds</div>
   }
       <Row>
         {sounds.map((sound, index) => (

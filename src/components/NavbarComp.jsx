@@ -17,6 +17,24 @@ const NavbarComp = () => {
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   const navbarColorClass = theme === "Light" ? "bgSlighDarkWhite" : "bg-black";
 
+  const sounds = [
+    {index:0,
+      name: "alarm-tone",
+      src: "alarm-tone.wav",
+    },
+    {index: 1, name: "classic-alarm", src: "classic-alarm.wav" },
+    {index: 2, name: "classic-short-alarm", src: "classic-short-alarm.wav" },
+    {index: 3, name: "clock-alarm", src: "clock-alarm.mp3" },
+    {index: 4, name: "critical-alarm", src: "critical-alarm.wav" },
+    {index: 5, name: "emergency-alert-alarm", src: "emergency-alert-alarm.wav" },
+    {index: 6, name: "error-alarm", src: "error-alarm.mp3" },
+    {index: 7, name: "facility-alarm", src: "facility-alarm.wav" },
+    {index: 8, name: "rooster-alarm", src: "rooster-alarm.wav" },
+    {index: 9, name: "security-breach-alarm", src: "security-breach-alarm.wav" },
+    {index: 10, name: "simple-notification-alarm", src: "simple-notification-alarm.mp3" },
+  ];
+
+
   useEffect(() => {
     document.body.className = theme === "Light" ? "bg-light" : "bg-dark";
   }, [theme]);
@@ -47,6 +65,25 @@ const NavbarComp = () => {
   const handleShowSoundModal = () => setShowSoundModal(true);
   const handleUpdateSoundModal =()=> {
     setShowSoundModal(false)
+    if(currentSound==="Timer")
+    {
+      const value=sounds.find((item)=>{
+         return item.index===selectedSound
+      })
+
+      localStorage.setItem("timerSound",JSON.stringify(value))
+    }
+    if(currentSound==="Alarm")
+    {
+      
+      console.log("Hello222")
+      console.log(selectedSound)
+
+      const value=sounds.find((item)=>{
+        return item.index===selectedSound
+     })
+     localStorage.setItem("alarmSound",JSON.stringify(value))
+    }
   }
 
   const [selectedSound,setSelectedSound]=useState(null)
@@ -54,6 +91,14 @@ const NavbarComp = () => {
   const handleRadioChange=(index)=>{
     setSelectedSound(index)
   }
+
+
+  const SetCurrentSoundParent=(parent)=>{
+    setCurrentSound(parent)
+    }
+
+
+
 
   return (
     <>
@@ -133,6 +178,8 @@ const NavbarComp = () => {
             handleRadioChange={handleRadioChange}
             selectedSound={selectedSound}
             setSelectedSound={selectedSound}
+            SetCurrentSoundParent={SetCurrentSoundParent}
+            sounds={sounds}
           />
         </Container>
       </Navbar>
