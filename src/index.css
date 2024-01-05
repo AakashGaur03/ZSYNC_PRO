@@ -103,3 +103,13 @@
 
   }
 }
+.starpriority{
+  fill: gold;
+}
+
+#dropdown-basic::after {
+  display: none;
+}
+.filterdropdownActive{
+  background-color: blue;
+}
