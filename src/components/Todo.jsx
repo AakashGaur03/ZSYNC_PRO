@@ -117,8 +117,10 @@ const Todo = () => {
           <li key={task.id} style={{ display: "flex" }}>
             <div style={{ width: "80%" }}>
               <span
+              className={`fw-bold fs-5`}
                 style={{
                   textDecoration: task.completed ? "line-through" : "none",
+                  color: task.important ? "gold" : "inherit",
                 }}
               >
                 {task.text}
