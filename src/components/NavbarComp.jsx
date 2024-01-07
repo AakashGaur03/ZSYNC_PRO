@@ -9,6 +9,7 @@ import ThemeContext from "../Contexts/ThemeContext";
 import ClockModal from "./Clock/ClockModal";
 import ClockContext from "../Contexts/ClockContext";
 import SoundModal from "./CLockSubModules/SoundModal";
+import RecentltyDeletedModal from './RecentlyDeletedModal'
 
 const NavbarComp = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -16,6 +17,9 @@ const NavbarComp = () => {
     useContext(ClockContext);
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   const navbarColorClass = theme === "Light" ? "bgSlighDarkWhite" : "bg-black";
+  const [showRecentlyDeletedModal, setShowRecentlyDeletedModal] = useState(false);
+  const handleCloseRecentlyDeleted = () => setShowRecentlyDeletedModal(false);
+  const handleShowRecentlyDeletedModal = () => setShowRecentlyDeletedModal(true);
 
   const sounds = [
     {index:0,
@@ -148,7 +152,9 @@ const NavbarComp = () => {
                 Clock
               </NavDropdown.Item>
               <NavDropdown.Item
-                className={`${navbarColorClass} ${textColorClass}`}
+                className={`${navbarColorClass} ${textColorClass}`
+              }
+              onClick={handleShowRecentlyDeletedModal}
               >
                 <FaTrash size="20px" className="me-3" />
                 Recently Deleted
@@ -167,6 +173,12 @@ const NavbarComp = () => {
             showClockModal={showClockModal}
             handleCloseClockModal={handleCloseClockModal}
             handleUpdateClockModal={handleUpdateClockModal}
+          />
+          <RecentltyDeletedModal
+          showRecentlyDeletedModal={showRecentlyDeletedModal}
+          setShowRecentlyDeletedModal={setShowRecentlyDeletedModal}
+          handleCloseRecentlyDeleted={handleCloseRecentlyDeleted}
+          handleShowRecentlyDeletedModal={handleShowRecentlyDeletedModal}
           />
 
           <SoundModal

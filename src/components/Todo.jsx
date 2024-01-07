@@ -39,7 +39,8 @@ const Todo = () => {
 
   const addTask = () => {
     if (newTask.trim() !== "") {
-      setTasks([{ id: Date.now(), text: newTask, completed: false }, ...tasks]);
+      const currentTime=new Date(Date.now()).toLocaleString();
+      setTasks([{ id: Date.now(), text: newTask, completed: false,important:false,createdAt:currentTime,deletedAt:null }, ...tasks]);
       setNewTask("");
     }
   };
@@ -56,7 +57,8 @@ const Todo = () => {
     setTasks(updatedTasks);
   };
   const removeTask = (taskId) => {
-    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    const updatedTasks = tasks.map((task) => 
+    task.id === taskId ? {...task,deletedAt:new Date(Date.now()).toLocaleString()}:task);
     setTasks(updatedTasks);
   };
   const editTask = (taskId) => {
@@ -113,7 +115,8 @@ const Todo = () => {
       </div>
       {/* <div>{newTask}</div> */}
       <ul style={{ overflowY: "auto", maxHeight: "75vh" }}>
-        {filteredTasks.map((task) => (
+        {filteredTasks.map((task) => {
+          return (task.deletedAt === null || task.deletedAt === undefined) &&
           <li key={task.id} style={{ display: "flex" }}>
             <div style={{ width: "80%" }}>
               <span
@@ -150,7 +153,7 @@ const Todo = () => {
               onClick={() => removeTask(task.id)}
             />
           </li>
-        ))}
+        })}
       </ul>
     </>
   );

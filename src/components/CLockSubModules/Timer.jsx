@@ -138,7 +138,7 @@ export const Timer = () => {
           )}
         </div>
         <div>
-          <Button className="" onClick={() => addMins(0.1)}>
+          <Button className="" onClick={() => addMins(0.5)}>
             +30 sec
           </Button>
           <Button className="" onClick={() => addMins(1)}>
