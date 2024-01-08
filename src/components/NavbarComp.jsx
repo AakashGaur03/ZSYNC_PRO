@@ -9,7 +9,7 @@ import ThemeContext from "../Contexts/ThemeContext";
 import ClockModal from "./Clock/ClockModal";
 import ClockContext from "../Contexts/ClockContext";
 import SoundModal from "./CLockSubModules/SoundModal";
-import RecentltyDeletedModal from './RecentlyDeletedModal'
+import RecentltyDeletedModal from "./RecentlyDeletedModal";
 
 const NavbarComp = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -17,27 +17,43 @@ const NavbarComp = () => {
     useContext(ClockContext);
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   const navbarColorClass = theme === "Light" ? "bgSlighDarkWhite" : "bg-black";
-  const [showRecentlyDeletedModal, setShowRecentlyDeletedModal] = useState(false);
+  const [showRecentlyDeletedModal, setShowRecentlyDeletedModal] =
+    useState(false);
   const handleCloseRecentlyDeleted = () => setShowRecentlyDeletedModal(false);
-  const handleShowRecentlyDeletedModal = () => setShowRecentlyDeletedModal(true);
+  const handleShowRecentlyDeletedModal = () => {
+    setRecentlyDeletedTasks(JSON.parse(localStorage.getItem("taskArray")) || []);
+    setShowRecentlyDeletedModal(true);
+  };
+
+  const [recentlyDeletedTasks, setRecentlyDeletedTasks] = useState(
+    JSON.parse(localStorage.getItem("taskArray")) || []
+  );
 
   const sounds = [
-    {index:0,
-      name: "alarm-tone",
-      src: "alarm-tone.wav",
+    { index: 0, name: "alarm-tone", src: "alarm-tone.wav" },
+    { index: 1, name: "classic-alarm", src: "classic-alarm.wav" },
+    { index: 2, name: "classic-short-alarm", src: "classic-short-alarm.wav" },
+    { index: 3, name: "clock-alarm", src: "clock-alarm.mp3" },
+    { index: 4, name: "critical-alarm", src: "critical-alarm.wav" },
+    {
+      index: 5,
+      name: "emergency-alert-alarm",
+      src: "emergency-alert-alarm.wav",
     },
-    {index: 1, name: "classic-alarm", src: "classic-alarm.wav" },
-    {index: 2, name: "classic-short-alarm", src: "classic-short-alarm.wav" },
-    {index: 3, name: "clock-alarm", src: "clock-alarm.mp3" },
-    {index: 4, name: "critical-alarm", src: "critical-alarm.wav" },
-    {index: 5, name: "emergency-alert-alarm", src: "emergency-alert-alarm.wav" },
-    {index: 6, name: "error-alarm", src: "error-alarm.mp3" },
-    {index: 7, name: "facility-alarm", src: "facility-alarm.wav" },
-    {index: 8, name: "rooster-alarm", src: "rooster-alarm.wav" },
-    {index: 9, name: "security-breach-alarm", src: "security-breach-alarm.wav" },
-    {index: 10, name: "simple-notification-alarm", src: "simple-notification-alarm.mp3" },
+    { index: 6, name: "error-alarm", src: "error-alarm.mp3" },
+    { index: 7, name: "facility-alarm", src: "facility-alarm.wav" },
+    { index: 8, name: "rooster-alarm", src: "rooster-alarm.wav" },
+    {
+      index: 9,
+      name: "security-breach-alarm",
+      src: "security-breach-alarm.wav",
+    },
+    {
+      index: 10,
+      name: "simple-notification-alarm",
+      src: "simple-notification-alarm.mp3",
+    },
   ];
-
 
   useEffect(() => {
     document.body.className = theme === "Light" ? "bg-light" : "bg-dark";
@@ -60,49 +76,41 @@ const NavbarComp = () => {
     setShowClockModal(false);
   };
 
-  const [currentSound,setCurrentSound]=useState("Timer")
-
+  const [currentSound, setCurrentSound] = useState("Timer");
 
   const [showSoundModal, setShowSoundModal] = useState(false);
 
   const handleCloseSoundModal = () => setShowSoundModal(false);
   const handleShowSoundModal = () => setShowSoundModal(true);
-  const handleUpdateSoundModal =()=> {
-    setShowSoundModal(false)
-    if(currentSound==="Timer")
-    {
-      const value=sounds.find((item)=>{
-         return item.index===selectedSound
-      })
+  const handleUpdateSoundModal = () => {
+    setShowSoundModal(false);
+    if (currentSound === "Timer") {
+      const value = sounds.find((item) => {
+        return item.index === selectedSound;
+      });
 
-      localStorage.setItem("timerSound",JSON.stringify(value))
+      localStorage.setItem("timerSound", JSON.stringify(value));
     }
-    if(currentSound==="Alarm")
-    {
-      
-      console.log("Hello222")
-      console.log(selectedSound)
+    if (currentSound === "Alarm") {
+      console.log("Hello222");
+      console.log(selectedSound);
 
-      const value=sounds.find((item)=>{
-        return item.index===selectedSound
-     })
-     localStorage.setItem("alarmSound",JSON.stringify(value))
+      const value = sounds.find((item) => {
+        return item.index === selectedSound;
+      });
+      localStorage.setItem("alarmSound", JSON.stringify(value));
     }
-  }
+  };
 
-  const [selectedSound,setSelectedSound]=useState(null)
+  const [selectedSound, setSelectedSound] = useState(null);
 
-  const handleRadioChange=(index)=>{
-    setSelectedSound(index)
-  }
+  const handleRadioChange = (index) => {
+    setSelectedSound(index);
+  };
 
-
-  const SetCurrentSoundParent=(parent)=>{
-    setCurrentSound(parent)
-    }
-
-
-
+  const SetCurrentSoundParent = (parent) => {
+    setCurrentSound(parent);
+  };
 
   return (
     <>
@@ -152,9 +160,8 @@ const NavbarComp = () => {
                 Clock
               </NavDropdown.Item>
               <NavDropdown.Item
-                className={`${navbarColorClass} ${textColorClass}`
-              }
-              onClick={handleShowRecentlyDeletedModal}
+                className={`${navbarColorClass} ${textColorClass}`}
+                onClick={handleShowRecentlyDeletedModal}
               >
                 <FaTrash size="20px" className="me-3" />
                 Recently Deleted
@@ -175,10 +182,11 @@ const NavbarComp = () => {
             handleUpdateClockModal={handleUpdateClockModal}
           />
           <RecentltyDeletedModal
-          showRecentlyDeletedModal={showRecentlyDeletedModal}
-          setShowRecentlyDeletedModal={setShowRecentlyDeletedModal}
-          handleCloseRecentlyDeleted={handleCloseRecentlyDeleted}
-          handleShowRecentlyDeletedModal={handleShowRecentlyDeletedModal}
+            showRecentlyDeletedModal={showRecentlyDeletedModal}
+            setShowRecentlyDeletedModal={setShowRecentlyDeletedModal}
+            handleCloseRecentlyDeleted={handleCloseRecentlyDeleted}
+            handleShowRecentlyDeletedModal={handleShowRecentlyDeletedModal}
+            recentlyDeletedTasks={recentlyDeletedTasks}
           />
 
           <SoundModal
