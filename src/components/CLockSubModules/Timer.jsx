@@ -12,9 +12,8 @@ export const Timer = () => {
   const [isAudioPlaying, setAudioPlaying] = useState(false);
   const [isActiveTimer, setIsActiveTimer] = useState(false);
   const [isTimerAvailable, setIsTimerAvailable] = useState(false);
-  const defaultTimerSound = [
-    { name: "classic-alarm", src: "classic-alarm.wav" },
-  ];
+  const defaultTimerSound = 
+    { index:1, name: "classic-alarm", src: "classic-alarm.wav" };
   const storedTimerSound = localStorage.getItem("timerSound")?localStorage.getItem("timerSound"):localStorage.setItem("timerSound",JSON.stringify(defaultTimerSound));
 
   const [timerSound, setTimerSound] = useState(
