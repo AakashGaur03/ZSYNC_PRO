@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { SlReload } from "react-icons/sl";
+import { MdDelete } from "react-icons/md";
 
 function RecentltyDeletedModal({
   showRecentlyDeletedModal,
@@ -26,9 +28,20 @@ function RecentltyDeletedModal({
         </Modal.Header>
         <Modal.Body>
           {filteredDeletedTask.map((task) => (
-            <div key={task.id}>
-              <p>ID: {task.id}</p>
-              <p>Text: {task.text}</p>
+            <div key={task.id} className="d-flex justify-content-between me-4">
+              {/* <p>ID: {task.id}</p> */}
+              <div>
+
+              <p className="fs-5">
+                <strong>
+                {task.title}
+                </strong>
+                </p>
+              </div>
+                <div>
+                <SlReload size={25}/>
+                <MdDelete size={25} className="ms-3"/>
+                </div>
             </div>
           ))}
         </Modal.Body>

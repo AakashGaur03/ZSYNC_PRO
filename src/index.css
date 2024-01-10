@@ -113,3 +113,9 @@
 .filterdropdownActive{
   background-color: blue;
 }
+/* .inputAddTodo{
+  border: 0;
+} */
+.inputAddTodo:focus{
+  box-shadow: none  ;
+}
