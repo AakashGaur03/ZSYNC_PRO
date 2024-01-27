@@ -81,11 +81,15 @@ const Todo = () => {
     setTasks(updatedTasks);
   };
   const removeTask = (taskId) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === taskId
-        ? { ...task, deletedAt: new Date(Date.now()).toLocaleString() }
-        : task
-    );
+    const updatedTasks = tasks.map((task) => {
+      if (
+        task.id === taskId &&
+        (!task.important || window.confirm("Are you sure"))
+      ) {
+        return { ...task, deletedAt: new Date().toLocaleString() };
+      }
+      return task;
+    });
     setTasks(updatedTasks);
   };
   const editTask = (taskId) => {
