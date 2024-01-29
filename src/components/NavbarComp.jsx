@@ -56,7 +56,7 @@ const NavbarComp = () => {
   ];
 
   useEffect(() => {
-    document.body.className = theme === "Light" ? "bg-light" : "bg-dark";
+    document.body.className = theme === "Light" ? "bg-light backgroundLight" : "bg-dark backgroundDark";
   }, [theme]);
 
   const [showClockModal, setShowClockModal] = useState(false);

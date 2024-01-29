@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Button, Form, InputGroup, Dropdown, Modal } from "react-bootstrap";
 import { FaTrash, FaEdit, FaStar, FaFilter } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
+import { useConfirmModalContext } from "../Contexts/ConfirmModalProvider";
 
 const Todo = () => {
+  const { handleShowConfirmModalShow,handleShowConfirmModalClose } = useConfirmModalContext();
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTask, setNewTask] = useState("");
   const [tasks, setTasks] = useState(
@@ -81,13 +83,18 @@ const Todo = () => {
     setTasks(updatedTasks);
   };
   const removeTask = (taskId) => {
+    handleShowConfirmModalClose(taskId)
     const updatedTasks = tasks.map((task) => {
       if (
         task.id === taskId &&
-        (!task.important || window.confirm("Are you sure"))
-      ) {
-        return { ...task, deletedAt: new Date().toLocaleString() };
-      }
+        (!task.important || handleShowConfirmModalShow())
+        ) 
+        {
+          console.log("INNNN")
+          
+          return { ...task, deletedAt: new Date().toLocaleString() };
+        }
+      console.log("OUTTTTT")
       return task;
     });
     setTasks(updatedTasks);
@@ -281,6 +288,8 @@ const Todo = () => {
                   className="me-3 cursorPointer"
                   onClick={() => removeTask(task.id)}
                 />
+                {/* <button onClick={handleShowConfirmModalShow}>Show Confirm Modal</button> */}
+    
               </li>
             )
           );

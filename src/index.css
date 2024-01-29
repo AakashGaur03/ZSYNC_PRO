@@ -1,3 +1,13 @@
+.backgroundLight{
+  background-image: linear-gradient(45deg, #085bff, #c8cee1);
+}
+.bg-mid{
+  backdrop-filter: brightness(0.7);
+}
+.backgroundDark{
+  background-image: linear-gradient(45deg, #282828, #420b46);
+}
+
 .minHeightContainer {
   min-height: calc(100vh - 56px);
 }
@@ -37,7 +47,8 @@
   min-height: calc(100vh - 56px);
 }
 .bgSlighDarkWhite{
-  background-color: #d9d9d9 !important
+  /* background-color: #d9d9d9 !important */
+  backdrop-filter: brightness(0.6);
 }
 .ClockDataClass{
   display: flex;

@@ -19,7 +19,7 @@ function App() {
             <Row
               className={`${
                 theme === "Dark"
-                  ? "bg-secondary text-white"
+                  ? "bg-secondar y bg-mid text-white"
                   : "bgSlighDarkWhite text-black"
               } mhexcludingNav`}
             >
