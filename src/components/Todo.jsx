@@ -5,7 +5,7 @@ import { CiCirclePlus } from "react-icons/ci";
 import { useConfirmModalContext } from "../Contexts/ConfirmModalProvider";
 
 const Todo = () => {
-  const { handleShowConfirmModalShow,handleShowConfirmModalClose } = useConfirmModalContext();
+  const { handleShowConfirmModalShow,handleShowConfirmModalClose,handleShowConfirmModalUpdate } = useConfirmModalContext();
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTask, setNewTask] = useState("");
   const [tasks, setTasks] = useState(
@@ -28,7 +28,7 @@ const Todo = () => {
   useEffect(() => {
     const storedTask = JSON.parse(localStorage.getItem("taskArray")) || [];
     setTasks(storedTask);
-  }, []);
+  }, [localStorage.getItem("taskArray")]);
 
   useEffect(() => {
     localStorage.setItem("taskArray", JSON.stringify(tasks));
@@ -83,7 +83,8 @@ const Todo = () => {
     setTasks(updatedTasks);
   };
   const removeTask = (taskId) => {
-    handleShowConfirmModalClose(taskId)
+    handleShowConfirmModalUpdate(taskId)
+    handleShowConfirmModalClose()
     const updatedTasks = tasks.map((task) => {
       if (
         task.id === taskId &&
@@ -95,7 +96,7 @@ const Todo = () => {
           return { ...task, deletedAt: new Date().toLocaleString() };
         }
       console.log("OUTTTTT")
-      return task;
+      return { ...task};
     });
     setTasks(updatedTasks);
   };
