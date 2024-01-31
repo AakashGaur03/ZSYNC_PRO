@@ -4,15 +4,15 @@ import App from './App.jsx'
 import './index.css'
 import ThemeContextProvider from './Contexts/ThemeContextProvider.jsx'
 import ClockContextProvider from './Contexts/ClockContextProvider.jsx'
-import { ConfirmModalContextProvider } from './Contexts/ConfirmModalProvider.jsx'
+// import { ConfirmModalContextProvider,useConfirmModalContext } from './Contexts/ConfirmModalProvider.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ClockContextProvider>
     <ThemeContextProvider>
-    <ConfirmModalContextProvider>
+    {/* <ConfirmModalContextProvider> */}
     <App />
-    </ConfirmModalContextProvider>
+    {/* </ConfirmModalContextProvider> */}
     </ThemeContextProvider>
     </ClockContextProvider>
   </React.StrictMode>,

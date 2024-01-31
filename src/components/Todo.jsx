@@ -1,11 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, InputGroup, Dropdown, Modal } from "react-bootstrap";
 import { FaTrash, FaEdit, FaStar, FaFilter } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
-import { useConfirmModalContext } from "../Contexts/ConfirmModalProvider";
+import { ThemeContext } from "@emotion/react";
+// import { ConfirmModalContextProvider,useConfirmModalContext } from "../Contexts/ConfirmModalProvider";
 
 const Todo = () => {
-  const { handleShowConfirmModalShow,handleShowConfirmModalClose,handleShowConfirmModalUpdate } = useConfirmModalContext();
+  // const { handleShowConfirmModalShow,handleShowConfirmModalClose,handleShowConfirmModalUpdate } = useConfirmModalContext();
+  const { theme } = useContext(ThemeContext);
+  const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
+  const textColorClass = theme === "Light" ? "text-black" : "text-white";
+  const [isCancelHovered, setIsCancelHovered] = useState(false);
+  const [isConfirmHovered, setIsConfirmHovered] = useState(false);
+  const modalBodyStyle = {
+    backgroundImage: isCancelHovered
+      ? "linear-gradient(45deg, #0e4b0e, #002615)"
+      : isConfirmHovered
+      ? "linear-gradient(45deg, #740202, #360808)"
+      : "",
+  };
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [importantTaskToBeDeleted, setImportantTaskToBeDeleted] =
+    useState(null);
+
+  const handleCloseConfirmModal = () => setShowConfirmModal(false);
+  const handleDeleteConfirmModal = () => {
+    console.log(importantTaskToBeDeleted, "IMpo");
+    if (importantTaskToBeDeleted !== null) {
+      const updatedTasks = tasks.map((task) => {
+        if (task.id === importantTaskToBeDeleted) {
+          return { ...task, deletedAt: new Date().toLocaleString() };
+        }
+        return { ...task };
+      });
+      setTasks(updatedTasks);
+    }
+    setIsConfirmHovered(false);
+    setIsCancelHovered(false);
+    setShowConfirmModal(false);
+  };
+  const handleShowConfirmModal = () => {
+    setIsConfirmHovered(false);
+    setIsCancelHovered(false);
+    setShowConfirmModal(true);
+  };
+
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTask, setNewTask] = useState("");
   const [tasks, setTasks] = useState(
@@ -28,7 +67,7 @@ const Todo = () => {
   useEffect(() => {
     const storedTask = JSON.parse(localStorage.getItem("taskArray")) || [];
     setTasks(storedTask);
-  }, [localStorage.getItem("taskArray")]);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("taskArray", JSON.stringify(tasks));
@@ -83,20 +122,19 @@ const Todo = () => {
     setTasks(updatedTasks);
   };
   const removeTask = (taskId) => {
-    handleShowConfirmModalUpdate(taskId)
-    handleShowConfirmModalClose()
+    // handleShowConfirmModalUpdate(taskId)
+    // handleShowConfirmModalClose()
     const updatedTasks = tasks.map((task) => {
+      setImportantTaskToBeDeleted(taskId);
       if (
         task.id === taskId &&
-        (!task.important || handleShowConfirmModalShow())
-        ) 
-        {
-          console.log("INNNN")
-          
-          return { ...task, deletedAt: new Date().toLocaleString() };
-        }
-      console.log("OUTTTTT")
-      return { ...task};
+        // (!task.important || handleShowConfirmModalShow())
+        // (!task.important || window.confirm("Are you Sure"))
+        (!task.important || handleShowConfirmModal())
+      ) {
+        return { ...task, deletedAt: new Date().toLocaleString() };
+      }
+      return { ...task };
     });
     setTasks(updatedTasks);
   };
@@ -290,12 +328,47 @@ const Todo = () => {
                   onClick={() => removeTask(task.id)}
                 />
                 {/* <button onClick={handleShowConfirmModalShow}>Show Confirm Modal</button> */}
-    
               </li>
             )
           );
         })}
+        {/* <Button variant="primary" onClick={handleShowConfirmModal}>
+        Launch demo modal
+      </Button> */}
       </ul>
+      <Modal show={showConfirmModal} onHide={handleCloseConfirmModal} centered>
+        <Modal.Body
+          style={{ ...modalBodyStyle }}
+          className={`${modalBgColor} ${textColorClass}`}
+        >
+          <Modal.Title className="text-center pb-4">
+            Confirmation Modal
+          </Modal.Title>
+          Are you sure you want to delete as this is an Important Task
+          <div
+            className={`mt-3 p-3 backgroundColorConfirmation d-flex justify-content-between`}
+          >
+            <Button
+              className="me-4 confirmModalBtn"
+              variant="danger"
+              onMouseEnter={() => setIsConfirmHovered(true)}
+              onMouseLeave={() => setIsConfirmHovered(false)}
+              onClick={() => handleDeleteConfirmModal()}
+            >
+              Confirm
+            </Button>
+            <Button
+              variant="success"
+              className="cancelModalBtn"
+              onMouseEnter={() => setIsCancelHovered(true)}
+              onMouseLeave={() => setIsCancelHovered(false)}
+              onClick={handleCloseConfirmModal}
+            >
+              Cancel
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
