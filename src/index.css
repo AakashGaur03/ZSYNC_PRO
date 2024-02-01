@@ -1,13 +1,12 @@
-.backgroundLight{
+.backgroundLight {
   background-image: linear-gradient(45deg, #085bff, #c8cee1);
 }
-.bg-mid{
+.bg-mid {
   backdrop-filter: brightness(0.7);
 }
-.backgroundDark{
+.backgroundDark {
   background-image: linear-gradient(45deg, #282828, #420b46);
 }
-
 
 .minHeightContainer {
   min-height: calc(100vh - 56px);
@@ -47,18 +46,18 @@
 .mhexcludingNav {
   min-height: calc(100vh - 56px);
 }
-.bgSlighDarkWhite{
+.bgSlighDarkWhite {
   /* background-color: #d9d9d9 !important */
   backdrop-filter: brightness(0.6);
 }
-.ClockDataClass{
+.ClockDataClass {
   display: flex;
   justify-content: center;
 }
-.activeClockDataClass{
-  border:2px solid olivedrab;
+.activeClockDataClass {
+  border: 2px solid olivedrab;
 }
-.cursorPointer{
+.cursorPointer {
   cursor: pointer;
 }
 
@@ -69,7 +68,7 @@
   text-align: center;
 }
 
-.clockSubModules{
+.clockSubModules {
   height: 200px;
   width: 200px;
   display: flex;
@@ -78,56 +77,97 @@
   border-radius: 50%;
   border: 2px solid white;
 }
-.blink{
-  animation: blinkTime 1.3s infinite ;
+.blink {
+  animation: blinkTime 1.3s infinite;
 }
 @keyframes blinkTime {
-  from{
+  from {
     opacity: 0;
   }
-  to{
+  to {
     opacity: 1;
   }
-
 }
 
-.clockSubModulesIcons{
+.clockSubModulesIcons {
   transition: 0.8s;
 }
-.clockSubModulesIcons:active{
+.clockSubModulesIcons:active {
   transform: scale(2);
 }
-.questionMark{
+.questionMark {
   text-align: end;
   margin-right: 35px;
 }
-@media (max-width:991px)
-{
-  .questionMark{
+@media (max-width: 991px) {
+  .questionMark {
     margin-right: 75px;
-
   }
 }
-@media (max-width:767px)
-{
-  .questionMark{
+@media (max-width: 767px) {
+  .questionMark {
     margin-right: 35px;
-
   }
 }
-.starpriority{
+.starpriority {
   fill: gold;
 }
 
 #dropdown-basic::after {
   display: none;
 }
-.filterdropdownActive{
+.filterdropdownActive {
   background-color: blue;
 }
 /* .inputAddTodo{
   border: 0;
 } */
-.inputAddTodo:focus{
-  box-shadow: none  ;
+.inputAddTodo:focus {
+  box-shadow: none;
+}
+.alarmSelectBox {
+  width: 100%;
+  padding: 5px;
+  background-color: rgb(216, 215, 215);
+}
+.alarmInputBox {
+  width: 100%;
+  padding: 5px;
+  background-color: rgb(216, 215, 215);
+  border: 1px solid gray;
+}
+
+.confirmBtn:has(.confirmBtnAlarm:hover) {
+  .alarmInputBox {
+    background-image: linear-gradient(45deg, #0e4b0e, #002615);
+    color: white !important;
+    border: 1px solid white;
+  }
+  .alarmSelectBox {
+    background-image: linear-gradient(45deg, #0e4b0e, #002615);
+    color: white !important;
+  }
+  color: white !important;
+  background-image: linear-gradient(45deg, #0e4b0e, #002615);
+}
+.confirmBtn:has(.cancelBtnAlarm:hover) {
+  .alarmInputBox {
+    background-image: linear-gradient(45deg, #740202, #360808);
+    color: white !important;
+    border: 1px solid white;
+  }
+  .alarmSelectBox {
+    background-image: linear-gradient(45deg, #740202, #360808);
+    color: white !important;
+  }
+  color: white !important;
+  background-image: linear-gradient(45deg, #740202, #360808);
+}
+
+.ConfirmModalColor:has(.deleteTaskModalBtn:hover){
+  background-image: linear-gradient(45deg, #740202, #360808);
+}
+.ConfirmModalColor:has(.dontDeleteTaskModalBtn:hover){
+  background-image: linear-gradient(45deg, #0e4b0e, #002615);
+
 }

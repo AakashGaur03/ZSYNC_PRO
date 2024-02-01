@@ -10,15 +10,6 @@ const Todo = () => {
   const { theme } = useContext(ThemeContext);
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
-  const [isCancelHovered, setIsCancelHovered] = useState(false);
-  const [isConfirmHovered, setIsConfirmHovered] = useState(false);
-  const modalBodyStyle = {
-    backgroundImage: isCancelHovered
-      ? "linear-gradient(45deg, #0e4b0e, #002615)"
-      : isConfirmHovered
-      ? "linear-gradient(45deg, #740202, #360808)"
-      : "",
-  };
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [importantTaskToBeDeleted, setImportantTaskToBeDeleted] =
     useState(null);
@@ -35,13 +26,9 @@ const Todo = () => {
       });
       setTasks(updatedTasks);
     }
-    setIsConfirmHovered(false);
-    setIsCancelHovered(false);
     setShowConfirmModal(false);
   };
   const handleShowConfirmModal = () => {
-    setIsConfirmHovered(false);
-    setIsCancelHovered(false);
     setShowConfirmModal(true);
   };
 
@@ -327,19 +314,15 @@ const Todo = () => {
                   className="me-3 cursorPointer"
                   onClick={() => removeTask(task.id)}
                 />
-                {/* <button onClick={handleShowConfirmModalShow}>Show Confirm Modal</button> */}
               </li>
             )
           );
         })}
-        {/* <Button variant="primary" onClick={handleShowConfirmModal}>
-        Launch demo modal
-      </Button> */}
       </ul>
       <Modal show={showConfirmModal} onHide={handleCloseConfirmModal} centered>
         <Modal.Body
-          style={{ ...modalBodyStyle }}
-          className={`${modalBgColor} ${textColorClass}`}
+          // style={{ ...modalBodyStyle }}
+          className={`${modalBgColor} ${textColorClass} ConfirmModalColor`}
         >
           <Modal.Title className="text-center pb-4">
             Confirmation Modal
@@ -349,19 +332,15 @@ const Todo = () => {
             className={`mt-3 p-3 backgroundColorConfirmation d-flex justify-content-between`}
           >
             <Button
-              className="me-4 confirmModalBtn"
+              className="me-4 deleteTaskModalBtn"
               variant="danger"
-              onMouseEnter={() => setIsConfirmHovered(true)}
-              onMouseLeave={() => setIsConfirmHovered(false)}
               onClick={() => handleDeleteConfirmModal()}
             >
               Confirm
             </Button>
             <Button
               variant="success"
-              className="cancelModalBtn"
-              onMouseEnter={() => setIsCancelHovered(true)}
-              onMouseLeave={() => setIsCancelHovered(false)}
+              className="dontDeleteTaskModalBtn"
               onClick={handleCloseConfirmModal}
             >
               Cancel
