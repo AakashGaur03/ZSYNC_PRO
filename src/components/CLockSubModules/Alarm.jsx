@@ -1,14 +1,49 @@
-import React, { useState,useContext } from "react";
-import { Button, Modal } from "react-bootstrap";
+import React, { useState, useContext, useEffect } from "react";
+import { Button, Form, Modal } from "react-bootstrap";
 import ThemeContext from "../../Contexts/ThemeContext";
 
 const Alarm = () => {
+  const [allAlarm, setAllAlarm] = useState(
+    JSON.parse(localStorage.getItem("alarmData"))
+      ? JSON.parse(localStorage.getItem("alarmData"))
+      : []
+  );
+  useEffect(() => {
+    const storedAlarm = localStorage.getItem("alarmData")
+      ? JSON.parse(localStorage.getItem("alarmData"))
+      : [];
+    setAllAlarm(storedAlarm);
+  }, []);
+  useEffect(() => {
+    localStorage.setItem("alarmData", JSON.stringify(allAlarm));
+  }, [allAlarm]);
   const { theme } = useContext(ThemeContext);
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   const [showAlarmModal, setShowAlarmModal] = useState(false);
   const handleAlarmModalClose = () => setShowAlarmModal(false);
   const handleAlarmModalShow = () => setShowAlarmModal(true);
+  const handleAlarmModalUpdate = () => {
+    let selectedMin = document.getElementById("hours").value;
+    let selectedHour = document.getElementById("minutes").value;
+    let selectedSound = document.getElementById("sounds").value;
+    let selectedTitle = document.getElementById("title").value;
+
+    const newAlarm = {
+      uniqueId: Date.now(),
+      hours: selectedMin,
+      minutes: selectedHour,
+      soundIndex: selectedSound,
+      title: selectedTitle,
+    };
+    setAllAlarm((prevAlarms) => {
+      const updateAlarms = [...prevAlarms, newAlarm];
+      localStorage.setItem("alarmData", JSON.stringify(updateAlarms));
+      return updateAlarms;
+    });
+
+    setShowAlarmModal(false);
+  };
 
   const sounds = [
     { index: 0, name: "alarm-tone", src: "alarm-tone.wav" },
@@ -50,20 +85,29 @@ const Alarm = () => {
         Set Alarm
       </Button>
       <Modal show={showAlarmModal} onHide={handleAlarmModalClose}>
-        <Modal.Body  className={`${modalBgColor} ${textColorClass} confirmBtn`}>
+        <Modal.Body className={`${modalBgColor} ${textColorClass} confirmBtn`}>
           <h3 className="text-center mb-3">Set Alarm</h3>
           <div className="row">
             <div className="col-md-6">
               <label htmlFor="hours">Hours</label>
               <div>
-                <select id="hours" className={`${modalBgColor} ${textColorClass} alarmSelectBox`}>
+                <select
+                  id="hours"
+                  className={`${modalBgColor} ${textColorClass} alarmSelectBox`}
+                >
                   {generateOptions(1, 12).map((hour) => (
-                    <option key={`hour-${hour}`} value={`${hour} AM`}>
+                    <option
+                      key={`hour-${hour}`}
+                      value={`${formatNumbers(hour)} AM`}
+                    >
                       {formatNumbers(hour)} AM
                     </option>
                   ))}
                   {generateOptions(1, 12).map((hour) => (
-                    <option key={`hour-${hour + 12}`} value={`${hour} PM`}>
+                    <option
+                      key={`hour-${hour + 12}`}
+                      value={`${formatNumbers(hour)} PM`}
+                    >
                       {formatNumbers(hour)} PM
                     </option>
                   ))}
@@ -73,9 +117,15 @@ const Alarm = () => {
             <div className="col-md-6">
               <label htmlFor="minutes">Minutes</label>
               <div>
-                <select id="minutes" className={`${modalBgColor} ${textColorClass} alarmSelectBox`}>
+                <select
+                  id="minutes"
+                  className={`${modalBgColor} ${textColorClass} alarmSelectBox`}
+                >
                   {generateOptions(0, 59).map((minute) => (
-                    <option key={`minute-${minute}`} value={`${minute}`}>
+                    <option
+                      key={`minute-${minute}`}
+                      value={`${formatNumbers(minute)}`}
+                    >
                       {formatNumbers(minute)}{" "}
                       {minute === 0 || minute === 1 ? "minute" : "minutes"}
                     </option>
@@ -87,9 +137,12 @@ const Alarm = () => {
             <div className="col-md-12">
               <label htmlFor="sounds">Sounds</label>
               <div>
-                <select id="sounds" className={`${modalBgColor} ${textColorClass} alarmSelectBox`}>
+                <select
+                  id="sounds"
+                  className={`${modalBgColor} ${textColorClass} alarmSelectBox`}
+                >
                   {sounds.map((sound) => (
-                    <option key={`sound-${sound.index}`} value={sound.src}>
+                    <option key={`sound-${sound.index}`} value={sound.index}>
                       {sound.name}
                     </option>
                   ))}
@@ -98,18 +151,58 @@ const Alarm = () => {
             </div>
             <div className="col-md-12">
               <label htmlFor="title">Title</label>
-              <input type="text" id="title" className={`${modalBgColor} ${textColorClass} alarmInputBox`} />
+              <input
+                type="text"
+                id="title"
+                className={`${modalBgColor} ${textColorClass} alarmInputBox`}
+              />
             </div>
           </div>
 
           <div
             className={`mt-3 p-3 backgroundColorConfirmation d-flex justify-content-between`}
           >
-            <Button onClick={handleAlarmModalClose} className="confirmBtnAlarm" variant="success">Save Alarm</Button>
-            <Button onClick={handleAlarmModalClose} className="cancelBtnAlarm" variant="danger">Cancel</Button>
+            <Button
+              onClick={handleAlarmModalUpdate}
+              className="confirmBtnAlarm"
+              variant="success"
+            >
+              Save Alarm
+            </Button>
+            <Button
+              onClick={handleAlarmModalClose}
+              className="cancelBtnAlarm"
+              variant="danger"
+            >
+              Cancel
+            </Button>
           </div>
         </Modal.Body>
       </Modal>
+
+      <div>
+        {allAlarm.map((alarm) => (
+          <div key={alarm.uniqueId}>
+            <div className="p-4 border bg-transparent ">
+              <div className="text-center">{alarm.title}</div>
+              <div className="d-flex justify-content-between">
+                <div className="d-flex">
+                  <div>{alarm.hours.slice(0, 2)}&nbsp;:</div>
+                  <div>&nbsp;{alarm.minutes}</div>
+                  <div>&nbsp;{alarm.hours.slice(2, 5)}</div>
+                </div>
+                <div>
+                  <Form.Check
+                    type="switch"
+                    id="custom-switch"
+                    label=""
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
