@@ -162,7 +162,7 @@ const Todo = () => {
         <div className="pt-2 pb-3 text-end me-4">
           {tasks.some((task) => task.deletedAt == null) && (
             <Dropdown>
-              <Dropdown.Toggle id="dropdown-basic">
+              <Dropdown.Toggle id="dropdown-basic2">
                 <FaFilter />
               </Dropdown.Toggle>
 
@@ -213,6 +213,7 @@ const Todo = () => {
         <Modal.Body>
           <InputGroup className="mb-3">
             <Form.Control
+              name="setNewTaskTitle"
               className="inputAddTodo"
               type="text"
               value={newTaskTitle}
@@ -226,6 +227,7 @@ const Todo = () => {
           </InputGroup>
           <InputGroup className="mb-3">
             <Form.Control
+              name="setNewTask"
               className="inputAddTodo"
               as="textarea"
               rows={5}
@@ -292,6 +294,7 @@ const Todo = () => {
                   </span>
                 </div>
                 <Form.Check
+                  name="toggleTaskStatus"
                   className="me-3"
                   checked={task.completed}
                   onChange={() => toggleTaskStatus(task.id)}

@@ -21,7 +21,9 @@ const NavbarComp = () => {
     useState(false);
   const handleCloseRecentlyDeleted = () => setShowRecentlyDeletedModal(false);
   const handleShowRecentlyDeletedModal = () => {
-    setRecentlyDeletedTasks(JSON.parse(localStorage.getItem("taskArray")) || []);
+    setRecentlyDeletedTasks(
+      JSON.parse(localStorage.getItem("taskArray")) || []
+    );
     setShowRecentlyDeletedModal(true);
   };
 
@@ -56,7 +58,8 @@ const NavbarComp = () => {
   ];
 
   useEffect(() => {
-    document.body.className = theme === "Light" ? "bg-light backgroundLight" : "bg-dark backgroundDark";
+    document.body.className =
+      theme === "Light" ? "bg-light backgroundLight" : "bg-dark backgroundDark";
   }, [theme]);
 
   const [showClockModal, setShowClockModal] = useState(false);
@@ -134,8 +137,9 @@ const NavbarComp = () => {
                 Incognito Todo
               </Nav.Link>
             </Nav>
-            <Form className="togglePosition">
+            <Form className="togglePosition" name="togglePosition">
               <Form.Check
+                name="themeMode"
                 checked={theme === "Dark"} // Adjust this based on your theme values
                 onChange={toggleTheme}
                 type="switch"

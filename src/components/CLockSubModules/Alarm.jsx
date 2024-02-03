@@ -3,6 +3,19 @@ import { Button, Form, Modal } from "react-bootstrap";
 import ThemeContext from "../../Contexts/ThemeContext";
 
 const Alarm = () => {
+  const days = [
+    { id: 1, day: "M" },
+    { id: 2, day: "T" },
+    { id: 3, day: "W" },
+    { id: 4, day: "T" },
+    { id: 5, day: "F" },
+    { id: 6, day: "S" },
+    { id: 7, day: "S" },
+  ];
+  const [activeDay,setActiveDay]=useState(null)
+  const handleAlarmClick = (dayId) =>{
+    setActiveDay(dayId)
+  }
   const [allAlarm, setAllAlarm] = useState(
     JSON.parse(localStorage.getItem("alarmData"))
       ? JSON.parse(localStorage.getItem("alarmData"))
@@ -149,6 +162,13 @@ const Alarm = () => {
                 </select>
               </div>
             </div>
+            <div className="mt-3 mb-3">
+              <div className="d-flex justify-content-around">
+                {days.map((day) => (
+                  <div key={day.id} className={`p-2 px-3 me-2 alarmDays ${activeDay===day.id?'active':''}`} onClick={()=>handleAlarmClick(day.id)}>{day.day}</div>
+                ))}
+              </div>
+            </div>
             <div className="col-md-12">
               <label htmlFor="title">Title</label>
               <input
@@ -192,11 +212,7 @@ const Alarm = () => {
                   <div>&nbsp;{alarm.hours.slice(2, 5)}</div>
                 </div>
                 <div>
-                  <Form.Check
-                    type="switch"
-                    id="custom-switch"
-                    label=""
-                  />
+                  <Form.Check type="switch" id="custom-switch" label="" />
                 </div>
               </div>
             </div>

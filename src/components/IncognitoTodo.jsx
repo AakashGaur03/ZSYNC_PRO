@@ -180,6 +180,7 @@ const Todo = () => {
         <Modal.Body>
           <InputGroup className="mb-3">
             <Form.Control
+              name="setNewTaskTitleIncog"
               className="inputAddTodo"
               type="text"
               value={newTaskTitle}
@@ -193,6 +194,7 @@ const Todo = () => {
           </InputGroup>
           <InputGroup className="mb-3">
             <Form.Control
+              name="setNewTaskIncog"
               className="inputAddTodo"
               as="textarea"
               rows={5}
@@ -259,6 +261,7 @@ const Todo = () => {
                   </span>
                 </div>
                 <Form.Check
+                  name="toggleTaskStatus"
                   className="me-3"
                   checked={task.completed}
                   onChange={() => toggleTaskStatus(task.id)}

@@ -40,6 +40,7 @@ const AudioPlayer = ({currentSound ,setCurrentSound,handleRadioChange,selectedSo
               <p>{sound.name}</p>
             </div>
               <Form.Check
+              name="playAudio"
               type="radio"
               checked={selectedSound===index}
               onChange={()=>{
