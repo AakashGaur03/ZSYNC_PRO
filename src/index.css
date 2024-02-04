@@ -178,5 +178,9 @@
 }
 .alarmDays:hover,
 .alarmDays.active{
-  background-color: red;
+  background-color: #7c7c7c;
+}
+
+.colorDropdownAlarm{
+  background-color: #7c7c7c;
 }

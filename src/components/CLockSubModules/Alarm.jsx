@@ -3,6 +3,9 @@ import { Button, Form, Modal } from "react-bootstrap";
 import ThemeContext from "../../Contexts/ThemeContext";
 
 const Alarm = () => {
+
+      console.log(Date.now())
+      console.log(new Date())
   const days = [
     { id: 1, day: "M" },
     { id: 2, day: "T" },
@@ -12,10 +15,14 @@ const Alarm = () => {
     { id: 6, day: "S" },
     { id: 7, day: "S" },
   ];
-  const [activeDay,setActiveDay]=useState(null)
-  const handleAlarmClick = (dayId) =>{
-    setActiveDay(dayId)
-  }
+  const [activeDays, setActiveDays] = useState([]);
+  const handleAlarmClick = (dayId) => {
+    if (activeDays.includes(dayId)) {
+      setActiveDays(activeDays.filter((id) => id !== dayId));
+    } else {
+      setActiveDays([...activeDays, dayId]);
+    }
+  };
   const [allAlarm, setAllAlarm] = useState(
     JSON.parse(localStorage.getItem("alarmData"))
       ? JSON.parse(localStorage.getItem("alarmData"))
@@ -37,15 +44,15 @@ const Alarm = () => {
   const handleAlarmModalClose = () => setShowAlarmModal(false);
   const handleAlarmModalShow = () => setShowAlarmModal(true);
   const handleAlarmModalUpdate = () => {
-    let selectedMin = document.getElementById("hours").value;
-    let selectedHour = document.getElementById("minutes").value;
+    let selectedMin = document.getElementById("minutes").value;
+    let selectedHour = document.getElementById("hours").value;
     let selectedSound = document.getElementById("sounds").value;
     let selectedTitle = document.getElementById("title").value;
-
+    
     const newAlarm = {
       uniqueId: Date.now(),
-      hours: selectedMin,
-      minutes: selectedHour,
+      hours: selectedHour,
+      minutes: selectedMin,
       soundIndex: selectedSound,
       title: selectedTitle,
     };
@@ -109,7 +116,7 @@ const Alarm = () => {
                   className={`${modalBgColor} ${textColorClass} alarmSelectBox`}
                 >
                   {generateOptions(1, 12).map((hour) => (
-                    <option
+                    <option className="colorDropdownAlarm"
                       key={`hour-${hour}`}
                       value={`${formatNumbers(hour)} AM`}
                     >
@@ -117,7 +124,7 @@ const Alarm = () => {
                     </option>
                   ))}
                   {generateOptions(1, 12).map((hour) => (
-                    <option
+                    <option className="colorDropdownAlarm"
                       key={`hour-${hour + 12}`}
                       value={`${formatNumbers(hour)} PM`}
                     >
@@ -135,7 +142,7 @@ const Alarm = () => {
                   className={`${modalBgColor} ${textColorClass} alarmSelectBox`}
                 >
                   {generateOptions(0, 59).map((minute) => (
-                    <option
+                    <option className="colorDropdownAlarm"
                       key={`minute-${minute}`}
                       value={`${formatNumbers(minute)}`}
                     >
@@ -155,7 +162,7 @@ const Alarm = () => {
                   className={`${modalBgColor} ${textColorClass} alarmSelectBox`}
                 >
                   {sounds.map((sound) => (
-                    <option key={`sound-${sound.index}`} value={sound.index}>
+                    <option className="colorDropdownAlarm" key={`sound-${sound.index}`} value={sound.index}>
                       {sound.name}
                     </option>
                   ))}
@@ -165,7 +172,15 @@ const Alarm = () => {
             <div className="mt-3 mb-3">
               <div className="d-flex justify-content-around">
                 {days.map((day) => (
-                  <div key={day.id} className={`p-2 px-3 me-2 alarmDays ${activeDay===day.id?'active':''}`} onClick={()=>handleAlarmClick(day.id)}>{day.day}</div>
+                  <div
+                    key={day.id}
+                    className={`p-2 px-3 me-2 alarmDays ${
+                      activeDays.includes(day.id) ? "active" : ""
+                    }`}
+                    onClick={() => handleAlarmClick(day.id)}
+                  >
+                    {day.day}
+                  </div>
                 ))}
               </div>
             </div>
@@ -203,14 +218,14 @@ const Alarm = () => {
       <div>
         {allAlarm.map((alarm) => (
           <div key={alarm.uniqueId}>
-            <div className="p-4 border bg-transparent ">
-              <div className="text-center">{alarm.title}</div>
+            <div className="p-4 border bg-transparent rounded-pill mb-4">
               <div className="d-flex justify-content-between">
                 <div className="d-flex">
                   <div>{alarm.hours.slice(0, 2)}&nbsp;:</div>
                   <div>&nbsp;{alarm.minutes}</div>
                   <div>&nbsp;{alarm.hours.slice(2, 5)}</div>
                 </div>
+                <div className="text-center">{alarm.title}</div>
                 <div>
                   <Form.Check type="switch" id="custom-switch" label="" />
                 </div>
