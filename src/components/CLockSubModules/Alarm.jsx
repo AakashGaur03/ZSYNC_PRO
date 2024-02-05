@@ -3,9 +3,8 @@ import { Button, Form, Modal } from "react-bootstrap";
 import ThemeContext from "../../Contexts/ThemeContext";
 
 const Alarm = () => {
-
-      console.log(Date.now())
-      console.log(new Date())
+  // console.log(Date.now())
+  // console.log(new Date())
   const days = [
     { id: 1, day: "M" },
     { id: 2, day: "T" },
@@ -28,6 +27,75 @@ const Alarm = () => {
       ? JSON.parse(localStorage.getItem("alarmData"))
       : []
   );
+  const toggleAlarmStatus = (Id) => {
+    const updatedAlarm = allAlarm.map((alarm) =>
+      alarm.uniqueId === Id ? { ...alarm, status: !alarm.status } : alarm
+    );
+    AlarmOnOrOff(Id);
+    setAllAlarm(updatedAlarm);
+  };
+
+  const AlarmOnOrOff = (Id) => {
+    console.log(Id, "IDD");
+    const alarmToBeOn = allAlarm.find((alarm) => alarm.uniqueId === Id);
+
+    if (alarmToBeOn && alarmToBeOn.status) {
+      console.log(alarmToBeOn);
+      const { hours, minutes } = alarmToBeOn;
+      // console.log(hours, minutes);
+
+      let formattedHours;
+      if (hours.includes("PM")) {
+        formattedHours = (parseInt(hours) === 12 ? 12 : parseInt(hours) + 12).toString();
+      } else {
+        formattedHours = (parseInt(hours) === 12 ? "00" : hours.slice(0, 2));
+      }
+      // console.log(formattedHours)
+      const now = new Date();
+      let alarmTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        parseInt(formattedHours),
+        parseInt(minutes),
+        0
+      );
+      if (alarmTime <= now) {
+        alarmTime = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() + 1, // Setting it for the next day
+          parseInt(formattedHours),
+          parseInt(minutes),
+          0
+        );
+      }
+
+      const timeUnlitAlarm = alarmTime - now;
+
+      if(timeUnlitAlarm< 0 )
+      {
+        console.log("Alarm Gone",alarmToBeOn)
+      }
+      
+
+      console.log(timeUnlitAlarm);
+      console.log(alarmTime)
+      console.log(now);
+
+      // We can make new Date() in folllowing Manner
+      // new Date();
+      // new Date(date string)
+      // new Date(year,month)
+      // new Date(year,month,day)
+      // new Date(year,month,day,hours)
+      // new Date(year,month,day,hours,minutes)
+      // new Date(year,month,day,hours,minutes,seconds)
+      // new Date(year,month,day,hours,minutes,seconds,ms)
+
+      // new Date(milliseconds)
+    }
+  };
   useEffect(() => {
     const storedAlarm = localStorage.getItem("alarmData")
       ? JSON.parse(localStorage.getItem("alarmData"))
@@ -48,14 +116,16 @@ const Alarm = () => {
     let selectedHour = document.getElementById("hours").value;
     let selectedSound = document.getElementById("sounds").value;
     let selectedTitle = document.getElementById("title").value;
-    
+
     const newAlarm = {
       uniqueId: Date.now(),
       hours: selectedHour,
       minutes: selectedMin,
       soundIndex: selectedSound,
       title: selectedTitle,
+      status: true,
     };
+    AlarmOnOrOff(newAlarm.uniqueId);
     setAllAlarm((prevAlarms) => {
       const updateAlarms = [...prevAlarms, newAlarm];
       localStorage.setItem("alarmData", JSON.stringify(updateAlarms));
@@ -116,7 +186,8 @@ const Alarm = () => {
                   className={`${modalBgColor} ${textColorClass} alarmSelectBox`}
                 >
                   {generateOptions(1, 12).map((hour) => (
-                    <option className="colorDropdownAlarm"
+                    <option
+                      className="colorDropdownAlarm"
                       key={`hour-${hour}`}
                       value={`${formatNumbers(hour)} AM`}
                     >
@@ -124,7 +195,8 @@ const Alarm = () => {
                     </option>
                   ))}
                   {generateOptions(1, 12).map((hour) => (
-                    <option className="colorDropdownAlarm"
+                    <option
+                      className="colorDropdownAlarm"
                       key={`hour-${hour + 12}`}
                       value={`${formatNumbers(hour)} PM`}
                     >
@@ -142,7 +214,8 @@ const Alarm = () => {
                   className={`${modalBgColor} ${textColorClass} alarmSelectBox`}
                 >
                   {generateOptions(0, 59).map((minute) => (
-                    <option className="colorDropdownAlarm"
+                    <option
+                      className="colorDropdownAlarm"
                       key={`minute-${minute}`}
                       value={`${formatNumbers(minute)}`}
                     >
@@ -162,14 +235,18 @@ const Alarm = () => {
                   className={`${modalBgColor} ${textColorClass} alarmSelectBox`}
                 >
                   {sounds.map((sound) => (
-                    <option className="colorDropdownAlarm" key={`sound-${sound.index}`} value={sound.index}>
+                    <option
+                      className="colorDropdownAlarm"
+                      key={`sound-${sound.index}`}
+                      value={sound.index}
+                    >
                       {sound.name}
                     </option>
                   ))}
                 </select>
               </div>
             </div>
-            <div className="mt-3 mb-3">
+            {/* <div className="mt-3 mb-3">
               <div className="d-flex justify-content-around">
                 {days.map((day) => (
                   <div
@@ -183,7 +260,7 @@ const Alarm = () => {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
             <div className="col-md-12">
               <label htmlFor="title">Title</label>
               <input
@@ -227,7 +304,13 @@ const Alarm = () => {
                 </div>
                 <div className="text-center">{alarm.title}</div>
                 <div>
-                  <Form.Check type="switch" id="custom-switch" label="" />
+                  <Form.Check
+                    type="switch"
+                    checked={alarm.status}
+                    id="custom-switch"
+                    label=""
+                    onChange={() => toggleAlarmStatus(alarm.uniqueId)}
+                  />
                 </div>
               </div>
             </div>

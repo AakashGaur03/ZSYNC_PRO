@@ -137,18 +137,18 @@ export const Timer = () => {
           )}
         </div>
         <div>
-          <Button className="" onClick={() => addMins(0.1)}>
+          <button className="btn me-2 my-2 btn-outline-secondary" onClick={() => addMins(0.5)}>
             +30 sec
-          </Button>
-          <Button className="" onClick={() => addMins(1)}>
+          </button>
+          <button className="btn me-2 my-2 btn-outline-secondary" onClick={() => addMins(1)}>
             +1 Min
-          </Button>
-          <Button className="" onClick={() => addMins(5)}>
+          </button>
+          <button className="btn me-2 my-2 btn-outline-secondary" onClick={() => addMins(5)}>
             +5 Min
-          </Button>
-          <Button className="" onClick={() => addMins(10)}>
+          </button>
+          <button className="btn me-2 my-2 btn-outline-secondary" onClick={() => addMins(10)}>
             +10 Min
-          </Button>
+          </button>
         </div>
       </div>
     </>

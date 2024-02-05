@@ -1,5 +1,6 @@
 .backgroundLight {
-  background-image: linear-gradient(45deg, #085bff, #c8cee1);
+  /* background-image: linear-gradient(45deg, #085bff, #c8cee1); */
+  background-image: linear-gradient(45deg, #00e7ff, #00adff);
 }
 .bg-mid {
   backdrop-filter: brightness(0.7);
