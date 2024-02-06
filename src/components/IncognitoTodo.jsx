@@ -1,9 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, InputGroup, Dropdown, Modal } from "react-bootstrap";
 import { FaTrash, FaEdit, FaStar, FaFilter } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
+import  ThemeContext  from "../Contexts/ThemeContext";
+// import { ConfirmModalContextProvider,useConfirmModalContext } from "../Contexts/ConfirmModalProvider";
 
-const Todo = () => {
+const IncognitoTodo = () => {
+  // const { handleShowConfirmModalShow,handleShowConfirmModalClose,handleShowConfirmModalUpdate } = useConfirmModalContext();
+  const { theme } = useContext(ThemeContext);
+  console.log(theme,"gg")
+  const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
+  const textColorClass = theme === "Light" ? "text-black" : "text-white";
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [importantTaskToBeDeleted, setImportantTaskToBeDeleted] =
+    useState(null);
+
+  const handleCloseConfirmModal = () => setShowConfirmModal(false);
+  const handleDeleteConfirmModal = () => {
+    console.log(importantTaskToBeDeleted, "IMpo");
+    if (importantTaskToBeDeleted !== null) {
+      const updatedTasks = tasks.map((task) => {
+        if (task.id === importantTaskToBeDeleted) {
+          return { ...task, deletedAt: new Date().toLocaleString() };
+        }
+        return { ...task };
+      });
+      setTasks(updatedTasks);
+    }
+    setShowConfirmModal(false);
+  };
+  const handleShowConfirmModal = () => {
+    setShowConfirmModal(true);
+  };
+
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTask, setNewTask] = useState("");
   const [tasks, setTasks] = useState(
@@ -40,7 +69,7 @@ const Todo = () => {
         return task.important;
       case "Completed":
         return task.completed;
-      case "UnCompleted":
+      case "Uncompleted":
         return !task.completed;
 
       default:
@@ -81,14 +110,19 @@ const Todo = () => {
     setTasks(updatedTasks);
   };
   const removeTask = (taskId) => {
+    // handleShowConfirmModalUpdate(taskId)
+    // handleShowConfirmModalClose()
     const updatedTasks = tasks.map((task) => {
+      setImportantTaskToBeDeleted(taskId);
       if (
         task.id === taskId &&
-        (!task.important || window.confirm("Are you sure"))
+        // (!task.important || handleShowConfirmModalShow())
+        // (!task.important || window.confirm("Are you Sure"))
+        (!task.important || handleShowConfirmModal())
       ) {
         return { ...task, deletedAt: new Date().toLocaleString() };
       }
-      return task;
+      return { ...task };
     });
     setTasks(updatedTasks);
   };
@@ -108,14 +142,26 @@ const Todo = () => {
         ? { ...task, title: newTaskTitle, text: newTask }
         : task
     );
+    setShowAddTodo(false);
     setTasks(updatedTask);
     setEditingTaskId(null);
     setNewTaskTitle("");
     setNewTask("");
-    setShowAddTodo(false);
+    setModalTitle("Add Task")
   };
+  const closeEditingAddModal=()=>{
+    setShowAddTodo(false);
+    setEditingTaskId(null);
+    setNewTaskTitle("");
+    setNewTask("");
+    setModalTitle("Add Task")
+
+  }
   return (
     <>
+        <div className="backgroundIncognito">
+      <img src="../../public/Images/incognitoImg.png" alt="" className="incognitoImg"/>
+    </div>
       {/* <div className="fs-4">Add Todo</div> */}
       <div className="d-flex justify-content-between mx-4 mt-3">
         <div className="align-self-center">
@@ -129,15 +175,15 @@ const Todo = () => {
         <div className="pt-2 pb-3 text-end me-4">
           {tasks.some((task) => task.deletedAt == null) && (
             <Dropdown>
-              <Dropdown.Toggle id="dropdown-basic">
+              <Dropdown.Toggle id="dropdown-basic2">
                 <FaFilter />
               </Dropdown.Toggle>
 
-              <Dropdown.Menu>
+              <Dropdown.Menu className="text-center dropdownFilterMain">
                 <Dropdown.Item
                   className={`${
                     selectedFilter === "All" ? "filterdropdownActive" : ""
-                  }`}
+                  } dropdownFilter topDropdownFilter`}
                   onClick={() => setSelectedFilter("All")}
                 >
                   All
@@ -145,7 +191,7 @@ const Todo = () => {
                 <Dropdown.Item
                   className={`${
                     selectedFilter === "Important" ? "filterdropdownActive" : ""
-                  }`}
+                  } dropdownFilter`}
                   onClick={() => setSelectedFilter("Important")}
                 >
                   Important
@@ -153,34 +199,37 @@ const Todo = () => {
                 <Dropdown.Item
                   className={`${
                     selectedFilter === "Completed" ? "filterdropdownActive" : ""
-                  }`}
+                  } dropdownFilter `}
                   onClick={() => setSelectedFilter("Completed")}
                 >
                   Completed
                 </Dropdown.Item>
                 <Dropdown.Item
                   className={`${
-                    selectedFilter === "UnCompleted"
+                    selectedFilter === "Uncompleted"
                       ? "filterdropdownActive"
                       : ""
-                  }`}
-                  onClick={() => setSelectedFilter("UnCompleted")}
+                  } dropdownFilter bottomDropdownFilter`}
+                  onClick={() => setSelectedFilter("Uncompleted")}
                 >
-                  UnCompleted
+                  Uncompleted
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           )}
         </div>
       </div>
-      <Modal show={showAddTodo} onHide={() => setShowAddTodo(false)} centered>
-        <Modal.Header closeButton>
+      <Modal show={showAddTodo} onHide={() => setShowAddTodo(false)} centered backdrop="static"
+        keyboard={false}>
+        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor`}>
+
+        <Modal.Header className="border-0" closeButton>
           <Modal.Title>{modalTitle}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body >
           <InputGroup className="mb-3">
             <Form.Control
-              name="setNewTaskTitleIncog"
+              name="setNewTaskTitle"
               className="inputAddTodo"
               type="text"
               value={newTaskTitle}
@@ -194,7 +243,7 @@ const Todo = () => {
           </InputGroup>
           <InputGroup className="mb-3">
             <Form.Control
-              name="setNewTaskIncog"
+              name="setNewTask"
               className="inputAddTodo"
               as="textarea"
               rows={5}
@@ -207,21 +256,23 @@ const Todo = () => {
             ></Form.Control>
           </InputGroup>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="border-0">
           <Button
             variant="primary"
+            className="saveEditModal"
             id=""
             onClick={editingTaskId ? saveEditing : addTask}
           >
             {editingTaskId ? "Save Task" : "Add Task"}
           </Button>
-          <Button variant="secondary" onClick={() => setShowAddTodo(false)}>
+          <Button variant="secondary" className="CloseModal" onClick={() => closeEditingAddModal()}>
             Close
           </Button>
           {/* <Button variant="primary" onClick={() => setShowAddTodo(false)}>
             Save Changes
           </Button> */}
         </Modal.Footer>
+        </div>
       </Modal>
 
       <Modal show={viewTask} onHide={() => setViewTask(false)}>
@@ -289,8 +340,37 @@ const Todo = () => {
           );
         })}
       </ul>
+      <Modal show={showConfirmModal} onHide={handleCloseConfirmModal} centered>
+        <Modal.Body
+          // style={{ ...modalBodyStyle }}
+          className={`${modalBgColor} ${textColorClass} ConfirmModalColor`}
+        >
+          <Modal.Title className="text-center pb-4">
+            Confirmation Modal
+          </Modal.Title>
+          Are you sure you want to delete as this is an Important Task
+          <div
+            className={`mt-3 p-3 backgroundColorConfirmation d-flex justify-content-between`}
+          >
+            <Button
+              className="me-4 deleteTaskModalBtn"
+              variant="danger"
+              onClick={() => handleDeleteConfirmModal()}
+            >
+              Confirm
+            </Button>
+            <Button
+              variant="success"
+              className="dontDeleteTaskModalBtn"
+              onClick={handleCloseConfirmModal}
+            >
+              Cancel
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
 
-export default Todo;
+export default IncognitoTodo;

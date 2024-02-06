@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import ThemeContext from "../../Contexts/ThemeContext";
+import { FaTrash } from "react-icons/fa";
 
 const Alarm = () => {
   // console.log(Date.now())
@@ -46,9 +47,11 @@ const Alarm = () => {
 
       let formattedHours;
       if (hours.includes("PM")) {
-        formattedHours = (parseInt(hours) === 12 ? 12 : parseInt(hours) + 12).toString();
+        formattedHours = (
+          parseInt(hours) === 12 ? 12 : parseInt(hours) + 12
+        ).toString();
       } else {
-        formattedHours = (parseInt(hours) === 12 ? "00" : hours.slice(0, 2));
+        formattedHours = parseInt(hours) === 12 ? "00" : hours.slice(0, 2);
       }
       // console.log(formattedHours)
       const now = new Date();
@@ -73,14 +76,12 @@ const Alarm = () => {
 
       const timeUnlitAlarm = alarmTime - now;
 
-      if(timeUnlitAlarm< 0 )
-      {
-        console.log("Alarm Gone",alarmToBeOn)
+      if (timeUnlitAlarm < 0) {
+        console.log("Alarm Gone", alarmToBeOn);
       }
-      
 
       console.log(timeUnlitAlarm);
-      console.log(alarmTime)
+      console.log(alarmTime);
       console.log(now);
 
       // We can make new Date() in folllowing Manner
@@ -133,6 +134,11 @@ const Alarm = () => {
     });
 
     setShowAlarmModal(false);
+  };
+  const removeClock = (Id) => {
+    const updatedClocks = allAlarm.filter((alarm) => alarm.uniqueId!==Id);
+
+    setAllAlarm(updatedClocks)
   };
 
   const sounds = [
@@ -303,13 +309,20 @@ const Alarm = () => {
                   <div>&nbsp;{alarm.hours.slice(2, 5)}</div>
                 </div>
                 <div className="text-center">{alarm.title}</div>
-                <div>
-                  <Form.Check
-                    type="switch"
-                    checked={alarm.status}
-                    id="custom-switch"
-                    label=""
-                    onChange={() => toggleAlarmStatus(alarm.uniqueId)}
+                <div className="d-flex">
+                  <div>
+                    <Form.Check
+                      type="switch"
+                      checked={alarm.status}
+                      id="custom-switch"
+                      label=""
+                      onChange={() => toggleAlarmStatus(alarm.uniqueId)}
+                    />
+                  </div>
+                  <FaTrash
+                    size={20}
+                    className="mx-3 cursorPointer"
+                    onClick={() => removeClock(alarm.uniqueId)}
                   />
                 </div>
               </div>

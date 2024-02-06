@@ -2,12 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, InputGroup, Dropdown, Modal } from "react-bootstrap";
 import { FaTrash, FaEdit, FaStar, FaFilter } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
-import { ThemeContext } from "@emotion/react";
+import  ThemeContext  from "../Contexts/ThemeContext";
 // import { ConfirmModalContextProvider,useConfirmModalContext } from "../Contexts/ConfirmModalProvider";
 
 const Todo = () => {
   // const { handleShowConfirmModalShow,handleShowConfirmModalClose,handleShowConfirmModalUpdate } = useConfirmModalContext();
   const { theme } = useContext(ThemeContext);
+  console.log(theme,"gg")
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -68,7 +69,7 @@ const Todo = () => {
         return task.important;
       case "Completed":
         return task.completed;
-      case "UnCompleted":
+      case "Uncompleted":
         return !task.completed;
 
       default:
@@ -141,12 +142,21 @@ const Todo = () => {
         ? { ...task, title: newTaskTitle, text: newTask }
         : task
     );
+    setShowAddTodo(false);
     setTasks(updatedTask);
     setEditingTaskId(null);
     setNewTaskTitle("");
     setNewTask("");
-    setShowAddTodo(false);
+    setModalTitle("Add Task")
   };
+  const closeEditingAddModal=()=>{
+    setShowAddTodo(false);
+    setEditingTaskId(null);
+    setNewTaskTitle("");
+    setNewTask("");
+    setModalTitle("Add Task")
+
+  }
   return (
     <>
       {/* <div className="fs-4">Add Todo</div> */}
@@ -166,11 +176,11 @@ const Todo = () => {
                 <FaFilter />
               </Dropdown.Toggle>
 
-              <Dropdown.Menu>
+              <Dropdown.Menu className="text-center dropdownFilterMain">
                 <Dropdown.Item
                   className={`${
                     selectedFilter === "All" ? "filterdropdownActive" : ""
-                  }`}
+                  } dropdownFilter topDropdownFilter`}
                   onClick={() => setSelectedFilter("All")}
                 >
                   All
@@ -178,7 +188,7 @@ const Todo = () => {
                 <Dropdown.Item
                   className={`${
                     selectedFilter === "Important" ? "filterdropdownActive" : ""
-                  }`}
+                  } dropdownFilter`}
                   onClick={() => setSelectedFilter("Important")}
                 >
                   Important
@@ -186,31 +196,34 @@ const Todo = () => {
                 <Dropdown.Item
                   className={`${
                     selectedFilter === "Completed" ? "filterdropdownActive" : ""
-                  }`}
+                  } dropdownFilter `}
                   onClick={() => setSelectedFilter("Completed")}
                 >
                   Completed
                 </Dropdown.Item>
                 <Dropdown.Item
                   className={`${
-                    selectedFilter === "UnCompleted"
+                    selectedFilter === "Uncompleted"
                       ? "filterdropdownActive"
                       : ""
-                  }`}
-                  onClick={() => setSelectedFilter("UnCompleted")}
+                  } dropdownFilter bottomDropdownFilter`}
+                  onClick={() => setSelectedFilter("Uncompleted")}
                 >
-                  UnCompleted
+                  Uncompleted
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           )}
         </div>
       </div>
-      <Modal show={showAddTodo} onHide={() => setShowAddTodo(false)} centered>
-        <Modal.Header closeButton>
+      <Modal show={showAddTodo} onHide={() => setShowAddTodo(false)} centered backdrop="static"
+        keyboard={false}>
+        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor`}>
+
+        <Modal.Header className="border-0" closeButton>
           <Modal.Title>{modalTitle}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body >
           <InputGroup className="mb-3">
             <Form.Control
               name="setNewTaskTitle"
@@ -240,21 +253,23 @@ const Todo = () => {
             ></Form.Control>
           </InputGroup>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="border-0">
           <Button
             variant="primary"
+            className="saveEditModal"
             id=""
             onClick={editingTaskId ? saveEditing : addTask}
           >
             {editingTaskId ? "Save Task" : "Add Task"}
           </Button>
-          <Button variant="secondary" onClick={() => setShowAddTodo(false)}>
+          <Button variant="secondary" className="CloseModal" onClick={() => closeEditingAddModal()}>
             Close
           </Button>
           {/* <Button variant="primary" onClick={() => setShowAddTodo(false)}>
             Save Changes
           </Button> */}
         </Modal.Footer>
+        </div>
       </Modal>
 
       <Modal show={viewTask} onHide={() => setViewTask(false)}>

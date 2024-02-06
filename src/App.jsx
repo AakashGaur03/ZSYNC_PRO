@@ -26,7 +26,7 @@ function App() {
               <Col lg="4">
                 <Clock />
               </Col>
-              <Col lg="8">
+              <Col lg="8" className="adjustonIncognito">
                 <Routes>
                   <Route path="" element={<Todo />} />
                   <Route path="/incognito-todo" element={<IncognitoTodo />} />

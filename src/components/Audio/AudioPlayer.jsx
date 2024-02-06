@@ -21,7 +21,7 @@ const AudioPlayer = ({currentSound ,setCurrentSound,handleRadioChange,selectedSo
     <>
     <div className="d-flex justify-content-around mb-4">
     <Button variant="secondary" onClick={()=>SetCurrentSoundParent("Timer")}>Timer</Button>
-    <Button variant="secondary" onClick={()=>SetCurrentSoundParent("Alarm")}>Alarm</Button>
+    {/* <Button variant="secondary" onClick={()=>SetCurrentSoundParent("Alarm")}>Alarm</Button> */}
     </div>
 
     {currentSound==="Timer" ?

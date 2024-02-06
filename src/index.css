@@ -117,9 +117,7 @@
 #dropdown-basic::after {
   display: none;
 }
-.filterdropdownActive {
-  background-color: blue;
-}
+
 /* .inputAddTodo{
   border: 0;
 } */
@@ -170,7 +168,12 @@
 }
 .ConfirmModalColor:has(.dontDeleteTaskModalBtn:hover){
   background-image: linear-gradient(45deg, #0e4b0e, #002615);
-
+}
+.ConfirmModalColor:has(.CloseModal:hover){
+  background-image: linear-gradient(45deg, #740202, #360808);
+}
+.ConfirmModalColor:has(.saveEditModal:hover){
+  background-image: linear-gradient(45deg, #0e4b0e, #002615);
 }
 .alarmDays{
   padding: 12px;
@@ -184,4 +187,58 @@
 
 .colorDropdownAlarm{
   background-color: #7c7c7c;
+}
+.backgroundIncognito{
+  height: calc(100vh - 56px);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  z-index: -20;
+}
+.adjustonIncognito{
+  min-height: calc(100vh - 56px);
+}
+@media (max-width:767px){
+  .backgroundIncognito{
+    width: 90%;
+  }
+  .incognitoImg{
+    height: 170px;
+    width: 250px;
+
+  }
+}
+@media (max-width:1033px)
+{
+  .adjustonIncognito{
+    min-height: calc(100vh - 38px);
+  }
+}
+.dropdownFilterMain{
+  border: 0;
+  background-color: transparent;
+}
+.dropdownFilter{
+  background-color: black;
+  color: white;
+}
+.filterdropdownActive {
+  background-color: #323232;
+}
+.dropdownFilter:hover{
+  background-color: #323232;
+  color: white;
+}
+.topDropdownFilter{
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+.bottomDropdownFilter{
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+.btn-close{
+  background-color: white;
 }
