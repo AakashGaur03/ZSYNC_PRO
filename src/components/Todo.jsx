@@ -5,10 +5,10 @@ import { CiCirclePlus } from "react-icons/ci";
 import  ThemeContext  from "../Contexts/ThemeContext";
 // import { ConfirmModalContextProvider,useConfirmModalContext } from "../Contexts/ConfirmModalProvider";
 
-const Todo = () => {
+const Todo = ({tasks,setTasks}) => {
   // const { handleShowConfirmModalShow,handleShowConfirmModalClose,handleShowConfirmModalUpdate } = useConfirmModalContext();
   const { theme } = useContext(ThemeContext);
-  console.log(theme,"gg")
+  // console.log(theme,"gg")
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -17,7 +17,7 @@ const Todo = () => {
 
   const handleCloseConfirmModal = () => setShowConfirmModal(false);
   const handleDeleteConfirmModal = () => {
-    console.log(importantTaskToBeDeleted, "IMpo");
+    // console.log(importantTaskToBeDeleted, "IMpo");
     if (importantTaskToBeDeleted !== null) {
       const updatedTasks = tasks.map((task) => {
         if (task.id === importantTaskToBeDeleted) {
@@ -28,18 +28,18 @@ const Todo = () => {
       setTasks(updatedTasks);
     }
     setShowConfirmModal(false);
-  };
+  };  
   const handleShowConfirmModal = () => {
     setShowConfirmModal(true);
   };
 
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTask, setNewTask] = useState("");
-  const [tasks, setTasks] = useState(
-    JSON.parse(localStorage.getItem("taskArray"))
-      ? JSON.parse(localStorage.getItem("taskArray"))
-      : []
-  );
+  // const [tasks, setTasks] = useState(
+  //   JSON.parse(localStorage.getItem("taskArray"))
+  //     ? JSON.parse(localStorage.getItem("taskArray"))
+  //     : []
+  // );
   const [viewTask, setViewTask] = useState(false);
   const [viewedTask, setViewedTask] = useState(null);
   const [editingTaskId, setEditingTaskId] = useState(null);

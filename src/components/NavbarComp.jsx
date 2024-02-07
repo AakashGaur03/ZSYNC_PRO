@@ -11,7 +11,7 @@ import ClockContext from "../Contexts/ClockContext";
 import SoundModal from "./CLockSubModules/SoundModal";
 import RecentltyDeletedModal from "./RecentlyDeletedModal";
 
-const NavbarComp = () => {
+const NavbarComp = ({ tasks, setTasks }) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const { activeClock, setActiveClock, activeClass, setActiveClass } =
     useContext(ClockContext);
@@ -83,7 +83,11 @@ const NavbarComp = () => {
 
   const [showSoundModal, setShowSoundModal] = useState(false);
 
-  const handleCloseSoundModal = () => setShowSoundModal(false);
+  const handleCloseSoundModal = () => {
+    setShowSoundModal(false);
+    setSelectedSound(null);
+    return selectedSound;
+  };
   const handleShowSoundModal = () => setShowSoundModal(true);
   const handleUpdateSoundModal = () => {
     setShowSoundModal(false);
@@ -95,8 +99,8 @@ const NavbarComp = () => {
       localStorage.setItem("timerSound", JSON.stringify(value));
     }
     if (currentSound === "Alarm") {
-      console.log("Hello222");
-      console.log(selectedSound);
+      // console.log("Hello222");
+      // console.log(selectedSound);
 
       const value = sounds.find((item) => {
         return item.index === selectedSound;
@@ -117,7 +121,10 @@ const NavbarComp = () => {
 
   return (
     <>
-      <Navbar expand="lg" className={`${navbarColorClass} ${textColorClass}`}>
+      <Navbar
+        expand="lg"
+        className={`zindex2 ${navbarColorClass} ${textColorClass}`}
+      >
         <Container>
           <Navbar.Brand className={textColorClass}>ZSYNC PRO</Navbar.Brand>
           <Navbar.Toggle
@@ -191,6 +198,9 @@ const NavbarComp = () => {
             handleCloseRecentlyDeleted={handleCloseRecentlyDeleted}
             handleShowRecentlyDeletedModal={handleShowRecentlyDeletedModal}
             recentlyDeletedTasks={recentlyDeletedTasks}
+            setRecentlyDeletedTasks={setRecentlyDeletedTasks}
+            tasks={tasks}
+            setTasks={setTasks}
           />
 
           <SoundModal

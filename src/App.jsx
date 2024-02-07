@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavbarComp from "./components/NavbarComp";
-import { useContext } from "react";
+import { useContext,useState } from "react";
 import Todo from "./components/Todo";
 import IncognitoTodo from "./components/IncognitoTodo";
 import { Row, Col, Container } from "react-bootstrap";
@@ -10,11 +10,16 @@ import ThemeContext from "./Contexts/ThemeContext";
 
 function App() {
   const { theme } = useContext(ThemeContext);
+  const [tasks, setTasks] = useState(
+    JSON.parse(localStorage.getItem("taskArray"))
+      ? JSON.parse(localStorage.getItem("taskArray"))
+      : []
+  );
   return (
     <>
       <Router>
         <>
-          <NavbarComp />
+          <NavbarComp tasks={tasks} setTasks={setTasks} />
           <Container className="minHeightContainer">
             <Row
               className={`${
@@ -28,7 +33,7 @@ function App() {
               </Col>
               <Col lg="8" className="adjustonIncognito">
                 <Routes>
-                  <Route path="" element={<Todo />} />
+                  <Route path="" element={<Todo tasks={tasks} setTasks={setTasks} />} />
                   <Route path="/incognito-todo" element={<IncognitoTodo />} />
                 </Routes>
               </Col>

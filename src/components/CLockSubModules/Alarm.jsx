@@ -37,11 +37,11 @@ const Alarm = () => {
   };
 
   const AlarmOnOrOff = (Id) => {
-    console.log(Id, "IDD");
+    // console.log(Id, "IDD");
     const alarmToBeOn = allAlarm.find((alarm) => alarm.uniqueId === Id);
 
     if (alarmToBeOn && alarmToBeOn.status) {
-      console.log(alarmToBeOn);
+      // console.log(alarmToBeOn);
       const { hours, minutes } = alarmToBeOn;
       // console.log(hours, minutes);
 

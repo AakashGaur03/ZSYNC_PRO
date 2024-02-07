@@ -8,7 +8,7 @@ import  ThemeContext  from "../../Contexts/ThemeContext";
 function ClockModal({showClockModal,handleCloseClockModal ,handleUpdateClockModal}) {
 
   const { theme } = useContext(ThemeContext);
-  console.log(theme,"gg")
+  // console.log(theme,"gg")
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   

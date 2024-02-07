@@ -18,7 +18,7 @@ function SoundModal({
   sounds,
 }) {
   const { theme } = useContext(ThemeContext);
-  console.log(theme, "gg");
+  // console.log(theme, "gg");
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
 
@@ -30,6 +30,8 @@ function SoundModal({
         centered
         size="lg"
         className="SoundModalSize"
+        backdrop="static"
+        keyboard={false}
       >
         <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor`}>
           <Modal.Body>

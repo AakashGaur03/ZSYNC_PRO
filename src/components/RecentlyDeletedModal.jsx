@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import Button from "react-bootstrap/Button";
+import { useContext, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { SlReload } from "react-icons/sl";
 import { MdDelete } from "react-icons/md";
@@ -8,15 +7,35 @@ import ThemeContext from "../Contexts/ThemeContext";
 function RecentltyDeletedModal({
   showRecentlyDeletedModal,
   handleCloseRecentlyDeleted,
-  handleShowRecentlyDeletedModal,
   recentlyDeletedTasks,
+  setRecentlyDeletedTasks,
+  tasks,
+  setTasks,
 }) {
   const filteredDeletedTask = recentlyDeletedTasks.filter(
     (tasks) => tasks.deletedAt !== null
   );
+  const restoreTaskPermanently = (ID) => {
+    const updatedTasks = recentlyDeletedTasks.map((task) =>
+      task.id === ID ? { ...task, deletedAt: null } : task
+    );
+    setRecentlyDeletedTasks(updatedTasks);
+    setTasks(updatedTasks);
+  };
+  const deleteTaskPermanently = (ID) => {
+    const updatedTasks = recentlyDeletedTasks.filter((task) => task.id !== ID);
+
+    setRecentlyDeletedTasks(updatedTasks);
+    setTasks(updatedTasks)
+    localStorage.setItem("taskArray", JSON.stringify(recentlyDeletedTasks));
+  };
+
+  useEffect(() => {
+    localStorage.setItem("taskArray", JSON.stringify(recentlyDeletedTasks));
+  }, [recentlyDeletedTasks]);
 
   const { theme } = useContext(ThemeContext);
-  console.log(theme, "gg");
+  // console.log(theme, "gg");
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
 
@@ -28,27 +47,44 @@ function RecentltyDeletedModal({
         centered
       >
         <div className={`${modalBgColor} ${textColorClass}`}>
-          <Modal.Header closeButton className={`${textColorClass} border-0 text-center`}>
-            <Modal.Title className="text-center">Recently Deleted Tasks</Modal.Title>
+          <Modal.Header
+            closeButton
+            className={`${textColorClass} border-0 text-center`}
+          >
+            <Modal.Title className="text-center">
+              Recently Deleted Tasks
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {filteredDeletedTask.map((task) => (
-              <div
-                key={task.id}
-                className="d-flex justify-content-between me-4"
-              >
-                {/* <p>ID: {task.id}</p> */}
-                <div>
-                  <p className="fs-5">
-                    <strong>{task.title}</strong>
-                  </p>
+            {filteredDeletedTask.length !== 0 ? (
+              filteredDeletedTask.map((task) => (
+                <div
+                  key={task.id}
+                  className="d-flex justify-content-between me-4"
+                >
+                  {/* <p>ID: {task.id}</p> */}
+                  <div>
+                    <p className="fs-5">
+                      <strong>{task.title}</strong>
+                    </p>
+                  </div>
+                  <div>
+                    <SlReload
+                      size={25}
+                      className="cursorPointer"
+                      onClick={() => restoreTaskPermanently(task.id)}
+                    />
+                    <MdDelete
+                      size={25}
+                      className="ms-3 cursorPointer"
+                      onClick={() => deleteTaskPermanently(task.id)}
+                    />
+                  </div>
                 </div>
-                <div>
-                  <SlReload size={25} />
-                  <MdDelete size={25} className="ms-3" />
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <h4 className="text-center">No History Available</h4>
+            )}
           </Modal.Body>
           {/* <Modal.Footer className="border-0">
             <Button variant="secondary" onClick={handleCloseRecentlyDeleted}>

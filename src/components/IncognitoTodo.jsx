@@ -8,7 +8,7 @@ import  ThemeContext  from "../Contexts/ThemeContext";
 const IncognitoTodo = () => {
   // const { handleShowConfirmModalShow,handleShowConfirmModalClose,handleShowConfirmModalUpdate } = useConfirmModalContext();
   const { theme } = useContext(ThemeContext);
-  console.log(theme,"gg")
+  // console.log(theme,"gg")
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -17,7 +17,7 @@ const IncognitoTodo = () => {
 
   const handleCloseConfirmModal = () => setShowConfirmModal(false);
   const handleDeleteConfirmModal = () => {
-    console.log(importantTaskToBeDeleted, "IMpo");
+    // console.log(importantTaskToBeDeleted, "IMpo");
     if (importantTaskToBeDeleted !== null) {
       const updatedTasks = tasks.map((task) => {
         if (task.id === importantTaskToBeDeleted) {
