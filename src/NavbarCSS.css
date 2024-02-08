@@ -51,3 +51,9 @@
       margin-right: 0px;
     }
   }
+  .bg-black.settingDropdownItems:hover{
+    background-color: #442244 !important;
+  }
+  .bgSlighDarkWhite.settingDropdownItems:hover{
+    background-color: #7979ab;
+  }

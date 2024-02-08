@@ -54,6 +54,7 @@
 .ClockDataClass {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 .activeClockDataClass {
   border: 2px solid olivedrab;
@@ -244,4 +245,11 @@
 }
 .zindex2{
   z-index: 2;
+}
+.mainClockClass{
+  min-height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }

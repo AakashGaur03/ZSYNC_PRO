@@ -164,21 +164,21 @@ const NavbarComp = ({ tasks, setTasks }) => {
               id="settingDropdown"
             >
               <NavDropdown.Item
-                className={`${navbarColorClass} ${textColorClass}`}
+                className={`settingDropdownItems ${navbarColorClass} ${textColorClass}`}
                 onClick={handleShowClockModal}
               >
                 <FaRegClock size="20px" className="me-3" />
                 Clock
               </NavDropdown.Item>
               <NavDropdown.Item
-                className={`${navbarColorClass} ${textColorClass}`}
+                className={`settingDropdownItems ${navbarColorClass} ${textColorClass}`}
                 onClick={handleShowRecentlyDeletedModal}
               >
                 <FaTrash size="20px" className="me-3" />
                 Recently Deleted
               </NavDropdown.Item>
               <NavDropdown.Item
-                className={`${navbarColorClass} ${textColorClass}`}
+                className={`settingDropdownItems ${navbarColorClass} ${textColorClass}`}
                 onClick={handleShowSoundModal}
               >
                 <IoIosMusicalNotes size="20px" className="me-3" />

@@ -15,19 +15,44 @@ const Alarm = () => {
     { id: 6, day: "S" },
     { id: 7, day: "S" },
   ];
-  const [activeDays, setActiveDays] = useState([]);
-  const handleAlarmClick = (dayId) => {
-    if (activeDays.includes(dayId)) {
-      setActiveDays(activeDays.filter((id) => id !== dayId));
-    } else {
-      setActiveDays([...activeDays, dayId]);
-    }
-  };
-  const [allAlarm, setAllAlarm] = useState(
-    JSON.parse(localStorage.getItem("alarmData"))
-      ? JSON.parse(localStorage.getItem("alarmData"))
-      : []
+  // const [activeDays, setActiveDays] = useState([]);
+  // const handleAlarmClick = (dayId) => {
+  //   if (activeDays.includes(dayId)) {
+  //     setActiveDays(activeDays.filter((id) => id !== dayId));
+  //   } else {
+  //     setActiveDays([...activeDays, dayId]);
+  //   }
+  // };
+
+  const storedAlarms = JSON.parse(localStorage.getItem("alarmData"))
+    ? JSON.parse(localStorage.getItem("alarmData"))
+    : [];
+
+  const filteredActiveAlarms = storedAlarms.filter(
+    (alarm) => alarm.status === true
   );
+  // console.log(filteredActiveAlarms);
+
+  const [allAlarm, setAllAlarm] = useState(storedAlarms);
+  const [activeAlarms, setActiveAlarms] = useState(storedAlarms);
+
+  useEffect(() => {
+    const filteredActiveAlarms = storedAlarms.filter(
+      (alarm) => alarm.status === true
+    );
+
+    setActiveAlarms(filteredActiveAlarms);
+  }, [allAlarm]);
+  useEffect(() => {
+    const filteredActiveAlarms = storedAlarms.filter(
+      (alarm) => alarm.status === true
+    );
+
+    localStorage.setItem("onAlarms", JSON.stringify(filteredActiveAlarms));
+  }, [storedAlarms]);
+
+  // const [isActiveAlarm, setIsActiveAlarm] = useState([false]);
+  const [alarmTime, setAlarmTime] = useState(null);
   const toggleAlarmStatus = (Id) => {
     const updatedAlarm = allAlarm.map((alarm) =>
       alarm.uniqueId === Id ? { ...alarm, status: !alarm.status } : alarm
@@ -37,13 +62,10 @@ const Alarm = () => {
   };
 
   const AlarmOnOrOff = (Id) => {
-    // console.log(Id, "IDD");
     const alarmToBeOn = allAlarm.find((alarm) => alarm.uniqueId === Id);
 
     if (alarmToBeOn && alarmToBeOn.status) {
-      // console.log(alarmToBeOn);
       const { hours, minutes } = alarmToBeOn;
-      // console.log(hours, minutes);
 
       let formattedHours;
       if (hours.includes("PM")) {
@@ -53,7 +75,6 @@ const Alarm = () => {
       } else {
         formattedHours = parseInt(hours) === 12 ? "00" : hours.slice(0, 2);
       }
-      // console.log(formattedHours)
       const now = new Date();
       let alarmTime = new Date(
         now.getFullYear(),
@@ -73,16 +94,18 @@ const Alarm = () => {
           0
         );
       }
+      // setIsActiveAlarm(true);
+      setAlarmTime(alarmTime);
 
       const timeUnlitAlarm = alarmTime - now;
 
       if (timeUnlitAlarm < 0) {
-        console.log("Alarm Gone", alarmToBeOn);
+        // console.log("Alarm Gone", alarmToBeOn);
       }
 
-      console.log(timeUnlitAlarm);
-      console.log(alarmTime);
-      console.log(now);
+      // console.log(timeUnlitAlarm, "timeUnlitAlarm");
+      // console.log(alarmTime, "alarmTime");
+      // console.log(now, "now");
 
       // We can make new Date() in folllowing Manner
       // new Date();
@@ -97,6 +120,108 @@ const Alarm = () => {
       // new Date(milliseconds)
     }
   };
+  // useEffect(() => {
+  //   if (isActiveAlarm) {
+  //     const intervalId = setInterval(() => {
+  //       console.log("timeticking");
+  //       const now = new Date();
+  //       const timeUntilAlarm = alarmTime - now;
+  //       if (timeUntilAlarm < 0) {
+  //         console.log("Alarm Gone");
+  //         clearInterval(intervalId);
+  //         setIsActiveAlarm(false);
+  //       }
+  //     }, 1000);
+  //     return () => clearInterval(intervalId);
+  //   }
+  // }, [isActiveAlarm, alarmTime]);
+
+  const [nextAlarm, setNextAlarm] = useState(null);
+
+  const NextAlarmSetFunction = () => {
+    let eachAlarm = localStorage.getItem("onAlarms")
+      ? JSON.parse(localStorage.getItem("onAlarms"))
+      : [];
+
+    // console.log(eachAlarm, "ea");
+    const sortAlarm = [];
+    const now = new Date();
+    for (let i = 0; i < eachAlarm.length; i++) {
+      // eachAlarm - now
+      // console.log(eachAlarm[i]);
+      // console.log(eachAlarm[i].hours);
+
+      let formattedHours;
+      if (eachAlarm[i].hours.includes("PM")) {
+        formattedHours = (
+          parseInt(eachAlarm[i].hours) === 12
+            ? 12
+            : parseInt(eachAlarm[i].hours) + 12
+        ).toString();
+      } else {
+        formattedHours =
+          parseInt(eachAlarm[i].hours) === 12
+            ? "00"
+            : eachAlarm[i].hours.slice(0, 2);
+      }
+      const now = new Date();
+      let alarmTime = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        parseInt(formattedHours),
+        parseInt(eachAlarm[i].minutes),
+        0
+      );
+      if (alarmTime <= now) {
+        alarmTime = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() + 1,
+          parseInt(formattedHours),
+          parseInt(eachAlarm[i].minutes),
+          0
+        );
+      }
+      const timeUnlitAlarm = alarmTime - now;
+      // console.log(timeUnlitAlarm);
+      sortAlarm.push({ time: timeUnlitAlarm, alarm: alarmTime });
+    }
+    sortAlarm.sort((a, b) => a.time - b.time);
+    console.log(sortAlarm,"sorted");
+    if(sortAlarm[0])
+    {
+      setNextAlarm(sortAlarm[0].alarm);
+    }
+
+    console.log(nextAlarm,"nextAlarm");
+  };
+  useEffect(() => {
+    NextAlarmSetFunction();
+  }, [activeAlarms]);
+
+
+  const [timeRemaining,setTimeRemaining]=useState("")
+
+  useEffect(()=>{
+    let timeRunOut=0
+    if(nextAlarm){
+      const now = new Date()
+      const intervalId = setInterval(()=>{
+        timeRunOut=nextAlarm-now
+        console.log(timeRunOut)
+        setTimeRemaining(timeRunOut)
+        if(timeRunOut<0){
+          console.log("asfdsdf")
+        }
+      },1000)
+      return () => {
+        clearInterval(intervalId);
+      };  
+    }
+
+  },[nextAlarm,timeRemaining])
+
   useEffect(() => {
     const storedAlarm = localStorage.getItem("alarmData")
       ? JSON.parse(localStorage.getItem("alarmData"))
@@ -126,9 +251,30 @@ const Alarm = () => {
       title: selectedTitle,
       status: true,
     };
+    // setIsActiveAlarm(true);
+
     AlarmOnOrOff(newAlarm.uniqueId);
     setAllAlarm((prevAlarms) => {
       const updateAlarms = [...prevAlarms, newAlarm];
+      updateAlarms.sort((a, b) => {
+        console.log(a.hours.slice(3, 5));
+        if (a.hours.slice(3, 5) === "PM") {
+          console.log(parseInt(a.hours) + 12);
+          console.log(a.hours);
+        }
+        let aHours = parseInt(a.hours);
+        let bHours = parseInt(b.hours);
+        const adjustedAHours =
+          a.hours.slice(3, 5) === "PM" ? aHours + 12 : aHours;
+        const adjustedBHours =
+          b.hours.slice(3, 5) === "PM" ? bHours + 12 : bHours;
+
+        if (adjustedAHours !== adjustedBHours) {
+          return adjustedAHours - adjustedBHours;
+        }
+        return parseInt(a.minutes) - parseInt(b.minutes);
+      });
+      console.log(updateAlarms, "Update");
       localStorage.setItem("alarmData", JSON.stringify(updateAlarms));
       return updateAlarms;
     });
@@ -136,9 +282,9 @@ const Alarm = () => {
     setShowAlarmModal(false);
   };
   const removeClock = (Id) => {
-    const updatedClocks = allAlarm.filter((alarm) => alarm.uniqueId!==Id);
+    const updatedClocks = allAlarm.filter((alarm) => alarm.uniqueId !== Id);
 
-    setAllAlarm(updatedClocks)
+    setAllAlarm(updatedClocks);
   };
 
   const sounds = [

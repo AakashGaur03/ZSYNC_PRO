@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import ClockContext from "../../Contexts/ClockContext";
 
-const ClockData = ({Clock1 , Clock2 , parentComponent}) => {
-  const borderClass = parentComponent === 'Clock' ? 'border-0' : 'activeClockDataClass';
+const ClockData = ({ Clock1, Clock2, parentComponent }) => {
+  const borderClass =
+    parentComponent === "Clock" ? "border-0" : "activeClockDataClass";
   const [currentTime, setCurrentTime] = useState(new Date());
   const [getSec, setGetSec] = useState(0);
   const [getmin, setGetMin] = useState(0);
@@ -11,13 +12,13 @@ const ClockData = ({Clock1 , Clock2 , parentComponent}) => {
   const formatTimeComponent = (component) => {
     return component < 10 ? `0${component}` : component;
   };
-  const {activeClass,setActiveClass}=useContext(ClockContext)
+  const { activeClass, setActiveClass } = useContext(ClockContext);
 
-  const handleActiveClock=(id)=>{
+  const handleActiveClock = (id) => {
     if (id !== activeClass) {
       setActiveClass(id);
     }
-  }
+  };
   useEffect(() => {
     const intervalId = setInterval(() => {
       const now = new Date();
@@ -47,39 +48,51 @@ const ClockData = ({Clock1 , Clock2 , parentComponent}) => {
     .split(" ")[1];
   return (
     <>
-    <div className={`ClockDataClass ${activeClass == 1 ? `${borderClass}` : ""}`} onClick={()=>handleActiveClock(1)}>
-      {Clock1 && <div
-        className={`position-relative align-self-center `}
-      >
-        <img src="/Clock2.webp" alt="" className="clockInfo" />
+      <div className="mainClockClass">
         <div
-          className="position-absolute"
-          id="secHand"
-          style={{ transform: `rotate(${secondRotateDegrees}deg)` }}
-        ></div>
-        <div
-          className="position-absolute"
-          id="minHand"
-          style={{ transform: `rotate(${minuteRotateDegrees}deg)` }}
-        ></div>
-        <div
-          className="position-absolute"
-          id="hourHand"
-          style={{ transform: `rotate(${hourRotateDegrees}deg)` }}
-        ></div>
-      </div>}
-    </div>
+          className={`ClockDataClass ${
+            activeClass == 1 ? `${borderClass}` : ""
+          }`}
+          onClick={() => handleActiveClock(1)}
+        >
+          {Clock1 && (
+            <div className={`position-relative align-self-center `}>
+              <img src="/Clock2.webp" alt="" className="clockInfo" />
+              <div
+                className="position-absolute"
+                id="secHand"
+                style={{ transform: `rotate(${secondRotateDegrees}deg)` }}
+              ></div>
+              <div
+                className="position-absolute"
+                id="minHand"
+                style={{ transform: `rotate(${minuteRotateDegrees}deg)` }}
+              ></div>
+              <div
+                className="position-absolute"
+                id="hourHand"
+                style={{ transform: `rotate(${hourRotateDegrees}deg)` }}
+              ></div>
+            </div>
+          )}
+        </div>
 
-    <div className={`ClockDataClass ${activeClass == 2 ? `${borderClass}` : ""}`} onClick={()=>handleActiveClock(2)}>
-      {Clock2 && <div
-        className={`d-inline-flex `}
-      >
-        <div className="border hour">{hour} &nbsp;</div>
-        <div className="border minute">{minute}&nbsp;</div>
-        <div className="border second">{second}&nbsp;</div>
-        <div className="border ampn">{ampm}&nbsp;</div>
-      </div>}
-    </div>
+        <div
+          className={`ClockDataClass ${
+            activeClass == 2 ? `${borderClass}` : ""
+          }`}
+          onClick={() => handleActiveClock(2)}
+        >
+          {Clock2 && (
+            <div className={`d-inline-flex `}>
+              <div className="border hour">{hour} &nbsp;</div>
+              <div className="border minute">{minute}&nbsp;</div>
+              <div className="border second">{second}&nbsp;</div>
+              <div className="border ampn">{ampm}&nbsp;</div>
+            </div>
+          )}
+        </div>
+      </div>
     </>
   );
 };
