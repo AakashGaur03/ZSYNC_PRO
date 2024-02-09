@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, InputGroup, Dropdown, Modal } from "react-bootstrap";
 import { FaTrash, FaEdit, FaStar, FaFilter } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
-import  ThemeContext  from "../Contexts/ThemeContext";
+import ThemeContext from "../Contexts/ThemeContext";
 // import { ConfirmModalContextProvider,useConfirmModalContext } from "../Contexts/ConfirmModalProvider";
 
 const IncognitoTodo = () => {
@@ -147,21 +147,24 @@ const IncognitoTodo = () => {
     setEditingTaskId(null);
     setNewTaskTitle("");
     setNewTask("");
-    setModalTitle("Add Task")
+    setModalTitle("Add Task");
   };
-  const closeEditingAddModal=()=>{
+  const closeEditingAddModal = () => {
     setShowAddTodo(false);
     setEditingTaskId(null);
     setNewTaskTitle("");
     setNewTask("");
-    setModalTitle("Add Task")
-
-  }
+    setModalTitle("Add Task");
+  };
   return (
     <>
-        <div className="backgroundIncognito">
-      <img src="../../public/Images/incognitoImg.png" alt="" className="incognitoImg"/>
-    </div>
+      <div className="backgroundIncognito">
+        <img
+          src="../../public/Images/incognitoImg.png"
+          alt=""
+          className="incognitoImg"
+        />
+      </div>
       {/* <div className="fs-4">Add Todo</div> */}
       <div className="d-flex justify-content-between mx-4 mt-3">
         <div className="align-self-center">
@@ -219,59 +222,68 @@ const IncognitoTodo = () => {
           )}
         </div>
       </div>
-      <Modal show={showAddTodo} onHide={() => setShowAddTodo(false)} centered backdrop="static"
-        keyboard={false}>
+      <Modal
+        show={showAddTodo}
+        onHide={() => setShowAddTodo(false)}
+        centered
+        backdrop="static"
+        keyboard={false}
+      >
         <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor`}>
-
-        <Modal.Header className="border-0" closeButton>
-          <Modal.Title>{modalTitle}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body >
-          <InputGroup className="mb-3">
-            <Form.Control
-              name="setNewTaskTitle"
-              className="inputAddTodo"
-              type="text"
-              value={newTaskTitle}
-              onChange={(e) => {
-                setNewTaskTitle(e.target.value);
-              }}
-              placeholder="Add Title"
-              aria-label=""
-              aria-describedby="addTask"
-            />
-          </InputGroup>
-          <InputGroup className="mb-3">
-            <Form.Control
-              name="setNewTask"
-              className="inputAddTodo"
-              as="textarea"
-              rows={5}
-              type="text"
-              value={newTask}
-              onChange={(e) => {
-                setNewTask(e.target.value);
-              }}
-              placeholder="Add Task"
-            ></Form.Control>
-          </InputGroup>
-        </Modal.Body>
-        <Modal.Footer className="border-0">
-          <Button
-            variant="primary"
-            className="saveEditModal"
-            id=""
-            onClick={editingTaskId ? saveEditing : addTask}
-          >
-            {editingTaskId ? "Save Task" : "Add Task"}
-          </Button>
-          <Button variant="secondary" className="CloseModal" onClick={() => closeEditingAddModal()}>
-            Close
-          </Button>
-          {/* <Button variant="primary" onClick={() => setShowAddTodo(false)}>
+          <Modal.Header className="border-0" closeButton>
+            <Modal.Title>{modalTitle}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <InputGroup className="mb-3">
+              <Form.Control
+                required
+                name="setNewTaskTitle"
+                className="inputAddTodo"
+                type="text"
+                value={newTaskTitle}
+                onChange={(e) => {
+                  setNewTaskTitle(e.target.value);
+                }}
+                placeholder="Add Title"
+                aria-label=""
+                aria-describedby="addTask"
+              />
+            </InputGroup>
+            <InputGroup className="mb-3">
+              <Form.Control
+                name="setNewTask"
+                className="inputAddTodo"
+                as="textarea"
+                rows={5}
+                type="text"
+                value={newTask}
+                onChange={(e) => {
+                  setNewTask(e.target.value);
+                }}
+                placeholder="Add Task"
+              ></Form.Control>
+            </InputGroup>
+          </Modal.Body>
+          <Modal.Footer className="border-0">
+            <Button
+              variant="primary"
+              className="saveEditModal"
+              id=""
+              onClick={editingTaskId ? saveEditing : addTask}
+            >
+              {editingTaskId ? "Save Task" : "Add Task"}
+            </Button>
+            <Button
+              variant="secondary"
+              className="CloseModal"
+              onClick={() => closeEditingAddModal()}
+            >
+              Close
+            </Button>
+            {/* <Button variant="primary" onClick={() => setShowAddTodo(false)}>
             Save Changes
           </Button> */}
-        </Modal.Footer>
+          </Modal.Footer>
         </div>
       </Modal>
 
@@ -298,6 +310,7 @@ const IncognitoTodo = () => {
             (task.deletedAt === null || task.deletedAt === undefined) && (
               <li key={task.id} style={{ display: "flex" }}>
                 <div
+                  className="cursorPointer"
                   style={{ width: "80%" }}
                   onClick={() => handleViewTask(task)}
                 >

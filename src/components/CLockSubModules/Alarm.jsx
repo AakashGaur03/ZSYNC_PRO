@@ -15,6 +15,31 @@ const Alarm = () => {
     { id: 6, day: "S" },
     { id: 7, day: "S" },
   ];
+  const sounds = [
+    { index: 0, name: "alarm-tone", src: "alarm-tone.wav" },
+    { index: 1, name: "classic-alarm", src: "classic-alarm.wav" },
+    { index: 2, name: "classic-short-alarm", src: "classic-short-alarm.wav" },
+    { index: 3, name: "clock-alarm", src: "clock-alarm.mp3" },
+    { index: 4, name: "critical-alarm", src: "critical-alarm.wav" },
+    {
+      index: 5,
+      name: "emergency-alert-alarm",
+      src: "emergency-alert-alarm.wav",
+    },
+    { index: 6, name: "error-alarm", src: "error-alarm.mp3" },
+    { index: 7, name: "facility-alarm", src: "facility-alarm.wav" },
+    { index: 8, name: "rooster-alarm", src: "rooster-alarm.wav" },
+    {
+      index: 9,
+      name: "security-breach-alarm",
+      src: "security-breach-alarm.wav",
+    },
+    {
+      index: 10,
+      name: "simple-notification-alarm",
+      src: "simple-notification-alarm.mp3",
+    },
+  ];
   // const [activeDays, setActiveDays] = useState([]);
   // const handleAlarmClick = (dayId) => {
   //   if (activeDays.includes(dayId)) {
@@ -142,85 +167,109 @@ const Alarm = () => {
     let eachAlarm = localStorage.getItem("onAlarms")
       ? JSON.parse(localStorage.getItem("onAlarms"))
       : [];
-
-    // console.log(eachAlarm, "ea");
-    const sortAlarm = [];
-    const now = new Date();
-    for (let i = 0; i < eachAlarm.length; i++) {
-      // eachAlarm - now
-      // console.log(eachAlarm[i]);
-      // console.log(eachAlarm[i].hours);
-
-      let formattedHours;
-      if (eachAlarm[i].hours.includes("PM")) {
-        formattedHours = (
-          parseInt(eachAlarm[i].hours) === 12
-            ? 12
-            : parseInt(eachAlarm[i].hours) + 12
-        ).toString();
-      } else {
-        formattedHours =
-          parseInt(eachAlarm[i].hours) === 12
-            ? "00"
-            : eachAlarm[i].hours.slice(0, 2);
-      }
+    console.log(eachAlarm, "dddd");
+    if (eachAlarm.length > 0) {
+      // console.log(eachAlarm, "ea");
+      const sortAlarm = [];
       const now = new Date();
-      let alarmTime = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        parseInt(formattedHours),
-        parseInt(eachAlarm[i].minutes),
-        0
-      );
-      if (alarmTime <= now) {
-        alarmTime = new Date(
+      for (let i = 0; i < eachAlarm.length; i++) {
+        // eachAlarm - now
+        // console.log(eachAlarm[i]);
+        // console.log(eachAlarm[i].hours);
+
+        let formattedHours;
+        if (eachAlarm[i].hours.includes("PM")) {
+          formattedHours = (
+            parseInt(eachAlarm[i].hours) === 12
+              ? 12
+              : parseInt(eachAlarm[i].hours) + 12
+          ).toString();
+        } else {
+          formattedHours =
+            parseInt(eachAlarm[i].hours) === 12
+              ? "00"
+              : eachAlarm[i].hours.slice(0, 2);
+        }
+        const now = new Date();
+        let alarmTime = new Date(
           now.getFullYear(),
           now.getMonth(),
-          now.getDate() + 1,
+          now.getDate(),
           parseInt(formattedHours),
           parseInt(eachAlarm[i].minutes),
           0
         );
+        if (alarmTime <= now) {
+          alarmTime = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate() + 1,
+            parseInt(formattedHours),
+            parseInt(eachAlarm[i].minutes),
+            0
+          );
+        }
+        const timeUnlitAlarm = alarmTime - now;
+        // console.log(timeUnlitAlarm);
+        sortAlarm.push({
+          time: timeUnlitAlarm,
+          alarm: alarmTime,
+          soundIndex: eachAlarm[i].soundIndex,
+        });
       }
-      const timeUnlitAlarm = alarmTime - now;
-      // console.log(timeUnlitAlarm);
-      sortAlarm.push({ time: timeUnlitAlarm, alarm: alarmTime });
-    }
-    sortAlarm.sort((a, b) => a.time - b.time);
-    console.log(sortAlarm,"sorted");
-    if(sortAlarm[0])
-    {
-      setNextAlarm(sortAlarm[0].alarm);
+      sortAlarm.sort((a, b) => a.time - b.time);
+      console.log(sortAlarm, "sorted");
+      if (sortAlarm[0]) {
+        setNextAlarm(sortAlarm[0]);
+      }
+    } else {
+      setNextAlarm(null);
     }
 
-    console.log(nextAlarm,"nextAlarm");
+    console.log(nextAlarm, "nextAlarm");
   };
   useEffect(() => {
     NextAlarmSetFunction();
   }, [activeAlarms]);
 
+  const pauseWhenRinOut = () => {
+    NextAlarmSetFunction();
+  };
 
-  const [timeRemaining,setTimeRemaining]=useState("")
+  const [timeRemaining, setTimeRemaining] = useState("");
 
-  useEffect(()=>{
-    let timeRunOut=0
-    if(nextAlarm){
-      const now = new Date()
-      const intervalId = setInterval(()=>{
-        timeRunOut=nextAlarm-now
-        console.log(timeRunOut)
-        setTimeRemaining(timeRunOut)
-        if(timeRunOut<0){
-          console.log("asfdsdf")
+  const playSound = (soundIndex) => {
+    console.log(soundIndex, "Index");
+    console.log(sounds);
+    const soundToBePlayed = sounds.find((sound) => sound.index == soundIndex);
+    console.log(soundToBePlayed.src, "dd");
+
+    if (soundToBePlayed) {
+      const audio = new Audio(`Sounds/${soundToBePlayed.src}`);
+      audio.play();
+    } else {
+      console.error("Sound not found for index:", soundIndex);
+    }
+  };
+
+  useEffect(() => {
+    let timeRunOut = 0;
+    if (nextAlarm) {
+      const now = new Date();
+      const intervalId = setInterval(() => {
+        timeRunOut = nextAlarm.alarm - now;
+        console.log(timeRunOut);
+        setTimeRemaining(timeRunOut);
+        if (timeRunOut < 0) {
+          console.log("asfdsdf");
+          playSound(nextAlarm.soundIndex);
         }
-      },1000)
+      }, 1000);
       return () => {
         clearInterval(intervalId);
-      };  
+      };
     }
-
-  },[nextAlarm,timeRemaining])
+  }, [nextAlarm, timeRemaining]);
 
   useEffect(() => {
     const storedAlarm = localStorage.getItem("alarmData")
@@ -287,31 +336,7 @@ const Alarm = () => {
     setAllAlarm(updatedClocks);
   };
 
-  const sounds = [
-    { index: 0, name: "alarm-tone", src: "alarm-tone.wav" },
-    { index: 1, name: "classic-alarm", src: "classic-alarm.wav" },
-    { index: 2, name: "classic-short-alarm", src: "classic-short-alarm.wav" },
-    { index: 3, name: "clock-alarm", src: "clock-alarm.mp3" },
-    { index: 4, name: "critical-alarm", src: "critical-alarm.wav" },
-    {
-      index: 5,
-      name: "emergency-alert-alarm",
-      src: "emergency-alert-alarm.wav",
-    },
-    { index: 6, name: "error-alarm", src: "error-alarm.mp3" },
-    { index: 7, name: "facility-alarm", src: "facility-alarm.wav" },
-    { index: 8, name: "rooster-alarm", src: "rooster-alarm.wav" },
-    {
-      index: 9,
-      name: "security-breach-alarm",
-      src: "security-breach-alarm.wav",
-    },
-    {
-      index: 10,
-      name: "simple-notification-alarm",
-      src: "simple-notification-alarm.mp3",
-    },
-  ];
+
 
   const generateOptions = (start, end) => {
     return Array.from({ length: end - start + 1 }, (_, index) => start + index);
@@ -326,6 +351,7 @@ const Alarm = () => {
       <Button variant="secondary" onClick={handleAlarmModalShow}>
         Set Alarm
       </Button>
+      <Button onClick={pauseWhenRinOut}>Pause</Button>
       <Modal show={showAlarmModal} onHide={handleAlarmModalClose}>
         <Modal.Body className={`${modalBgColor} ${textColorClass} confirmBtn`}>
           <h3 className="text-center mb-3">Set Alarm</h3>
