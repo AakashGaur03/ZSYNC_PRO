@@ -218,14 +218,15 @@ const Todo = ({ tasks, setTasks }) => {
           )}
         </div>
       </div>
-      <Modal
+      <Modal 
+      className="backgroundTransparent"
         show={showAddTodo}
         onHide={() => setShowAddTodo(false)}
         centered
         backdrop="static"
         keyboard={false}
       >
-        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor`}>
+        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow p-3`}>
           <Modal.Header className="border-0" closeButton>
             <Modal.Title>{modalTitle}</Modal.Title>
           </Modal.Header>
@@ -286,31 +287,36 @@ const Todo = ({ tasks, setTasks }) => {
         </div>
       </Modal>
 
-      <Modal show={viewTask} onHide={() => setViewTask(false)}>
+      <Modal show={viewTask} onHide={() => setViewTask(false)} className="backgroundTransparent">
         {/* <Modal.Header closeButton> */}
-        <Modal.Title className="text-center mt-4 mb-4">
-          <strong>{viewedTask ? viewedTask.title.toUpperCase() : ""}</strong>
-        </Modal.Title>
-        {/* </Modal.Header> */}
-        <Modal.Body className="ms-3 fs-5 mb-5">
-          {viewedTask ? viewedTask.text : ""}
-        </Modal.Body>
-        {/* <Modal.Footer> */}
-        <Button variant="secondary" onClick={() => setViewTask(false)}>
-          Close
-        </Button>
+        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow`}>
+          <Modal.Title className="text-center mt-4 mb-4">
+            <strong>{viewedTask ? viewedTask.title.toUpperCase() : ""}</strong>
+          </Modal.Title>
+          <Modal.Body className="ms-3 fs-5 mb-5">
+            {viewedTask ? viewedTask.text : ""}
+          </Modal.Body>
+          <div className="d-flex mb-4 justify-content-center">
+            <Button variant="secondary" className="w-50" onClick={() => setViewTask(false)}>
+              Close
+            </Button>
+          </div>
+        </div>
         {/* </Modal.Footer> */}
       </Modal>
 
       {/* <div>{newTask}</div> */}
-      <ul style={{ overflowY: "auto", maxHeight: "75vh" }}>
+      <ul style={{ overflowY: "auto", maxHeight: "75vh" }} className="ps-2">
         {filteredTasks.map((task) => {
           return (
             (task.deletedAt === null || task.deletedAt === undefined) && (
-              <li key={task.id} style={{ display: "flex" }}>
+              <li
+                key={task.id}
+                className={`${task.important ? "imptodoDiv" : ""} todoDiv`}
+              >
                 <div
-                  className="cursorPointer"
-                  style={{ width: "80%" }}
+                  className="cursorPointer ps-3"
+                  style={{ width: "82%" }}
                   onClick={() => handleViewTask(task)}
                 >
                   <span
@@ -352,10 +358,10 @@ const Todo = ({ tasks, setTasks }) => {
           );
         })}
       </ul>
-      <Modal show={showConfirmModal} onHide={handleCloseConfirmModal} centered>
+      <Modal show={showConfirmModal} onHide={handleCloseConfirmModal} centered className="backgroundTransparent">
         <Modal.Body
           // style={{ ...modalBodyStyle }}
-          className={`${modalBgColor} ${textColorClass} ConfirmModalColor`}
+          className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow`}
         >
           <Modal.Title className="text-center pb-4">
             Confirmation Modal

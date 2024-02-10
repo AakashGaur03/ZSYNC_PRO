@@ -41,12 +41,13 @@ function RecentltyDeletedModal({
 
   return (
     <>
-      <Modal
+      <Modal 
         show={showRecentlyDeletedModal}
         onHide={handleCloseRecentlyDeleted}
         centered
+        className="backgroundTransparent"
       >
-        <div className={`${modalBgColor} ${textColorClass}`}>
+        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow p-3`}>
           <Modal.Header
             closeButton
             className={`${textColorClass} border-0 text-center`}
@@ -71,12 +72,12 @@ function RecentltyDeletedModal({
                   <div>
                     <SlReload
                       size={25}
-                      className="cursorPointer"
+                      className="cursorPointer restoreTaskBtn"
                       onClick={() => restoreTaskPermanently(task.id)}
                     />
                     <MdDelete
                       size={25}
-                      className="ms-3 cursorPointer"
+                      className="ms-3 cursorPointer deleteTaskModalBtn"
                       onClick={() => deleteTaskPermanently(task.id)}
                     />
                   </div>

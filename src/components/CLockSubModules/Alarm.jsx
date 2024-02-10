@@ -352,8 +352,8 @@ const Alarm = () => {
         Set Alarm
       </Button>
       <Button onClick={pauseWhenRinOut}>Pause</Button>
-      <Modal show={showAlarmModal} onHide={handleAlarmModalClose}>
-        <Modal.Body className={`${modalBgColor} ${textColorClass} confirmBtn`}>
+      <Modal show={showAlarmModal} onHide={handleAlarmModalClose} className="backgroundTransparent">
+        <Modal.Body className={`${modalBgColor} ${textColorClass} confirmBtn modalBorderRadiusAndShadow`}>
           <h3 className="text-center mb-3">Set Alarm</h3>
           <div className="row">
             <div className="col-md-6">

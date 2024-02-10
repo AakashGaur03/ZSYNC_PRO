@@ -24,16 +24,16 @@ function SoundModal({
 
   return (
     <>
-      <Modal
+      <Modal 
         show={showSoundModal}
         onHide={handleCloseSoundModal}
         centered
         size="lg"
-        className="SoundModalSize"
+        className="backgroundTransparent"
         backdrop="static"
         keyboard={false}
       >
-        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor`}>
+        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow`}>
           <Modal.Body>
             <AudioPlayer
               currentSound={currentSound}
@@ -46,7 +46,7 @@ function SoundModal({
             />
           </Modal.Body>
 
-          <Modal.Footer className="border-0">
+          <Modal.Footer className="border-0 pe-4 pb-3">
             <Button variant="secondary" className="CloseModal" onClick={handleCloseSoundModal}>
               Close
             </Button>

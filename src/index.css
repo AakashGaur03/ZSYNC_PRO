@@ -8,7 +8,13 @@
 .backgroundDark {
   background-image: linear-gradient(45deg, #282828, #420b46);
 }
-
+.backgroundTransparent{
+  background-color: transparent;
+}
+.backgroundTransparent .modal-content{
+  background-color: transparent;
+  border: 0;
+}
 .minHeightContainer {
   min-height: calc(100vh - 56px);
 }
@@ -164,32 +170,45 @@
   background-image: linear-gradient(45deg, #740202, #360808);
 }
 
-.ConfirmModalColor:has(.deleteTaskModalBtn:hover){
+.ConfirmModalColor:has(.deleteTaskModalBtn:hover) {
   background-image: linear-gradient(45deg, #740202, #360808);
+  color: white !important;
+
 }
-.ConfirmModalColor:has(.dontDeleteTaskModalBtn:hover){
+.ConfirmModalColor:has(.dontDeleteTaskModalBtn:hover) {
   background-image: linear-gradient(45deg, #0e4b0e, #002615);
+  color: white !important;
+
 }
-.ConfirmModalColor:has(.CloseModal:hover){
+.ConfirmModalColor:has(.restoreTaskBtn:hover) {
+  background-image: linear-gradient(45deg, #0e4b0e, #002615);
+  color: white !important;
+
+}
+.ConfirmModalColor:has(.CloseModal:hover) {
   background-image: linear-gradient(45deg, #740202, #360808);
+  color: white !important;
+
 }
-.ConfirmModalColor:has(.saveEditModal:hover){
+.ConfirmModalColor:has(.saveEditModal:hover) {
   background-image: linear-gradient(45deg, #0e4b0e, #002615);
+  color: white !important;
+
 }
-.alarmDays{
+.alarmDays {
   padding: 12px;
   border: 1px solid white;
   border-radius: 50%;
 }
 .alarmDays:hover,
-.alarmDays.active{
+.alarmDays.active {
   background-color: #7c7c7c;
 }
 
-.colorDropdownAlarm{
+.colorDropdownAlarm {
   background-color: #7c7c7c;
 }
-.backgroundIncognito{
+.backgroundIncognito {
   height: calc(100vh - 56px);
   position: absolute;
   display: flex;
@@ -198,58 +217,73 @@
   justify-content: center;
   z-index: -20;
 }
-.adjustonIncognito{
+.adjustonIncognito {
   min-height: calc(100vh - 56px);
 }
-@media (max-width:767px){
-  .backgroundIncognito{
+@media (max-width: 767px) {
+  .backgroundIncognito {
     width: 90%;
   }
-  .incognitoImg{
+  .incognitoImg {
     height: 170px;
     width: 250px;
-
   }
 }
-@media (max-width:1033px)
-{
-  .adjustonIncognito{
+@media (max-width: 1033px) {
+  .adjustonIncognito {
     min-height: calc(100vh - 38px);
   }
 }
-.dropdownFilterMain{
+.dropdownFilterMain {
   border: 0;
   background-color: transparent;
 }
-.dropdownFilter{
+.dropdownFilter {
   background-color: black;
   color: white;
 }
 .filterdropdownActive {
   background-color: #323232;
 }
-.dropdownFilter:hover{
+.dropdownFilter:hover {
   background-color: #323232;
   color: white;
 }
-.topDropdownFilter{
+.topDropdownFilter {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
-.bottomDropdownFilter{
+.bottomDropdownFilter {
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 }
-.btn-close{
+.btn-close {
   background-color: white;
 }
-.zindex2{
+.zindex2 {
   z-index: 2;
 }
-.mainClockClass{
+.mainClockClass {
   min-height: 250px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.todoDiv {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.7rem;
+  padding: 10px;
+  border: 1px solid;
+  border-radius: 54px;
+  box-shadow: -6px 20px 7px 0px #0a0609;
+}
+.imptodoDiv {
+  border: 1px solid goldenrod;
+}
+.modalBorderRadiusAndShadow{
+  border-radius: 50px;
+  box-shadow: 5px 9px 20px 2px #60605f;
 }

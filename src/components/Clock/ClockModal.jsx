@@ -14,8 +14,8 @@ function ClockModal({showClockModal,handleCloseClockModal ,handleUpdateClockModa
   
   return (
     <>
-      <Modal show={showClockModal} onHide={handleCloseClockModal} centered>
-        <div className={`${modalBgColor} ${textColorClass}`}  >
+      <Modal show={showClockModal} onHide={handleCloseClockModal} centered className="backgroundTransparent">
+        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow p-3`}  >
 
         <Modal.Body>
             <ClockData Clock1 Clock2/>
