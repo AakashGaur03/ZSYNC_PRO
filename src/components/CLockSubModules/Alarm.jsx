@@ -218,7 +218,7 @@ const Alarm = () => {
         });
       }
       sortAlarm.sort((a, b) => a.time - b.time);
-      console.log(sortAlarm, "sorted");
+      // console.log(sortAlarm, "sorted");
       if (sortAlarm[0]) {
         setNextAlarm(sortAlarm[0]);
       }
@@ -226,23 +226,27 @@ const Alarm = () => {
       setNextAlarm(null);
     }
 
-    console.log(nextAlarm, "nextAlarm");
+    // console.log(nextAlarm, "nextAlarm");
   };
   useEffect(() => {
     NextAlarmSetFunction();
   }, [activeAlarms]);
 
   const pauseWhenRinOut = () => {
+    document.getElementById("alarmRing").classList.remove("shake-image")
     NextAlarmSetFunction();
+    handleAlarmModalRingClose();
   };
 
   const [timeRemaining, setTimeRemaining] = useState("");
 
   const playSound = (soundIndex) => {
-    console.log(soundIndex, "Index");
-    console.log(sounds);
+    // console.log(soundIndex, "Index");
+    // console.log(sounds);
+    handleAlarmModalRingShow();
+    document.getElementById("alarmRing").classList.add("shake-image")
     const soundToBePlayed = sounds.find((sound) => sound.index == soundIndex);
-    console.log(soundToBePlayed.src, "dd");
+    // console.log(soundToBePlayed.src, "dd");
 
     if (soundToBePlayed) {
       const audio = new Audio(`Sounds/${soundToBePlayed.src}`);
@@ -261,7 +265,7 @@ const Alarm = () => {
         console.log(timeRunOut);
         setTimeRemaining(timeRunOut);
         if (timeRunOut < 0) {
-          console.log("asfdsdf");
+          // console.log("asfdsdf");
           playSound(nextAlarm.soundIndex);
         }
       }, 1000);
@@ -284,8 +288,11 @@ const Alarm = () => {
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   const [showAlarmModal, setShowAlarmModal] = useState(false);
+  const [showAlarmModalRing, setShowAlarmModalRing] = useState(false);
   const handleAlarmModalClose = () => setShowAlarmModal(false);
   const handleAlarmModalShow = () => setShowAlarmModal(true);
+  const handleAlarmModalRingClose = () => setShowAlarmModalRing(false);
+  const handleAlarmModalRingShow = () => setShowAlarmModalRing(true);
   const handleAlarmModalUpdate = () => {
     let selectedMin = document.getElementById("minutes").value;
     let selectedHour = document.getElementById("hours").value;
@@ -306,10 +313,10 @@ const Alarm = () => {
     setAllAlarm((prevAlarms) => {
       const updateAlarms = [...prevAlarms, newAlarm];
       updateAlarms.sort((a, b) => {
-        console.log(a.hours.slice(3, 5));
+        // console.log(a.hours.slice(3, 5));
         if (a.hours.slice(3, 5) === "PM") {
-          console.log(parseInt(a.hours) + 12);
-          console.log(a.hours);
+          // console.log(parseInt(a.hours) + 12);
+          // console.log(a.hours);
         }
         let aHours = parseInt(a.hours);
         let bHours = parseInt(b.hours);
@@ -323,7 +330,7 @@ const Alarm = () => {
         }
         return parseInt(a.minutes) - parseInt(b.minutes);
       });
-      console.log(updateAlarms, "Update");
+      // console.log(updateAlarms, "Update");
       localStorage.setItem("alarmData", JSON.stringify(updateAlarms));
       return updateAlarms;
     });
@@ -336,8 +343,6 @@ const Alarm = () => {
     setAllAlarm(updatedClocks);
   };
 
-
-
   const generateOptions = (start, end) => {
     return Array.from({ length: end - start + 1 }, (_, index) => start + index);
   };
@@ -348,12 +353,22 @@ const Alarm = () => {
   return (
     <div>
       <div>Alarm</div>
+
       <Button variant="secondary" onClick={handleAlarmModalShow}>
         Set Alarm
       </Button>
-      <Button onClick={pauseWhenRinOut}>Pause</Button>
-      <Modal show={showAlarmModal} onHide={handleAlarmModalClose} className="backgroundTransparent">
-        <Modal.Body className={`${modalBgColor} ${textColorClass} confirmBtn modalBorderRadiusAndShadow`}>
+      <Button variant="secondary" onClick={handleAlarmModalRingShow}>
+        Show Alarm
+      </Button>
+
+      <Modal
+        show={showAlarmModal}
+        onHide={handleAlarmModalClose}
+        className="backgroundTransparent"
+      >
+        <Modal.Body
+          className={`${modalBgColor} ${textColorClass} confirmBtn modalBorderRadiusAndShadow`}
+        >
           <h3 className="text-center mb-3">Set Alarm</h3>
           <div className="row">
             <div className="col-md-6">
@@ -466,6 +481,30 @@ const Alarm = () => {
             >
               Cancel
             </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        show={showAlarmModalRing}
+        onHide={handleAlarmModalRingClose}
+        className="backgroundTransparent"
+      >
+        <Modal.Body
+          className={`${modalBgColor} ${textColorClass} confirmBtn modalBorderRadiusAndShadow`}
+        >
+          <div className="d-flex justify-content-center">
+            <img
+              src="../../../public/ClockImgToRing.png"
+              alt=""
+              // height={100}
+              // width={100}
+              id="alarmRing"
+              className=" "
+            />
+          </div>
+          <div>
+            <Button onClick={pauseWhenRinOut}>Pause</Button>
           </div>
         </Modal.Body>
       </Modal>

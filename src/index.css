@@ -287,3 +287,15 @@
   border-radius: 50px;
   box-shadow: 5px 9px 20px 2px #60605f;
 }
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-8px) rotate(-8deg); }
+  50% { transform: translateX(8px) rotate(8deg); }
+  75% { transform: translateX(-8px) rotate(-8deg); }
+  100% { transform: translateX(0); }
+}
+
+.shake-image {
+  animation: shake 0.6s linear 1s infinite both;
+}

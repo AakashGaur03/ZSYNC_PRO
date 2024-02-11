@@ -1,4 +1,11 @@
-import { Container, Nav, NavDropdown, Navbar, Form } from "react-bootstrap";
+import {
+  Container,
+  Nav,
+  NavDropdown,
+  Navbar,
+  Form,
+  Badge,
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { IoSettings, IoSettingsOutline } from "react-icons/io5";
 import { FaRegClock, FaTrash } from "react-icons/fa";
@@ -17,8 +24,11 @@ const NavbarComp = ({ tasks, setTasks }) => {
     useContext(ClockContext);
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   const navbarColorClass = theme === "Light" ? "bgSlighDarkWhite" : "bg-black";
+  const bgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const [showRecentlyDeletedModal, setShowRecentlyDeletedModal] =
     useState(false);
+  const [numberTodo, setNumberTodo] = useState("");
+
   const handleCloseRecentlyDeleted = () => setShowRecentlyDeletedModal(false);
   const handleShowRecentlyDeletedModal = () => {
     setRecentlyDeletedTasks(
@@ -119,6 +129,14 @@ const NavbarComp = ({ tasks, setTasks }) => {
     setCurrentSound(parent);
   };
 
+  const numberAtTodoTop = tasks.filter(
+    (task) => task.deletedAt === null && task.completed === false
+  );
+
+  useEffect(() => {
+    setNumberTodo(numberAtTodoTop.length);
+  }, [numberTodo, tasks]);
+
   return (
     <>
       <Navbar
@@ -134,7 +152,14 @@ const NavbarComp = ({ tasks, setTasks }) => {
           <Navbar.Collapse id="basic-navbar-nav" className={"btn-light"}>
             <Nav className="ms-auto gapNavItem">
               <Nav.Link as={Link} to="/" className={textColorClass}>
-                Todo
+                <div style={{position:"relative"}}>
+                  Todo
+                  {numberTodo > 0 && (
+                    <Badge pill className={`${bgColor}`}  style={{marginTop:"-4px" , position:"absolute"}}>
+                      {numberTodo}
+                    </Badge>
+                  )}
+                </div>
               </Nav.Link>
               <Nav.Link
                 as={Link}
