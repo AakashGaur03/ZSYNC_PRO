@@ -105,8 +105,18 @@ const NavbarComp = ({ tasks, setTasks }) => {
       const value = sounds.find((item) => {
         return item.index === selectedSound;
       });
-
-      localStorage.setItem("timerSound", JSON.stringify(value));
+      if (value) {
+        localStorage.setItem("timerSound", JSON.stringify(value));
+      } else {
+        localStorage.setItem(
+          "timerSound",
+          JSON.stringify({
+            index: 1,
+            name: "classic-alarm",
+            src: "classic-alarm.wav",
+          })
+        );
+      }
     }
     if (currentSound === "Alarm") {
       // console.log("Hello222");
@@ -152,10 +162,14 @@ const NavbarComp = ({ tasks, setTasks }) => {
           <Navbar.Collapse id="basic-navbar-nav" className={"btn-light"}>
             <Nav className="ms-auto gapNavItem">
               <Nav.Link as={Link} to="/" className={textColorClass}>
-                <div style={{position:"relative"}}>
+                <div style={{ position: "relative" }}>
                   Todo
                   {numberTodo > 0 && (
-                    <Badge pill className={`${bgColor}`}  style={{marginTop:"-4px" , position:"absolute"}}>
+                    <Badge
+                      pill
+                      className={`${bgColor}`}
+                      style={{ marginTop: "-4px", position: "absolute" }}
+                    >
                       {numberTodo}
                     </Badge>
                   )}

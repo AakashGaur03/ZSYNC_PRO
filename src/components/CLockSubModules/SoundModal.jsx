@@ -21,6 +21,7 @@ function SoundModal({
   // console.log(theme, "gg");
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
+  const btnColor = theme === "Light" ? "btnLightTheme" : "btnDarkTheme";
 
   return (
     <>
@@ -47,10 +48,10 @@ function SoundModal({
           </Modal.Body>
 
           <Modal.Footer className="border-0 pe-4 pb-3">
-            <Button variant="secondary" className="CloseModal" onClick={handleCloseSoundModal}>
+            <Button variant="danger" className="RedModal" onClick={handleCloseSoundModal}>
               Close
             </Button>
-            <Button variant="primary" className="saveEditModal" onClick={handleUpdateSoundModal}>
+            <Button variant="primary" className={`GreenModal ${btnColor}`} onClick={handleUpdateSoundModal}>
               Save Changes
             </Button>
           </Modal.Footer>

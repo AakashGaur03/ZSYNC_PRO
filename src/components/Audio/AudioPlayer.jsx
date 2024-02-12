@@ -13,6 +13,7 @@ const AudioPlayer = ({
   const [audio, setaudio] = useState(null);
 
   const selectedSoundLocal = localStorage.getItem("timerSound")?localStorage.getItem("timerSound"):localStorage.setItem("timerSound",JSON.stringify({ index:1, name: "classic-alarm", src: "classic-alarm.wav" }));
+  
   const parsedSound = JSON.parse(selectedSoundLocal);
   // console.log(parsedSound["index"]);
 

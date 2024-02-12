@@ -19,6 +19,7 @@ const Clock = () => {
         parentComponent="Clock"
         Clock1={activeClock === "clock1"}
         Clock2={activeClock === "clock2"}
+        Clock3={activeClock === "clock3"}
       />
       <div className="d-flex justify-content-around mb-4">
         <FaStopwatch

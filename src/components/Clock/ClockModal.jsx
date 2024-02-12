@@ -11,6 +11,7 @@ function ClockModal({showClockModal,handleCloseClockModal ,handleUpdateClockModa
   // console.log(theme,"gg")
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
+  const btnColor = theme === "Light" ? "btnLightTheme" : "btnDarkTheme";
   
   return (
     <>
@@ -18,13 +19,13 @@ function ClockModal({showClockModal,handleCloseClockModal ,handleUpdateClockModa
         <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow p-3`}  >
 
         <Modal.Body>
-            <ClockData Clock1 Clock2/>
+            <ClockData Clock1 Clock2 Clock3/>
         </Modal.Body>
         <Modal.Footer className="border-0">
-          <Button variant="secondary" onClick={handleCloseClockModal}>
+          <Button variant="danger" className='RedModal' onClick={handleCloseClockModal}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleUpdateClockModal}>
+          <Button variant="primary" className={`GreenModal ${btnColor}`} onClick={handleUpdateClockModal}>
             Save Changes
           </Button>
         </Modal.Footer>

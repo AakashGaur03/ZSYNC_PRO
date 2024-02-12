@@ -7,6 +7,7 @@ import { Row, Col, Container } from "react-bootstrap";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Clock from "./components/Clock/Clock";
 import ThemeContext from "./Contexts/ThemeContext";
+import Alarm from "./components/CLockSubModules/Alarm";
 
 function App() {
   const { theme } = useContext(ThemeContext);
@@ -30,6 +31,10 @@ function App() {
             >
               <Col lg="4">
                 <Clock />
+                <div style={{display:"none"}}>
+
+                <Alarm/>
+                </div>
               </Col>
               <Col lg="8" className="adjustonIncognito">
                 <Routes>

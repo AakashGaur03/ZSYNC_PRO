@@ -72,12 +72,12 @@ function RecentltyDeletedModal({
                   <div>
                     <SlReload
                       size={25}
-                      className="cursorPointer restoreTaskBtn"
+                      className="cursorPointer GreenModal"
                       onClick={() => restoreTaskPermanently(task.id)}
                     />
                     <MdDelete
                       size={25}
-                      className="ms-3 cursorPointer deleteTaskModalBtn"
+                      className="ms-3 cursorPointer RedModal"
                       onClick={() => deleteTaskPermanently(task.id)}
                     />
                   </div>

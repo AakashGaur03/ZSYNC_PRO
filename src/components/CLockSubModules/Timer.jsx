@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button } from "react-bootstrap";
 import { VscDebugStart } from "react-icons/vsc";
 import { IoIosPause } from "react-icons/io";
@@ -6,18 +6,25 @@ import { GrPowerReset } from "react-icons/gr";
 import { FaRegStopCircle, FaQuestion } from "react-icons/fa";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
+import ThemeContext from "../../Contexts/ThemeContext";
 
 export const Timer = () => {
+  const { theme } = useContext(ThemeContext);
+  const btnColor = theme === "Light" ? "btnLightTheme" : "btnDarkTheme";
   const [timer, setTimer] = useState(0);
   const [isAudioPlaying, setAudioPlaying] = useState(false);
   const [isActiveTimer, setIsActiveTimer] = useState(false);
   const [isTimerAvailable, setIsTimerAvailable] = useState(false);
-  const defaultTimerSound = 
-    { index:1, name: "classic-alarm", src: "classic-alarm.wav" };
-  const storedTimerSound = localStorage.getItem("timerSound")?localStorage.getItem("timerSound"):localStorage.setItem("timerSound",JSON.stringify(defaultTimerSound));
+  const defaultTimerSound = {
+    index: 1,
+    name: "classic-alarm",
+    src: "classic-alarm.wav",
+  };
+  const storedTimerSound = localStorage.getItem("timerSound")
+    ? localStorage.getItem("timerSound")
+    : localStorage.setItem("timerSound", JSON.stringify(defaultTimerSound));
 
-  const [timerSound, setTimerSound] = useState(
-    JSON.parse(storedTimerSound));
+  const [timerSound, setTimerSound] = useState(JSON.parse(storedTimerSound));
   const [audio, setAudio] = useState(null);
   const [timeoutId, setTimeoutId] = useState(null);
   const formatTime = (time) => {
@@ -41,7 +48,7 @@ export const Timer = () => {
     setTimer(0);
     setIsTimerAvailable(false);
     setIsActiveTimer(false);
-    setAudioPlaying(false)
+    setAudioPlaying(false);
     if (audio) {
       audio.pause();
       audio.currentTime = 0;
@@ -51,21 +58,21 @@ export const Timer = () => {
   };
 
   useEffect(() => {
-    const storedTimerSound = localStorage.getItem('timerSound');
+    const storedTimerSound = localStorage.getItem("timerSound");
     setTimerSound(JSON.parse(storedTimerSound));
-  }, [localStorage.getItem('timerSound')]);
+  }, [localStorage.getItem("timerSound")]);
 
   useEffect(() => {
     if (isActiveTimer) {
       const intervalId = setInterval(() => {
         setTimer((prev) => prev - 1000);
       }, 1000);
-  
+
       if (timer <= 0 && !isAudioPlaying) {
         const newAudio = new Audio(`Sounds/${timerSound.src}`);
         setAudio(newAudio);
-  
-        newAudio.addEventListener('ended', () => {
+
+        newAudio.addEventListener("ended", () => {
           const newTimeoutId = setTimeout(() => {
             newAudio.pause();
             newAudio.currentTime = 0;
@@ -74,11 +81,11 @@ export const Timer = () => {
           }, 1000);
           setTimeoutId(newTimeoutId);
         });
-  
+
         setAudioPlaying(true);
         newAudio.play();
       }
-  
+
       return () => {
         clearInterval(intervalId);
         clearTimeout(timeoutId);
@@ -86,7 +93,6 @@ export const Timer = () => {
     }
   }, [isActiveTimer, timer, timerSound, timeoutId, isAudioPlaying]);
 
-  
   return (
     <>
       <div className="questionMark">
@@ -137,16 +143,28 @@ export const Timer = () => {
           )}
         </div>
         <div>
-          <button className="btn me-2 my-2 btn-outline-secondary" onClick={() => addMins(0.5)}>
+          <button
+            className={`btn me-2 my-2 btn-outline-secondary ${btnColor}`}
+            onClick={() => addMins(0.5)}
+          >
             +30 sec
           </button>
-          <button className="btn me-2 my-2 btn-outline-secondary" onClick={() => addMins(1)}>
+          <button
+            className={`btn me-2 my-2 btn-outline-secondary ${btnColor}`}
+            onClick={() => addMins(1)}
+          >
             +1 Min
           </button>
-          <button className="btn me-2 my-2 btn-outline-secondary" onClick={() => addMins(5)}>
+          <button
+            className={`btn me-2 my-2 btn-outline-secondary ${btnColor}`}
+            onClick={() => addMins(5)}
+          >
             +5 Min
           </button>
-          <button className="btn me-2 my-2 btn-outline-secondary" onClick={() => addMins(10)}>
+          <button
+            className={`btn me-2 my-2 btn-outline-secondary ${btnColor}`}
+            onClick={() => addMins(10)}
+          >
             +10 Min
           </button>
         </div>

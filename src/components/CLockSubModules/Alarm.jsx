@@ -167,7 +167,7 @@ const Alarm = () => {
     let eachAlarm = localStorage.getItem("onAlarms")
       ? JSON.parse(localStorage.getItem("onAlarms"))
       : [];
-    console.log(eachAlarm, "dddd");
+    // console.log(eachAlarm, "dddd");
     if (eachAlarm.length > 0) {
       // console.log(eachAlarm, "ea");
       const sortAlarm = [];
@@ -233,7 +233,7 @@ const Alarm = () => {
   }, [activeAlarms]);
 
   const pauseWhenRinOut = () => {
-    document.getElementById("alarmRing").classList.remove("shake-image")
+    document.getElementById("alarmRing").classList.remove("shake-image");
     NextAlarmSetFunction();
     handleAlarmModalRingClose();
   };
@@ -244,7 +244,10 @@ const Alarm = () => {
     // console.log(soundIndex, "Index");
     // console.log(sounds);
     handleAlarmModalRingShow();
-    document.getElementById("alarmRing").classList.add("shake-image")
+    let alarmRing = document.getElementById("alarmRing");
+    if (alarmRing) {
+      alarmRing.classList.add("shake-image");
+    }
     const soundToBePlayed = sounds.find((sound) => sound.index == soundIndex);
     // console.log(soundToBePlayed.src, "dd");
 
@@ -262,7 +265,7 @@ const Alarm = () => {
       const now = new Date();
       const intervalId = setInterval(() => {
         timeRunOut = nextAlarm.alarm - now;
-        console.log(timeRunOut);
+        // console.log(timeRunOut);
         setTimeRemaining(timeRunOut);
         if (timeRunOut < 0) {
           // console.log("asfdsdf");
@@ -287,6 +290,7 @@ const Alarm = () => {
   const { theme } = useContext(ThemeContext);
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
+  const btnColor = theme === "Light" ? "btnLightTheme" : "btnDarkTheme";
   const [showAlarmModal, setShowAlarmModal] = useState(false);
   const [showAlarmModalRing, setShowAlarmModalRing] = useState(false);
   const handleAlarmModalClose = () => setShowAlarmModal(false);
@@ -352,13 +356,10 @@ const Alarm = () => {
 
   return (
     <div>
-      <div>Alarm</div>
+      {/* <div>Alarm</div> */}
 
-      <Button variant="secondary" onClick={handleAlarmModalShow}>
+      <Button variant="secondary" className={`${btnColor}`} onClick={handleAlarmModalShow}>
         Set Alarm
-      </Button>
-      <Button variant="secondary" onClick={handleAlarmModalRingShow}>
-        Show Alarm
       </Button>
 
       <Modal
@@ -489,6 +490,9 @@ const Alarm = () => {
         show={showAlarmModalRing}
         onHide={handleAlarmModalRingClose}
         className="backgroundTransparent"
+        backdrop="static"
+        keyboard={false}
+        centered
       >
         <Modal.Body
           className={`${modalBgColor} ${textColorClass} confirmBtn modalBorderRadiusAndShadow`}
@@ -503,8 +507,8 @@ const Alarm = () => {
               className=" "
             />
           </div>
-          <div>
-            <Button onClick={pauseWhenRinOut}>Pause</Button>
+          <div className="d-flex justify-content-center">
+            <Button onClick={pauseWhenRinOut} className={`btn w-75 ${btnColor} `}>Pause</Button>
           </div>
         </Modal.Body>
       </Modal>

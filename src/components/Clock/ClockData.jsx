@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import ClockContext from "../../Contexts/ClockContext";
 
-const ClockData = ({ Clock1, Clock2, parentComponent }) => {
+const ClockData = ({ Clock1, Clock2 ,Clock3, parentComponent }) => {
   const borderClass =
     parentComponent === "Clock" ? "border-0" : "activeClockDataClass";
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -85,10 +85,27 @@ const ClockData = ({ Clock1, Clock2, parentComponent }) => {
         >
           {Clock2 && (
             <div className={`d-inline-flex `}>
-              <div className="border hour">{hour} &nbsp;</div>
-              <div className="border minute">{minute}&nbsp;</div>
-              <div className="border second">{second}&nbsp;</div>
-              <div className="border ampn">{ampm}&nbsp;</div>
+              <div className="ClassClock2 border hour">{hour} &nbsp;</div>
+              <div className="ClassClock2 border minute">{minute}&nbsp;</div>
+              <div className="ClassClock2 border second">{second}&nbsp;</div>
+              <div className="ClassClock2 border ampn">{ampm}&nbsp;</div>
+            </div>
+          )}
+        </div>
+
+
+        <div
+          className={`ClockDataClass colorWhite ${
+            activeClass == 3 ? `${borderClass}` : ""
+          }`}
+          onClick={() => handleActiveClock(3)}
+        >
+          {Clock3 && (
+            <div className={`d-inline-flex `}>
+              <div className="ClassClock3 border hour">{hour} &nbsp;</div>
+              <div className="ClassClock3 border minute">{minute}&nbsp;</div>
+              <div className="ClassClock3 border second">{second}&nbsp;</div>
+              <div className="ClassClock3 border ampn">{ampm}&nbsp;</div>
             </div>
           )}
         </div>

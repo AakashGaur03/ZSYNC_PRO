@@ -11,6 +11,7 @@ const IncognitoTodo = () => {
   // console.log(theme,"gg")
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
+  const btnColor = theme === "Light" ? "btnLightTheme" : "btnDarkTheme";
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [importantTaskToBeDeleted, setImportantTaskToBeDeleted] =
     useState(null);
@@ -268,15 +269,15 @@ const IncognitoTodo = () => {
           <Modal.Footer className="border-0">
             <Button
               variant="primary"
-              className="saveEditModal"
+              className={`GreenModal ${btnColor}`}
               id=""
               onClick={editingTaskId ? saveEditing : addTask}
             >
               {editingTaskId ? "Save Task" : "Add Task"}
             </Button>
             <Button
-              variant="secondary"
-              className="CloseModal"
+              variant="danger"
+              className="RedModal"
               onClick={() => closeEditingAddModal()}
             >
               Close
@@ -298,7 +299,7 @@ const IncognitoTodo = () => {
             {viewedTask ? viewedTask.text : ""}
           </Modal.Body>
           <div className="d-flex mb-4 justify-content-center">
-            <Button variant="secondary" className="w-50" onClick={() => setViewTask(false)}>
+            <Button variant="secondary" className={`w-50 ${btnColor}`} onClick={() => setViewTask(false)}>
               Close
             </Button>
           </div>
@@ -369,7 +370,7 @@ const IncognitoTodo = () => {
             className={`mt-3 p-3 backgroundColorConfirmation d-flex justify-content-between`}
           >
             <Button
-              className="me-4 deleteTaskModalBtn"
+              className="me-4 RedModal"
               variant="danger"
               onClick={() => handleDeleteConfirmModal()}
             >
@@ -377,7 +378,7 @@ const IncognitoTodo = () => {
             </Button>
             <Button
               variant="success"
-              className="dontDeleteTaskModalBtn"
+              className="GreenModal"
               onClick={handleCloseConfirmModal}
             >
               Cancel

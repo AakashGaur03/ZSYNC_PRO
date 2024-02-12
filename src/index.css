@@ -8,10 +8,10 @@
 .backgroundDark {
   background-image: linear-gradient(45deg, #282828, #420b46);
 }
-.backgroundTransparent{
+.backgroundTransparent {
   background-color: transparent;
 }
-.backgroundTransparent .modal-content{
+.backgroundTransparent .modal-content {
   background-color: transparent;
   border: 0;
 }
@@ -22,9 +22,14 @@
   height: 193.85px;
   width: auto;
 }
-.border {
+.ClassClock2 {
   background-color: gray;
   padding: 20px;
+}
+.ClassClock3 {
+  background-color: rgb(5 0 76);
+  padding: 20px;
+  font-family: cursive;
 }
 #secHand {
   height: 72px;
@@ -61,6 +66,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  margin-bottom: 10px;
 }
 .activeClockDataClass {
   border: 2px solid olivedrab;
@@ -170,30 +176,13 @@
   background-image: linear-gradient(45deg, #740202, #360808);
 }
 
-.ConfirmModalColor:has(.deleteTaskModalBtn:hover) {
+.ConfirmModalColor:has(.RedModal:hover) {
   background-image: linear-gradient(45deg, #740202, #360808);
   color: white !important;
-
 }
-.ConfirmModalColor:has(.dontDeleteTaskModalBtn:hover) {
+.ConfirmModalColor:has(.GreenModal:hover) {
   background-image: linear-gradient(45deg, #0e4b0e, #002615);
   color: white !important;
-
-}
-.ConfirmModalColor:has(.restoreTaskBtn:hover) {
-  background-image: linear-gradient(45deg, #0e4b0e, #002615);
-  color: white !important;
-
-}
-.ConfirmModalColor:has(.CloseModal:hover) {
-  background-image: linear-gradient(45deg, #740202, #360808);
-  color: white !important;
-
-}
-.ConfirmModalColor:has(.saveEditModal:hover) {
-  background-image: linear-gradient(45deg, #0e4b0e, #002615);
-  color: white !important;
-
 }
 .alarmDays {
   padding: 12px;
@@ -283,19 +272,61 @@
 .imptodoDiv {
   border: 1px solid goldenrod;
 }
-.modalBorderRadiusAndShadow{
+.modalBorderRadiusAndShadow {
   border-radius: 50px;
   box-shadow: 5px 9px 20px 2px #60605f;
 }
 
 @keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-8px) rotate(-8deg); }
-  50% { transform: translateX(8px) rotate(8deg); }
-  75% { transform: translateX(-8px) rotate(-8deg); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-8px) rotate(-8deg);
+  }
+  50% {
+    transform: translateX(8px) rotate(8deg);
+  }
+  75% {
+    transform: translateX(-8px) rotate(-8deg);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .shake-image {
   animation: shake 0.6s linear 1s infinite both;
+}
+
+.pauseBtn {
+  background-color: rebeccapurple;
+}
+.colorWhite {
+  color: white;
+}
+.btnDarkTheme {
+  background-color: rebeccapurple;
+  color: white;
+  font-weight: 500;
+  border: 0px;
+}
+.btnDarkTheme:hover {
+  background-color: rgb(75, 29, 122);
+  border: 0px;
+}
+
+.btnLightTheme {
+  background-color: #5272e7;
+  color: black;
+  font-weight: 500;
+  border: 0px;
+}
+
+.form-check-input:checked {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+.form-check-input:checked[type=radio] {
+  --bs-form-check-bg-image: url(data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23fff'/%3e%3c/svg%3e);
 }
