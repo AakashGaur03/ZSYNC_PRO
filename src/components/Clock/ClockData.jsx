@@ -57,7 +57,7 @@ const ClockData = ({ Clock1, Clock2 ,Clock3, parentComponent }) => {
         >
           {Clock1 && (
             <div className={`position-relative align-self-center `}>
-              <img src="./Clock2.webp" alt="" className="clockInfo" />
+              <img src="/Clock2.webp" alt="" className="clockInfo" />
               <div
                 className="position-absolute"
                 id="secHand"
