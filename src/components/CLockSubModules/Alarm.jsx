@@ -2,10 +2,13 @@ import React, { useState, useContext, useEffect } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import ThemeContext from "../../Contexts/ThemeContext";
 import { FaTrash } from "react-icons/fa";
+import SnackbarContext from "../../Contexts/SnackbarContext";
 
 const Alarm = () => {
   // console.log(Date.now())
   // console.log(new Date())
+  const  {setSnackbarMessage}  = useContext(SnackbarContext)
+
   const days = [
     { id: 1, day: "M" },
     { id: 2, day: "T" },
@@ -340,10 +343,12 @@ const Alarm = () => {
     });
 
     setShowAlarmModal(false);
+    setSnackbarMessage("Alarm Added Successfully")
+
   };
   const removeClock = (Id) => {
     const updatedClocks = allAlarm.filter((alarm) => alarm.uniqueId !== Id);
-
+    setSnackbarMessage("Alarm Deleted Successfully")
     setAllAlarm(updatedClocks);
   };
 

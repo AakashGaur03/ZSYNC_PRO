@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import { SlReload } from "react-icons/sl";
 import { MdDelete } from "react-icons/md";
 import ThemeContext from "../Contexts/ThemeContext";
+import SnackbarContext from "../Contexts/SnackbarContext";
 
 function RecentltyDeletedModal({
   showRecentlyDeletedModal,
@@ -21,6 +22,8 @@ function RecentltyDeletedModal({
     );
     setRecentlyDeletedTasks(updatedTasks);
     setTasks(updatedTasks);
+    setSnackbarMessage("Task Restored Successfully")
+
   };
   const deleteTaskPermanently = (ID) => {
     const updatedTasks = recentlyDeletedTasks.filter((task) => task.id !== ID);
@@ -28,6 +31,7 @@ function RecentltyDeletedModal({
     setRecentlyDeletedTasks(updatedTasks);
     setTasks(updatedTasks)
     localStorage.setItem("taskArray", JSON.stringify(recentlyDeletedTasks));
+    setSnackbarMessage("Task Deleted Permanently")
   };
 
   useEffect(() => {
@@ -35,6 +39,7 @@ function RecentltyDeletedModal({
   }, [recentlyDeletedTasks]);
 
   const { theme } = useContext(ThemeContext);
+  const { setSnackbarMessage } = useContext(SnackbarContext);
   // console.log(theme, "gg");
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";

@@ -3,11 +3,13 @@ import { Button, Form, InputGroup, Dropdown, Modal } from "react-bootstrap";
 import { FaTrash, FaEdit, FaStar, FaFilter } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
 import ThemeContext from "../Contexts/ThemeContext";
+import SnackbarContext from "../Contexts/SnackbarContext";
 // import { ConfirmModalContextProvider,useConfirmModalContext } from "../Contexts/ConfirmModalProvider";
 
 const Todo = ({ tasks, setTasks }) => {
   // const { handleShowConfirmModalShow,handleShowConfirmModalClose,handleShowConfirmModalUpdate } = useConfirmModalContext();
   const { theme } = useContext(ThemeContext);
+  const { setSnackbarMessage } = useContext(SnackbarContext);
   // console.log(theme,"gg")
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
@@ -28,6 +30,7 @@ const Todo = ({ tasks, setTasks }) => {
       });
       setTasks(updatedTasks);
     }
+    setSnackbarMessage("Task Deleted Successfully");
     setShowConfirmModal(false);
   };
   const handleShowConfirmModal = () => {
@@ -99,6 +102,7 @@ const Todo = ({ tasks, setTasks }) => {
       setNewTask("");
       setShowAddTodo(false);
     }
+    setSnackbarMessage("Task Added Successfully");
   };
   const toggleTaskStatus = (taskId) => {
     const updatedTasks = tasks.map((task) =>
@@ -110,6 +114,13 @@ const Todo = ({ tasks, setTasks }) => {
     const updatedTasks = tasks.map((task) =>
       task.id === taskId ? { ...task, important: !task.important } : task
     );
+    const updatedTask = updatedTasks.find((task) => task.id === taskId);
+
+    if (updatedTask && updatedTask.important) {
+      setSnackbarMessage("Task Marked as Important");
+    }else{
+      setSnackbarMessage("Task Marked as Not Important");
+    }
     setTasks(updatedTasks);
   };
   const removeTask = (taskId) => {
@@ -123,8 +134,10 @@ const Todo = ({ tasks, setTasks }) => {
         // (!task.important || window.confirm("Are you Sure"))
         (!task.important || handleShowConfirmModal())
       ) {
+        setSnackbarMessage("Task Deleted Successfully");
         return { ...task, deletedAt: new Date().toLocaleString() };
       }
+
       return { ...task };
     });
     setTasks(updatedTasks);
@@ -152,6 +165,7 @@ const Todo = ({ tasks, setTasks }) => {
     setNewTaskTitle("");
     setNewTask("");
     setModalTitle("Add Task");
+    setSnackbarMessage("Task Edited Successfully");
   };
   const closeEditingAddModal = () => {
     setShowAddTodo(false);
@@ -219,15 +233,17 @@ const Todo = ({ tasks, setTasks }) => {
           )}
         </div>
       </div>
-      <Modal 
-      className="backgroundTransparent"
+      <Modal
+        className="backgroundTransparent"
         show={showAddTodo}
         onHide={() => setShowAddTodo(false)}
         centered
         backdrop="static"
         keyboard={false}
       >
-        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow p-3`}>
+        <div
+          className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow p-3`}
+        >
           <Modal.Header className="border-0" closeButton>
             <Modal.Title>{modalTitle}</Modal.Title>
           </Modal.Header>
@@ -288,9 +304,15 @@ const Todo = ({ tasks, setTasks }) => {
         </div>
       </Modal>
 
-      <Modal show={viewTask} onHide={() => setViewTask(false)} className="backgroundTransparent">
+      <Modal
+        show={viewTask}
+        onHide={() => setViewTask(false)}
+        className="backgroundTransparent"
+      >
         {/* <Modal.Header closeButton> */}
-        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow`}>
+        <div
+          className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow`}
+        >
           <Modal.Title className="text-center mt-4 mb-4">
             <strong>{viewedTask ? viewedTask.title.toUpperCase() : ""}</strong>
           </Modal.Title>
@@ -298,7 +320,11 @@ const Todo = ({ tasks, setTasks }) => {
             {viewedTask ? viewedTask.text : ""}
           </Modal.Body>
           <div className="d-flex mb-4 justify-content-center">
-            <Button variant="secondary" className={`w-50 ${btnColor}`} onClick={() => setViewTask(false)}>
+            <Button
+              variant="secondary"
+              className={`w-50 ${btnColor}`}
+              onClick={() => setViewTask(false)}
+            >
               Close
             </Button>
           </div>
@@ -359,7 +385,12 @@ const Todo = ({ tasks, setTasks }) => {
           );
         })}
       </ul>
-      <Modal show={showConfirmModal} onHide={handleCloseConfirmModal} centered className="backgroundTransparent">
+      <Modal
+        show={showConfirmModal}
+        onHide={handleCloseConfirmModal}
+        centered
+        className="backgroundTransparent"
+      >
         <Modal.Body
           // style={{ ...modalBodyStyle }}
           className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow`}

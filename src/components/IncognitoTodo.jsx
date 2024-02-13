@@ -3,11 +3,14 @@ import { Button, Form, InputGroup, Dropdown, Modal } from "react-bootstrap";
 import { FaTrash, FaEdit, FaStar, FaFilter } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
 import ThemeContext from "../Contexts/ThemeContext";
+import SnackbarContext from "../Contexts/SnackbarContext";
 // import { ConfirmModalContextProvider,useConfirmModalContext } from "../Contexts/ConfirmModalProvider";
 
 const IncognitoTodo = () => {
   // const { handleShowConfirmModalShow,handleShowConfirmModalClose,handleShowConfirmModalUpdate } = useConfirmModalContext();
   const { theme } = useContext(ThemeContext);
+  const { setSnackbarMessage } = useContext(SnackbarContext);
+
   // console.log(theme,"gg")
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
@@ -28,6 +31,7 @@ const IncognitoTodo = () => {
       });
       setTasks(updatedTasks);
     }
+    setSnackbarMessage("Incognito Task Deleted Successfully");
     setShowConfirmModal(false);
   };
   const handleShowConfirmModal = () => {
@@ -97,6 +101,7 @@ const IncognitoTodo = () => {
       setNewTask("");
       setShowAddTodo(false);
     }
+    setSnackbarMessage("Incognito Task Added Successfully");
   };
   const toggleTaskStatus = (taskId) => {
     const updatedTasks = tasks.map((task) =>
@@ -108,6 +113,13 @@ const IncognitoTodo = () => {
     const updatedTasks = tasks.map((task) =>
       task.id === taskId ? { ...task, important: !task.important } : task
     );
+    const updatedTask = updatedTasks.find((task) => task.id === taskId);
+
+    if (updatedTask && updatedTask.important) {
+      setSnackbarMessage("Task Marked as Important");
+    } else {
+      setSnackbarMessage("Task Marked as Not Important");
+    }
     setTasks(updatedTasks);
   };
   const removeTask = (taskId) => {
@@ -121,6 +133,7 @@ const IncognitoTodo = () => {
         // (!task.important || window.confirm("Are you Sure"))
         (!task.important || handleShowConfirmModal())
       ) {
+        setSnackbarMessage("Incognito Task Deleted Successfully");
         return { ...task, deletedAt: new Date().toLocaleString() };
       }
       return { ...task };
@@ -149,6 +162,7 @@ const IncognitoTodo = () => {
     setNewTaskTitle("");
     setNewTask("");
     setModalTitle("Add Task");
+    setSnackbarMessage("Incognito Task Edited Successfully");
   };
   const closeEditingAddModal = () => {
     setShowAddTodo(false);
@@ -223,15 +237,17 @@ const IncognitoTodo = () => {
           )}
         </div>
       </div>
-      <Modal 
-      className="backgroundTransparent"
+      <Modal
+        className="backgroundTransparent"
         show={showAddTodo}
         onHide={() => setShowAddTodo(false)}
         centered
         backdrop="static"
         keyboard={false}
       >
-        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow p-3`}>
+        <div
+          className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow p-3`}
+        >
           <Modal.Header className="border-0" closeButton>
             <Modal.Title>{modalTitle}</Modal.Title>
           </Modal.Header>
@@ -289,9 +305,15 @@ const IncognitoTodo = () => {
         </div>
       </Modal>
 
-      <Modal show={viewTask} onHide={() => setViewTask(false)} className="backgroundTransparent">
+      <Modal
+        show={viewTask}
+        onHide={() => setViewTask(false)}
+        className="backgroundTransparent"
+      >
         {/* <Modal.Header closeButton> */}
-        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow`}>
+        <div
+          className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow`}
+        >
           <Modal.Title className="text-center mt-4 mb-4">
             <strong>{viewedTask ? viewedTask.title.toUpperCase() : ""}</strong>
           </Modal.Title>
@@ -299,7 +321,11 @@ const IncognitoTodo = () => {
             {viewedTask ? viewedTask.text : ""}
           </Modal.Body>
           <div className="d-flex mb-4 justify-content-center">
-            <Button variant="secondary" className={`w-50 ${btnColor}`} onClick={() => setViewTask(false)}>
+            <Button
+              variant="secondary"
+              className={`w-50 ${btnColor}`}
+              onClick={() => setViewTask(false)}
+            >
               Close
             </Button>
           </div>
@@ -312,7 +338,10 @@ const IncognitoTodo = () => {
         {filteredTasks.map((task) => {
           return (
             (task.deletedAt === null || task.deletedAt === undefined) && (
-              <li key={task.id} className={`${task.important ? 'imptodoDiv':''} todoDiv`}>
+              <li
+                key={task.id}
+                className={`${task.important ? "imptodoDiv" : ""} todoDiv`}
+              >
                 <div
                   className="cursorPointer ps-3"
                   style={{ width: "82%" }}
@@ -357,7 +386,12 @@ const IncognitoTodo = () => {
           );
         })}
       </ul>
-      <Modal show={showConfirmModal} onHide={handleCloseConfirmModal} centered className="backgroundTransparent">
+      <Modal
+        show={showConfirmModal}
+        onHide={handleCloseConfirmModal}
+        centered
+        className="backgroundTransparent"
+      >
         <Modal.Body
           // style={{ ...modalBodyStyle }}
           className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow`}

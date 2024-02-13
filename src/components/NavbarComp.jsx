@@ -17,9 +17,11 @@ import ClockModal from "./Clock/ClockModal";
 import ClockContext from "../Contexts/ClockContext";
 import SoundModal from "./CLockSubModules/SoundModal";
 import RecentltyDeletedModal from "./RecentlyDeletedModal";
+import SnackbarContext from "../Contexts/SnackbarContext";
 
 const NavbarComp = ({ tasks, setTasks }) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const { setSnackbarMessage } = useContext(SnackbarContext);
   const { activeClock, setActiveClock, activeClass, setActiveClass } =
     useContext(ClockContext);
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
@@ -86,6 +88,7 @@ const NavbarComp = ({ tasks, setTasks }) => {
     setActiveClock(`clock${activeClass}`);
     localStorage.setItem("ClockName", `clock${activeClass}`);
     localStorage.setItem("ClockID", activeClass);
+    setSnackbarMessage("Clock Updated Successfully");
     setShowClockModal(false);
   };
 
@@ -127,6 +130,7 @@ const NavbarComp = ({ tasks, setTasks }) => {
       });
       localStorage.setItem("alarmSound", JSON.stringify(value));
     }
+    setSnackbarMessage("Updated Timer Sound");
   };
 
   const [selectedSound, setSelectedSound] = useState(null);

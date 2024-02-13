@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Clock from "./components/Clock/Clock";
 import ThemeContext from "./Contexts/ThemeContext";
 import Alarm from "./components/CLockSubModules/Alarm";
+import Snackbar from "./components/Snackbar";
 
 function App() {
   const { theme } = useContext(ThemeContext);
@@ -21,6 +22,7 @@ function App() {
       <Router>
         <>
           <NavbarComp tasks={tasks} setTasks={setTasks} />
+          <Snackbar />
           <Container className="minHeightContainer">
             <Row
               className={`${
