@@ -28,8 +28,12 @@ const Todo = ({ tasks, setTasks }) => {
         }
         return { ...task };
       });
-      setTasks(updatedTasks);
+      setTimeout(() => {
+        
+        setTasks(updatedTasks);
+      }, 1000);
     }
+    document.getElementById(importantTaskToBeDeleted).classList.add("disintegrate");
     setSnackbarMessage("Task Deleted Successfully");
     setShowConfirmModal(false);
   };
@@ -128,6 +132,7 @@ const Todo = ({ tasks, setTasks }) => {
     // handleShowConfirmModalClose()
     const updatedTasks = tasks.map((task) => {
       setImportantTaskToBeDeleted(taskId);
+
       if (
         task.id === taskId &&
         // (!task.important || handleShowConfirmModalShow())
@@ -135,12 +140,15 @@ const Todo = ({ tasks, setTasks }) => {
         (!task.important || handleShowConfirmModal())
       ) {
         setSnackbarMessage("Task Deleted Successfully");
+        document.getElementById(taskId).classList.add("disintegrate");
         return { ...task, deletedAt: new Date().toLocaleString() };
       }
 
       return { ...task };
     });
-    setTasks(updatedTasks);
+    setTimeout(() => {
+      setTasks(updatedTasks);
+    }, 1000);
   };
   const editTask = (taskId) => {
     setEditingTaskId(taskId);
@@ -338,6 +346,7 @@ const Todo = ({ tasks, setTasks }) => {
           return (
             (task.deletedAt === null || task.deletedAt === undefined) && (
               <li
+              id={task.id}
                 key={task.id}
                 className={`${task.important ? "imptodoDiv" : ""} todoDiv`}
               >

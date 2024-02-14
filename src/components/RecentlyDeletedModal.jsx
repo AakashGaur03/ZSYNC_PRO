@@ -20,18 +20,23 @@ function RecentltyDeletedModal({
     const updatedTasks = recentlyDeletedTasks.map((task) =>
       task.id === ID ? { ...task, deletedAt: null } : task
     );
-    setRecentlyDeletedTasks(updatedTasks);
-    setTasks(updatedTasks);
-    setSnackbarMessage("Task Restored Successfully")
-
+    document.getElementById(ID).classList.add("disintegrate");
+    setTimeout(() => {
+      setRecentlyDeletedTasks(updatedTasks);
+      setTasks(updatedTasks);
+    }, 1000);
+    setSnackbarMessage("Task Restored Successfully");
   };
   const deleteTaskPermanently = (ID) => {
-    const updatedTasks = recentlyDeletedTasks.filter((task) => task.id !== ID);
+    document.getElementById(ID).classList.add("disintegrate");
 
-    setRecentlyDeletedTasks(updatedTasks);
-    setTasks(updatedTasks)
+    const updatedTasks = recentlyDeletedTasks.filter((task) => task.id !== ID);
+    setTimeout(() => {
+      setRecentlyDeletedTasks(updatedTasks);
+      setTasks(updatedTasks);
+    }, 1000);
     localStorage.setItem("taskArray", JSON.stringify(recentlyDeletedTasks));
-    setSnackbarMessage("Task Deleted Permanently")
+    setSnackbarMessage("Task Deleted Permanently");
   };
 
   useEffect(() => {
@@ -46,13 +51,15 @@ function RecentltyDeletedModal({
 
   return (
     <>
-      <Modal 
+      <Modal
         show={showRecentlyDeletedModal}
         onHide={handleCloseRecentlyDeleted}
         centered
         className="backgroundTransparent"
       >
-        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow p-3`}>
+        <div
+          className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow p-3`}
+        >
           <Modal.Header
             closeButton
             className={`${textColorClass} border-0 text-center`}
@@ -67,9 +74,10 @@ function RecentltyDeletedModal({
                 <div
                   key={task.id}
                   className="d-flex justify-content-between me-4"
+                  id={task.id}
                 >
                   {/* <p>ID: {task.id}</p> */}
-                  <div>
+                  <div style={{maxWidth:"80%"}}>
                     <p className="fs-5">
                       <strong>{task.title}</strong>
                     </p>

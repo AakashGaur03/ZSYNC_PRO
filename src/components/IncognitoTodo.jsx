@@ -29,8 +29,13 @@ const IncognitoTodo = () => {
         }
         return { ...task };
       });
-      setTasks(updatedTasks);
+      setTimeout(() => {
+        setTasks(updatedTasks);
+      }, 1000);
     }
+    document
+      .getElementById(importantTaskToBeDeleted)
+      .classList.add("disintegrate");
     setSnackbarMessage("Incognito Task Deleted Successfully");
     setShowConfirmModal(false);
   };
@@ -134,11 +139,14 @@ const IncognitoTodo = () => {
         (!task.important || handleShowConfirmModal())
       ) {
         setSnackbarMessage("Incognito Task Deleted Successfully");
+        document.getElementById(taskId).classList.add("disintegrate");
         return { ...task, deletedAt: new Date().toLocaleString() };
       }
       return { ...task };
     });
-    setTasks(updatedTasks);
+    setTimeout(() => {
+      setTasks(updatedTasks);
+    }, 1000);
   };
   const editTask = (taskId) => {
     setEditingTaskId(taskId);
@@ -339,6 +347,7 @@ const IncognitoTodo = () => {
           return (
             (task.deletedAt === null || task.deletedAt === undefined) && (
               <li
+                id={task.id}
                 key={task.id}
                 className={`${task.important ? "imptodoDiv" : ""} todoDiv`}
               >
