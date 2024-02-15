@@ -183,7 +183,7 @@ const IncognitoTodo = () => {
     <>
       <div className="backgroundIncognito">
         <img
-          src="../../public/Images/incognitoImg.png"
+          src="./Images/incognitoImg.png"
           alt=""
           className="incognitoImg"
         />

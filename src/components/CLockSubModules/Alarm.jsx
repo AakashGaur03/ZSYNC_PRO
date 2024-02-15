@@ -504,7 +504,7 @@ const Alarm = () => {
         >
           <div className="d-flex justify-content-center">
             <img
-              src="../../../public/ClockImgToRing.png"
+              src="./ClockImgToRing.png"
               alt=""
               // height={100}
               // width={100}
