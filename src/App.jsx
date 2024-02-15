@@ -4,7 +4,7 @@ import { useContext,useState } from "react";
 import Todo from "./components/Todo";
 import IncognitoTodo from "./components/IncognitoTodo";
 import { Row, Col, Container } from "react-bootstrap";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import Clock from "./components/Clock/Clock";
 import ThemeContext from "./Contexts/ThemeContext";
 import Alarm from "./components/CLockSubModules/Alarm";
