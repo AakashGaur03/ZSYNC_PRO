@@ -8,7 +8,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Clock from "./components/Clock/Clock";
 import ThemeContext from "./Contexts/ThemeContext";
 import Alarm from "./components/CLockSubModules/Alarm";
-import Snackbar from "./components/Snackbar";
+import { useToast } from "react-toastify";
+import ToastContext from "./Contexts/ToastContext";
 
 function App() {
   const { theme } = useContext(ThemeContext);
@@ -17,12 +18,17 @@ function App() {
       ? JSON.parse(localStorage.getItem("taskArray"))
       : []
   );
+  const {showToast} = useContext(ToastContext)
+  const handleClick = () => {
+    showToast("This is a toast message!");
+  };
   return (
     <>
       <Router>
         <>
           <NavbarComp tasks={tasks} setTasks={setTasks} />
-          <Snackbar />
+          <button onClick={handleClick}>Show Toast</button>
+
           <Container className="minHeightContainer">
             <Row
               className={`${

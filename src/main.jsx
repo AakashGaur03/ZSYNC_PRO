@@ -5,6 +5,7 @@ import "./index.css";
 import ThemeContextProvider from "./Contexts/ThemeContextProvider.jsx";
 import ClockContextProvider from "./Contexts/ClockContextProvider.jsx";
 import SnackbarContextProvider from "./Contexts/SnackbarContextProvider.jsx";
+import ToastContextProvider from "./Contexts/ToastContextProvider.jsx";
 // import { ConfirmModalContextProvider,useConfirmModalContext } from './Contexts/ConfirmModalProvider.jsx'
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -12,9 +13,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <ClockContextProvider>
       <ThemeContextProvider>
         <SnackbarContextProvider>
-          {/* <ConfirmModalContextProvider> */}
-          <App />
-          {/* </ConfirmModalContextProvider> */}
+          <ToastContextProvider>
+            {/* <ConfirmModalContextProvider> */}
+            <App />
+            {/* </ConfirmModalContextProvider> */}
+          </ToastContextProvider>
         </SnackbarContextProvider>
       </ThemeContextProvider>
     </ClockContextProvider>

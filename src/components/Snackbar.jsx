@@ -11,7 +11,7 @@ const Snackbar = () =>{
         <>
         {/* <h1>{snackbarMessage?snackbarMessage:""}</h1>
         <h1>Hello</h1> */}
-        <div id="snackBarDiv" className={`snackBarClass ${snackbarOpen ?'active':''}`} >{snackbarMessage?snackbarMessage:""}</div>
+        <div id="snackBarDiv" className={`snackBarClass ${snackbarOpen ?'active':''}`} ></div>
         </>
     )
 }

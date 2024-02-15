@@ -349,7 +349,7 @@
     opacity: 1;
   }
 }
-
+/* 
 .snackBarClass {
   z-index: 999;
   position: fixed;
@@ -386,4 +386,4 @@
   100% {
     display: none;
   }
-}
+} */
