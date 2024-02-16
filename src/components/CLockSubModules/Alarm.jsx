@@ -148,21 +148,6 @@ const Alarm = () => {
       showToast("Alarm Turned On", "green", "white");
     }
   };
-  // useEffect(() => {
-  //   if (isActiveAlarm) {
-  //     const intervalId = setInterval(() => {
-  //       console.log("timeticking");
-  //       const now = new Date();
-  //       const timeUntilAlarm = alarmTime - now;
-  //       if (timeUntilAlarm < 0) {
-  //         console.log("Alarm Gone");
-  //         clearInterval(intervalId);
-  //         setIsActiveAlarm(false);
-  //       }
-  //     }, 1000);
-  //     return () => clearInterval(intervalId);
-  //   }
-  // }, [isActiveAlarm, alarmTime]);
 
   const [nextAlarm, setNextAlarm] = useState(null);
 
@@ -235,28 +220,62 @@ const Alarm = () => {
     NextAlarmSetFunction();
   }, [activeAlarms]);
 
-  const pauseWhenRinOut = () => {
+  const pauseWhenRunOut = () => {
     document.getElementById("alarmRing").classList.remove("shake-image");
+    setIsSoundPlaying(false);
+    if (audioElement) {
+      audioElement.pause();
+      audioElement.currentTime = 0;
+    }
+    setAudioElement(null);
     NextAlarmSetFunction();
     handleAlarmModalRingClose();
   };
 
   const [timeRemaining, setTimeRemaining] = useState("");
+  const [audioElement, setAudioElement] = useState(null);
+  const [isSoundPlaying, setIsSoundPlaying] = useState(false);
+
+  useEffect(() => {
+    if (audioElement) {
+      // Add event listener to handle sound end
+      audioElement.addEventListener("ended", () => {
+        setIsSoundPlaying(false);
+      });
+    }
+    // Clean up event listener on unmount or when audioElement changes
+    return () => {
+      if (audioElement) {
+        audioElement.removeEventListener("ended", () => {
+          setIsSoundPlaying(false);
+        });
+      }
+    };
+  }, [audioElement]);
 
   const playSound = (soundIndex) => {
-    // console.log(soundIndex, "Index");
-    // console.log(sounds);
     handleAlarmModalRingShow();
     let alarmRing = document.getElementById("alarmRing");
     if (alarmRing) {
       alarmRing.classList.add("shake-image");
     }
+
     const soundToBePlayed = sounds.find((sound) => sound.index == soundIndex);
-    // console.log(soundToBePlayed.src, "dd");
 
     if (soundToBePlayed) {
-      const audio = new Audio(`Sounds/${soundToBePlayed.src}`);
-      audio.play();
+      if (!isSoundPlaying) {
+        if (audioElement) {
+          audioElement.pause();
+          audioElement.currentTime = 0;
+        } else {
+          const newAudioElement = new Audio();
+          setAudioElement(newAudioElement);
+        }
+
+        audioElement.src = `Sounds/${soundToBePlayed.src}`;
+        audioElement.play();
+        setIsSoundPlaying(true);
+      }
     } else {
       console.error("Sound not found for index:", soundIndex);
     }
@@ -275,12 +294,21 @@ const Alarm = () => {
           // console.log("asfdsdf");
           playSound(nextAlarm.soundIndex);
         }
-      }, 1000);
+      }, 500);
       return () => {
         clearInterval(intervalId);
       };
     }
   }, [nextAlarm, timeRemaining]);
+
+
+  const truncateStr = (word, maxLength) => {
+    if (word.length <= maxLength) {
+      return word; // No truncation needed
+    } else {
+      return word.slice(0, maxLength) + "..."; // Truncate and append ellipsis
+    }
+  };
 
   useEffect(() => {
     const storedAlarm = localStorage.getItem("alarmData")
@@ -354,7 +382,6 @@ const Alarm = () => {
       setAllAlarm(updatedClocks);
     }, 1000);
     showToast("Alarm Deleted Successfully");
-
   };
 
   const generateOptions = (start, end) => {
@@ -524,7 +551,7 @@ const Alarm = () => {
           </div>
           <div className="d-flex justify-content-center">
             <Button
-              onClick={pauseWhenRinOut}
+              onClick={pauseWhenRunOut}
               className={`btn w-75 ${btnColor} `}
             >
               Pause
@@ -538,13 +565,13 @@ const Alarm = () => {
           <div key={alarm.uniqueId} id={alarm.uniqueId}>
             <div className="p-4 border bg-transparent rounded-pill mb-4">
               <div className="d-flex justify-content-between">
-                <div className="d-flex">
+                <div className="d-flex align-items-center">
                   <div>{alarm.hours.slice(0, 2)}&nbsp;:</div>
                   <div>&nbsp;{alarm.minutes}</div>
                   <div>&nbsp;{alarm.hours.slice(2, 5)}</div>
                 </div>
-                <div className="text-center">{alarm.title}</div>
-                <div className="d-flex">
+                <div className="text-center">{truncateStr(alarm.title,22)}</div>
+                <div className="d-flex align-items-center">
                   <div>
                     <Form.Check
                       type="switch"

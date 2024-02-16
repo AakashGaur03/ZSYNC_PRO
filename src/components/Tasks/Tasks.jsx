@@ -63,6 +63,30 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
     type === "normal" ? "Add Task" : "Add Incognito Task"
   );
 
+
+  const truncateStr = (word, maxLength) => {
+    if (word.length <= maxLength) {
+      return word; // No truncation needed
+    } else {
+      return word.slice(0, maxLength) + "..."; // Truncate and append ellipsis
+    }
+  };
+
+  const addSpaceAfterLength = (value, maxLength) => {
+    let newValue = value;
+    let words = newValue.split(" ");
+    for (let i = 0; i < words.length; i++) {
+      if (words[i].length > maxLength) {
+        let newWord = "";
+        for (let j = 0; j < words[i].length; j += maxLength) {
+          newWord += words[i].substring(j, j + maxLength) + " ";
+        }
+        words[i] = newWord.trim();
+      }
+    }
+    return words.join(" ");
+  };
+
   useEffect(() => {
     setModalTitle(type === "normal" ? "Add Task" : "Add Incognito Task");
   }, [type]);
@@ -155,10 +179,7 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
     const updatedTasks = tasks.map((task) => {
       setImportantTaskToBeDeleted(taskId);
 
-      if (
-        task.id === taskId &&
-        (!task.important || handleShowConfirmModal())
-      ) {
+      if (task.id === taskId && (!task.important || handleShowConfirmModal())) {
         if (type === "normal") {
           showToast("Task Deleted Successfully");
         } else {
@@ -354,7 +375,8 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
                   type="text"
                   value={newTaskTitle}
                   onChange={(e) => {
-                    setNewTaskTitle(e.target.value);
+                    const newValue = addSpaceAfterLength(e.target.value, 18);
+                    setNewTaskTitle(newValue);
                   }}
                   placeholder="Add Title"
                   aria-label=""
@@ -371,7 +393,8 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
                   type="text"
                   value={newTask}
                   onChange={(e) => {
-                    setNewTask(e.target.value);
+                    const newValue = addSpaceAfterLength(e.target.value, 20);
+                    setNewTask(newValue)
                   }}
                   placeholder="Add Task"
                 ></Form.Control>
@@ -447,9 +470,12 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
                     style={{
                       textDecoration: task.completed ? "line-through" : "none",
                       color: task.important ? "gold" : "inherit",
+                      maxWidth: "100%", // Ensure the span doesn't overflow its container
+                      display: "block", // Make the span a block-level element
+                      overflowWrap: "break-word", // Allow word breaks within the span
                     }}
                   >
-                    {task.title}
+                    {truncateStr(task.title,60)}
                   </span>
                 </div>
                 <Form.Check
