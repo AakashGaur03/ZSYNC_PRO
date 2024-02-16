@@ -348,8 +348,13 @@ const Alarm = () => {
   };
   const removeClock = (Id) => {
     const updatedClocks = allAlarm.filter((alarm) => alarm.uniqueId !== Id);
+    document.getElementById(Id).classList.add("disintegrate");
+
+    setTimeout(() => {
+      setAllAlarm(updatedClocks);
+    }, 1000);
     showToast("Alarm Deleted Successfully");
-    setAllAlarm(updatedClocks);
+
   };
 
   const generateOptions = (start, end) => {
@@ -530,7 +535,7 @@ const Alarm = () => {
 
       <div>
         {allAlarm.map((alarm) => (
-          <div key={alarm.uniqueId}>
+          <div key={alarm.uniqueId} id={alarm.uniqueId}>
             <div className="p-4 border bg-transparent rounded-pill mb-4">
               <div className="d-flex justify-content-between">
                 <div className="d-flex">
