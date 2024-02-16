@@ -142,7 +142,7 @@ const NavbarComp = ({ tasks, setTasks, incognitoTasks }) => {
     <>
       <Navbar
         expand="lg"
-        className={`zindex2 ${navbarColorClass} ${textColorClass}`}
+        className={`zindex2 navbarFixed ${navbarColorClass} ${textColorClass} fw600`}
       >
         <Container>
           <Navbar.Brand className={textColorClass}>ZSYNC PRO</Navbar.Brand>

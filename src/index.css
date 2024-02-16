@@ -122,7 +122,7 @@
 }
 .mhexcludingNav {
   min-height: calc(100vh - 56px);
-  /* padding-top: 56px; */
+  padding-top: 56px;
 }
 .bgSlighDarkWhite {
   /* background-color: #d9d9d9 !important */
@@ -428,20 +428,40 @@
   display: flex;
   align-items: center;
 }
-.NavActiveCSS {
+.text-white.NavActiveCSS {
   color: #f778ff !important;
 }
-.navItemClass:hover {
+.text-white.navItemClass:hover {
   color: #f778ff !important;
 }
+.text-black.NavActiveCSS {
+  color: wheat !important;
+}
+.text-black.navItemClass:hover {
+  color: wheat !important;
+}
+
+.fw600{
+  font-weight: 600 !important;
+}
+
+.backgroundLight .badge{
+  color: black;
+  font-weight: 700;
+}
+
 
 
 /* fw-600    white*/
 
-/* 
 
-border-bottom: 2px solid black;
-    position: fixed;
-    width: 100%;
-    background: linear-gradient(90deg, rgb(92 178 201) 0%, rgba(128,255,217,1) 100%);
-*/
+.navbarFixed{
+
+  border-bottom: 2px solid black;
+  position: fixed;
+  width: 100%;
+  
+}
+.text-black.navbarFixed{
+  background: linear-gradient(90deg, rgb(95 161 179) 0%, rgba(128,255,217,1) 100%);
+}
