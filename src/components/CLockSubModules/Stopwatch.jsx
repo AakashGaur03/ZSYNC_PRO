@@ -56,7 +56,7 @@ const Stopwatch = () => {
       ...prevFlagElapsedTimeArr,
       { flagElapsedTime, elapsedTime },
     ]);
-    console.log(flagElapsedTimeArr, " aaa");
+    // console.log(flagElapsedTimeArr, " aaa");
     setFlagElapsedTime(0);
   };
 

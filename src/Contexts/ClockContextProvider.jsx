@@ -11,6 +11,8 @@ const ClockContextProvider = ({ children }) => {
     localStorage.getItem("ClockID") ? localStorage.getItem("ClockID") : 1
   );
 
+  const [alarmActiveApp,setAlarmActiveApp]=useState(true)
+
   const handleStorageChange = (event) => {
     if (event.key === "ClockName") {
       const updatedClock = event.newValue;
@@ -20,7 +22,7 @@ const ClockContextProvider = ({ children }) => {
       setActiveClass(updatedClockID);
     }
   };
-
+  
   useEffect(() => {
     window.addEventListener("storage", handleStorageChange);
 
@@ -30,7 +32,7 @@ const ClockContextProvider = ({ children }) => {
   }, [setActiveClass, setActiveClock]);
   return (
     <ClockContext.Provider
-      value={{ activeClock, setActiveClock, activeClass, setActiveClass }}
+      value={{ activeClock, setActiveClock, activeClass, setActiveClass,alarmActiveApp,setAlarmActiveApp }}
     >
       {children}
     </ClockContext.Provider>

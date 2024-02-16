@@ -1,34 +1,37 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import NavbarComp from "./components/NavbarComp";
-import { useContext,useState } from "react";
-import Todo from "./components/Todo";
-import IncognitoTodo from "./components/IncognitoTodo";
+import { useContext, useState } from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
-import Clock from "./components/Clock/Clock";
-import ThemeContext from "./Contexts/ThemeContext";
-import Alarm from "./components/CLockSubModules/Alarm";
-import { useToast } from "react-toastify";
-import ToastContext from "./Contexts/ToastContext";
+import { ThemeContext, ClockContext } from "./Contexts";
+
+import { NavbarComp, Tasks, Clock, Alarm } from "./components";
 
 function App() {
   const { theme } = useContext(ThemeContext);
+  const { alarmActiveApp } = useContext(ClockContext);
+
   const [tasks, setTasks] = useState(
     JSON.parse(localStorage.getItem("taskArray"))
       ? JSON.parse(localStorage.getItem("taskArray"))
       : []
   );
-  const {showToast} = useContext(ToastContext)
-  const handleClick = () => {
-    showToast("This is a toast message!");
-  };
+
+  const [incognitoTasks, setIncognitoTasks] = useState(
+    JSON.parse(sessionStorage.getItem("taskArray"))
+      ? JSON.parse(sessionStorage.getItem("taskArray"))
+      : []
+  );
+
   return (
     <>
       <Router>
         <>
-          <NavbarComp tasks={tasks} setTasks={setTasks} />
-          <button onClick={handleClick}>Show Toast</button>
-
+          <NavbarComp
+            tasks={tasks}
+            setTasks={setTasks}
+            incognitoTasks={incognitoTasks}
+            setIncognitoTasks={setIncognitoTasks}
+          />
           <Container className="minHeightContainer">
             <Row
               className={`${
@@ -39,15 +42,36 @@ function App() {
             >
               <Col lg="4">
                 <Clock />
-                <div style={{display:"none"}}>
-
-                <Alarm/>
+                <div style={{ display: "none" }}>
+                  {" "}
+                  {/* Done Because Alarm gets active whenever website Loads*/}
+                  {alarmActiveApp && <Alarm />}
                 </div>
               </Col>
               <Col lg="8" className="adjustonIncognito">
                 <Routes>
-                  <Route path="" element={<Todo tasks={tasks} setTasks={setTasks} />} />
-                  <Route path="/incognito-todo" element={<IncognitoTodo />} />
+                  <Route
+                    path=""
+                    element={
+                      <Tasks
+                        tasks={tasks}
+                        setTasks={setTasks}
+                        storage={localStorage}
+                        type={"normal"}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/incognito-todo"
+                    element={
+                      <Tasks
+                        tasks={incognitoTasks}
+                        setTasks={setIncognitoTasks}
+                        storage={sessionStorage}
+                        type={"incognito"}
+                      />
+                    }
+                  />
                 </Routes>
               </Col>
             </Row>

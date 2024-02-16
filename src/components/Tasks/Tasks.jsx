@@ -1,26 +1,32 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Form, InputGroup, Dropdown, Modal } from "react-bootstrap";
+import {
+  Button,
+  Form,
+  InputGroup,
+  Dropdown,
+  Modal,
+  Badge,
+} from "react-bootstrap";
 import { FaTrash, FaEdit, FaStar, FaFilter } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
-import ThemeContext from "../Contexts/ThemeContext";
-import SnackbarContext from "../Contexts/SnackbarContext";
-// import { ConfirmModalContextProvider,useConfirmModalContext } from "../Contexts/ConfirmModalProvider";
+import { ThemeContext, ToastContext } from "../../Contexts";
 
-const Todo = ({ tasks, setTasks }) => {
-  // const { handleShowConfirmModalShow,handleShowConfirmModalClose,handleShowConfirmModalUpdate } = useConfirmModalContext();
+const Tasks = ({ tasks, setTasks, storage, type }) => {
   const { theme } = useContext(ThemeContext);
-  const { setSnackbarMessage } = useContext(SnackbarContext);
-  // console.log(theme,"gg")
+  const { showToast } = useContext(ToastContext);
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
   const btnColor = theme === "Light" ? "btnLightTheme" : "btnDarkTheme";
+  const bgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
+
+  const iconColor = theme === "Light" ? "colorWhite" : "";
+
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [importantTaskToBeDeleted, setImportantTaskToBeDeleted] =
     useState(null);
 
   const handleCloseConfirmModal = () => setShowConfirmModal(false);
   const handleDeleteConfirmModal = () => {
-    // console.log(importantTaskToBeDeleted, "IMpo");
     if (importantTaskToBeDeleted !== null) {
       const updatedTasks = tasks.map((task) => {
         if (task.id === importantTaskToBeDeleted) {
@@ -29,12 +35,17 @@ const Todo = ({ tasks, setTasks }) => {
         return { ...task };
       });
       setTimeout(() => {
-        
         setTasks(updatedTasks);
       }, 1000);
     }
-    document.getElementById(importantTaskToBeDeleted).classList.add("disintegrate");
-    setSnackbarMessage("Task Deleted Successfully");
+    document
+      .getElementById(importantTaskToBeDeleted)
+      .classList.add("disintegrate");
+    if (type === "normal") {
+      showToast("Task Deleted Successfully");
+    } else {
+      showToast("Incognito Task Deleted Successfully");
+    }
     setShowConfirmModal(false);
   };
   const handleShowConfirmModal = () => {
@@ -43,17 +54,18 @@ const Todo = ({ tasks, setTasks }) => {
 
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTask, setNewTask] = useState("");
-  // const [tasks, setTasks] = useState(
-  //   JSON.parse(localStorage.getItem("taskArray"))
-  //     ? JSON.parse(localStorage.getItem("taskArray"))
-  //     : []
-  // );
   const [viewTask, setViewTask] = useState(false);
   const [viewedTask, setViewedTask] = useState(null);
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [showAddTodo, setShowAddTodo] = useState(false);
-  const [modalTitle, setModalTitle] = useState("Add Task");
+  const [modalTitle, setModalTitle] = useState(
+    type === "normal" ? "Add Task" : "Add Incognito Task"
+  );
+
+  useEffect(() => {
+    setModalTitle(type === "normal" ? "Add Task" : "Add Incognito Task");
+  }, [type]);
 
   const handleViewTask = (task) => {
     setViewedTask(task);
@@ -61,12 +73,12 @@ const Todo = ({ tasks, setTasks }) => {
   };
 
   useEffect(() => {
-    const storedTask = JSON.parse(localStorage.getItem("taskArray")) || [];
+    const storedTask = JSON.parse(storage.getItem("taskArray")) || [];
     setTasks(storedTask);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("taskArray", JSON.stringify(tasks));
+    storage.setItem("taskArray", JSON.stringify(tasks));
   }, [tasks]);
 
   const filteredTasks = tasks.filter((task) => {
@@ -106,7 +118,11 @@ const Todo = ({ tasks, setTasks }) => {
       setNewTask("");
       setShowAddTodo(false);
     }
-    setSnackbarMessage("Task Added Successfully");
+    if (type === "normal") {
+      showToast("Task Added Successfully", "green", "white");
+    } else {
+      showToast("Incognito Task Added Successfully", "green", "white");
+    }
   };
   const toggleTaskStatus = (taskId) => {
     const updatedTasks = tasks.map((task) =>
@@ -121,25 +137,33 @@ const Todo = ({ tasks, setTasks }) => {
     const updatedTask = updatedTasks.find((task) => task.id === taskId);
 
     if (updatedTask && updatedTask.important) {
-      setSnackbarMessage("Task Marked as Important");
-    }else{
-      setSnackbarMessage("Task Marked as Not Important");
+      if (type === "normal") {
+        showToast("Task Marked as Important", "darkgoldenrod");
+      } else {
+        showToast("Incognito Task Marked as Important", "darkgoldenrod");
+      }
+    } else {
+      if (type === "normal") {
+        showToast("Task Marked as Not Important", "white", "black");
+      } else {
+        showToast("Incognito Task Marked as Not Important", "white", "black");
+      }
     }
     setTasks(updatedTasks);
   };
   const removeTask = (taskId) => {
-    // handleShowConfirmModalUpdate(taskId)
-    // handleShowConfirmModalClose()
     const updatedTasks = tasks.map((task) => {
       setImportantTaskToBeDeleted(taskId);
 
       if (
         task.id === taskId &&
-        // (!task.important || handleShowConfirmModalShow())
-        // (!task.important || window.confirm("Are you Sure"))
         (!task.important || handleShowConfirmModal())
       ) {
-        setSnackbarMessage("Task Deleted Successfully");
+        if (type === "normal") {
+          showToast("Task Deleted Successfully");
+        } else {
+          showToast("Incognito Task Deleted Successfully");
+        }
         document.getElementById(taskId).classList.add("disintegrate");
         return { ...task, deletedAt: new Date().toLocaleString() };
       }
@@ -156,7 +180,11 @@ const Todo = ({ tasks, setTasks }) => {
     if (taskToEdit) {
       setNewTaskTitle(taskToEdit.title);
       setNewTask(taskToEdit.text);
-      setModalTitle("Edit Task");
+      if (type === "normal") {
+        setModalTitle("Edit Task");
+      } else {
+        setModalTitle("Edit Incognito Task");
+      }
       setShowAddTodo(true);
     }
   };
@@ -172,18 +200,36 @@ const Todo = ({ tasks, setTasks }) => {
     setEditingTaskId(null);
     setNewTaskTitle("");
     setNewTask("");
-    setModalTitle("Add Task");
-    setSnackbarMessage("Task Edited Successfully");
+    if (type === "normal") {
+      setModalTitle("Add Task");
+      showToast("Task Edited Successfully", "grey");
+    } else {
+      setModalTitle("Add Incognito Task");
+      showToast("Incognito Task Edited Successfully", "grey");
+    }
   };
   const closeEditingAddModal = () => {
     setShowAddTodo(false);
     setEditingTaskId(null);
     setNewTaskTitle("");
     setNewTask("");
-    setModalTitle("Add Task");
+    if (type === "normal") {
+      setModalTitle("Add Task");
+    } else {
+      setModalTitle("Add Incognito Task");
+    }
   };
   return (
     <>
+      {type === "incognito" && (
+        <div className="backgroundIncognito">
+          <img
+            src="./Images/incognitoImg.png"
+            alt=""
+            className="incognitoImg"
+          />
+        </div>
+      )}
       {/* <div className="fs-4">Add Todo</div> */}
       <div className="d-flex justify-content-between mx-4 mt-3">
         <div className="align-self-center">
@@ -193,11 +239,18 @@ const Todo = ({ tasks, setTasks }) => {
             className="cursorPointer"
           />
         </div>
-
+        {tasks.some((task) => task.deletedAt == null) && (
+          <h5 className="align-self-center m-0">
+            <Badge className={`${bgColor}`}>
+              Total {type === "normal" ? "Task" : "Incognito Task"} :{" "}
+              {tasks.filter((task) => task.deletedAt === null).length}
+            </Badge>
+          </h5>
+        )}
         <div className="pt-2 pb-3 text-end me-4">
           {tasks.some((task) => task.deletedAt == null) && (
             <Dropdown>
-              <Dropdown.Toggle id="dropdown-basic2">
+              <Dropdown.Toggle id="dropdown-basic2" className={`${btnColor}`}>
                 <FaFilter />
               </Dropdown.Toggle>
 
@@ -208,7 +261,13 @@ const Todo = ({ tasks, setTasks }) => {
                   } dropdownFilter topDropdownFilter`}
                   onClick={() => setSelectedFilter("All")}
                 >
-                  All
+                  <div className="d-flex justify-content-between">
+                    <div className="ms-2">All</div>
+                    <Badge className={`badgeClassFilter ${bgColor}`}>
+                      {" "}
+                      {tasks.filter((task) => task.deletedAt === null).length}
+                    </Badge>
+                  </div>
                 </Dropdown.Item>
                 <Dropdown.Item
                   className={`${
@@ -216,7 +275,17 @@ const Todo = ({ tasks, setTasks }) => {
                   } dropdownFilter`}
                   onClick={() => setSelectedFilter("Important")}
                 >
-                  Important
+                  <div className="d-flex justify-content-between">
+                    <div className="ms-2">Important</div>
+                    <Badge className={`badgeClassFilter ${bgColor}`}>
+                      {" "}
+                      {
+                        tasks.filter(
+                          (task) => task.deletedAt === null && task.important
+                        ).length
+                      }
+                    </Badge>
+                  </div>
                 </Dropdown.Item>
                 <Dropdown.Item
                   className={`${
@@ -224,7 +293,17 @@ const Todo = ({ tasks, setTasks }) => {
                   } dropdownFilter `}
                   onClick={() => setSelectedFilter("Completed")}
                 >
-                  Completed
+                  <div className="d-flex justify-content-between">
+                    <div className="ms-2">Completed</div>
+                    <Badge className={`badgeClassFilter ${bgColor}`}>
+                      {" "}
+                      {
+                        tasks.filter(
+                          (task) => task.deletedAt === null && task.completed
+                        ).length
+                      }
+                    </Badge>
+                  </div>
                 </Dropdown.Item>
                 <Dropdown.Item
                   className={`${
@@ -234,7 +313,17 @@ const Todo = ({ tasks, setTasks }) => {
                   } dropdownFilter bottomDropdownFilter`}
                   onClick={() => setSelectedFilter("Uncompleted")}
                 >
-                  Uncompleted
+                  <div className="d-flex justify-content-between">
+                    <div className="ms-2">Pending</div>
+                    <Badge className={`badgeClassFilter ${bgColor}`}>
+                      {" "}
+                      {
+                        tasks.filter(
+                          (task) => task.deletedAt === null && !task.completed
+                        ).length
+                      }
+                    </Badge>
+                  </div>
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -304,9 +393,6 @@ const Todo = ({ tasks, setTasks }) => {
               >
                 Close
               </Button>
-              {/* <Button variant="primary" onClick={() => setShowAddTodo(false)}>
-            Save Changes
-          </Button> */}
             </Modal.Footer>
           </form>
         </div>
@@ -341,12 +427,13 @@ const Todo = ({ tasks, setTasks }) => {
       </Modal>
 
       {/* <div>{newTask}</div> */}
-      <ul style={{ overflowY: "auto", maxHeight: "75vh" }} className="ps-2">
+      {/* <ul style={{ overflowY: "auto", maxHeight: "75vh" }} className="ps-2"> */}
+      <ul className="ps-2">
         {filteredTasks.map((task) => {
           return (
             (task.deletedAt === null || task.deletedAt === undefined) && (
               <li
-              id={task.id}
+                id={task.id}
                 key={task.id}
                 className={`${task.important ? "imptodoDiv" : ""} todoDiv`}
               >
@@ -375,18 +462,18 @@ const Todo = ({ tasks, setTasks }) => {
                   size={20}
                   className={`me-3 cursorPointer ${
                     task.important ? "starpriority" : ""
-                  }`}
+                  } ${iconColor}`}
                   checked={task.important}
                   onClick={() => toggleImportantStatus(task.id)}
                 />
                 <FaEdit
                   size={20}
-                  className="me-3 cursorPointer"
+                  className={`me-3 cursorPointer ${iconColor}`}
                   onClick={() => editTask(task.id)}
                 />
                 <FaTrash
                   size={20}
-                  className="me-3 cursorPointer"
+                  className={`me-3 cursorPointer ${iconColor}`}
                   onClick={() => removeTask(task.id)}
                 />
               </li>
@@ -432,4 +519,4 @@ const Todo = ({ tasks, setTasks }) => {
   );
 };
 
-export default Todo;
+export default Tasks;

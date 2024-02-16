@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import ClockContext from "../../Contexts/ClockContext";
+import { ClockContext } from "../../Contexts";
 
-const ClockData = ({ Clock1, Clock2 ,Clock3, parentComponent }) => {
+const ClockData = ({ Clock1, Clock2, Clock3, parentComponent }) => {
   const borderClass =
     parentComponent === "Clock" ? "border-0" : "activeClockDataClass";
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -92,7 +92,6 @@ const ClockData = ({ Clock1, Clock2 ,Clock3, parentComponent }) => {
             </div>
           )}
         </div>
-
 
         <div
           className={`ClockDataClass colorWhite ${

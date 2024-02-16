@@ -6,16 +6,17 @@ import "react-toastify/dist/ReactToastify.css";
 const ToastContextProvider = ({ children }) => {
   const [toastOptions, setToastOptions] = useState({});
 
-  const showToast = (message, options = {}) => {
+  const showToast = (message,BGcolor="red",textColor="black" ,options = {}) => {
     const combinedOptions = {
       position: "top-right",
-      autoClose: 5000,
+      autoClose: 3000,
       hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
       rtl: false,
+      style:{backgroundColor:BGcolor , color:textColor},
       ...options,
     };
     toast(message, combinedOptions);
@@ -24,7 +25,7 @@ const ToastContextProvider = ({ children }) => {
     <>
       <ToastContext.Provider value={{showToast}}>
         {children}
-        <ToastContainer />
+        <ToastContainer className="mt-5" />
       </ToastContext.Provider>
     </>
   );

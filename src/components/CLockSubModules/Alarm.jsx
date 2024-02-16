@@ -1,13 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import ThemeContext from "../../Contexts/ThemeContext";
 import { FaTrash } from "react-icons/fa";
-import SnackbarContext from "../../Contexts/SnackbarContext";
 
+import { ToastContext, ThemeContext } from "../../Contexts";
 const Alarm = () => {
-  // console.log(Date.now())
-  // console.log(new Date())
-  const  {setSnackbarMessage}  = useContext(SnackbarContext)
+  const { showToast } = useContext(ToastContext);
 
   const days = [
     { id: 1, day: "M" },
@@ -93,6 +90,7 @@ const Alarm = () => {
     const alarmToBeOn = allAlarm.find((alarm) => alarm.uniqueId === Id);
 
     if (alarmToBeOn && alarmToBeOn.status) {
+      showToast("Alarm Turned Off");
       const { hours, minutes } = alarmToBeOn;
 
       let formattedHours;
@@ -146,6 +144,8 @@ const Alarm = () => {
       // new Date(year,month,day,hours,minutes,seconds,ms)
 
       // new Date(milliseconds)
+    } else {
+      showToast("Alarm Turned On", "green", "white");
     }
   };
   // useEffect(() => {
@@ -269,6 +269,7 @@ const Alarm = () => {
       const intervalId = setInterval(() => {
         timeRunOut = nextAlarm.alarm - now;
         // console.log(timeRunOut);
+        // console.log(nextAlarm);
         setTimeRemaining(timeRunOut);
         if (timeRunOut < 0) {
           // console.log("asfdsdf");
@@ -343,12 +344,11 @@ const Alarm = () => {
     });
 
     setShowAlarmModal(false);
-    setSnackbarMessage("Alarm Added Successfully")
-
+    showToast("Alarm Added Successfully", "green", "white");
   };
   const removeClock = (Id) => {
     const updatedClocks = allAlarm.filter((alarm) => alarm.uniqueId !== Id);
-    setSnackbarMessage("Alarm Deleted Successfully")
+    showToast("Alarm Deleted Successfully");
     setAllAlarm(updatedClocks);
   };
 
@@ -362,10 +362,15 @@ const Alarm = () => {
   return (
     <div>
       {/* <div>Alarm</div> */}
-
-      <Button variant="secondary" className={`${btnColor}`} onClick={handleAlarmModalShow}>
-        Set Alarm
-      </Button>
+      <div className="text-center">
+        <Button
+          variant="secondary"
+          className={`${btnColor} my-3`}
+          onClick={handleAlarmModalShow}
+        >
+          Set Alarm
+        </Button>
+      </div>
 
       <Modal
         show={showAlarmModal}
@@ -513,7 +518,12 @@ const Alarm = () => {
             />
           </div>
           <div className="d-flex justify-content-center">
-            <Button onClick={pauseWhenRinOut} className={`btn w-75 ${btnColor} `}>Pause</Button>
+            <Button
+              onClick={pauseWhenRinOut}
+              className={`btn w-75 ${btnColor} `}
+            >
+              Pause
+            </Button>
           </div>
         </Modal.Body>
       </Modal>

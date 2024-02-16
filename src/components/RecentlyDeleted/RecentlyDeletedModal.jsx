@@ -2,8 +2,7 @@ import { useContext, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { SlReload } from "react-icons/sl";
 import { MdDelete } from "react-icons/md";
-import ThemeContext from "../Contexts/ThemeContext";
-import SnackbarContext from "../Contexts/SnackbarContext";
+import { ThemeContext, ToastContext } from "../../Contexts";
 
 function RecentltyDeletedModal({
   showRecentlyDeletedModal,
@@ -23,9 +22,9 @@ function RecentltyDeletedModal({
     document.getElementById(ID).classList.add("disintegrate");
     setTimeout(() => {
       setRecentlyDeletedTasks(updatedTasks);
-      setTasks(updatedTasks);
+      setTasks(updatedTasks);               // setTasks is done to modify Task on UI on the spot
     }, 1000);
-    setSnackbarMessage("Task Restored Successfully");
+    showToast("Task Restored Successfully", "green", "white");
   };
   const deleteTaskPermanently = (ID) => {
     document.getElementById(ID).classList.add("disintegrate");
@@ -33,10 +32,10 @@ function RecentltyDeletedModal({
     const updatedTasks = recentlyDeletedTasks.filter((task) => task.id !== ID);
     setTimeout(() => {
       setRecentlyDeletedTasks(updatedTasks);
-      setTasks(updatedTasks);
+      setTasks(updatedTasks);           // setTasks is done to modify Task on UI on the spot
     }, 1000);
     localStorage.setItem("taskArray", JSON.stringify(recentlyDeletedTasks));
-    setSnackbarMessage("Task Deleted Permanently");
+    showToast("Task Deleted Permanently");
   };
 
   useEffect(() => {
@@ -44,7 +43,7 @@ function RecentltyDeletedModal({
   }, [recentlyDeletedTasks]);
 
   const { theme } = useContext(ThemeContext);
-  const { setSnackbarMessage } = useContext(SnackbarContext);
+  const { showToast } = useContext(ToastContext);
   // console.log(theme, "gg");
   const modalBgColor = theme === "Light" ? "backgroundLight" : "backgroundDark";
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
@@ -77,7 +76,7 @@ function RecentltyDeletedModal({
                   id={task.id}
                 >
                   {/* <p>ID: {task.id}</p> */}
-                  <div style={{maxWidth:"80%"}}>
+                  <div style={{ maxWidth: "80%" }}>
                     <p className="fs-5">
                       <strong>{task.title}</strong>
                     </p>
@@ -100,14 +99,6 @@ function RecentltyDeletedModal({
               <h4 className="text-center">No History Available</h4>
             )}
           </Modal.Body>
-          {/* <Modal.Footer className="border-0">
-            <Button variant="secondary" onClick={handleCloseRecentlyDeleted}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleCloseRecentlyDeleted}>
-              Save Changes
-            </Button>
-          </Modal.Footer> */}
         </div>
       </Modal>
     </>

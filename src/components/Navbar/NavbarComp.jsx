@@ -6,22 +6,18 @@ import {
   Form,
   Badge,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { IoSettings, IoSettingsOutline } from "react-icons/io5";
 import { FaRegClock, FaTrash } from "react-icons/fa";
 import { IoIosMusicalNotes } from "react-icons/io";
-import "../NavbarCSS.css";
 import { useContext, useEffect, useState } from "react";
-import ThemeContext from "../Contexts/ThemeContext";
-import ClockModal from "./Clock/ClockModal";
-import ClockContext from "../Contexts/ClockContext";
-import SoundModal from "./CLockSubModules/SoundModal";
-import RecentltyDeletedModal from "./RecentlyDeletedModal";
-import SnackbarContext from "../Contexts/SnackbarContext";
+import { ClockModal, SoundModal, RecentltyDeletedModal } from "../index";
 
-const NavbarComp = ({ tasks, setTasks }) => {
+import { ClockContext, ThemeContext, ToastContext } from "../../Contexts";
+
+const NavbarComp = ({ tasks, setTasks, incognitoTasks }) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const { setSnackbarMessage } = useContext(SnackbarContext);
+  const { showToast } = useContext(ToastContext);
   const { activeClock, setActiveClock, activeClass, setActiveClass } =
     useContext(ClockContext);
   const textColorClass = theme === "Light" ? "text-black" : "text-white";
@@ -30,6 +26,7 @@ const NavbarComp = ({ tasks, setTasks }) => {
   const [showRecentlyDeletedModal, setShowRecentlyDeletedModal] =
     useState(false);
   const [numberTodo, setNumberTodo] = useState("");
+  const [incognitoNumberTodo, setIncognitoNumberTodo] = useState("");
 
   const handleCloseRecentlyDeleted = () => setShowRecentlyDeletedModal(false);
   const handleShowRecentlyDeletedModal = () => {
@@ -88,11 +85,9 @@ const NavbarComp = ({ tasks, setTasks }) => {
     setActiveClock(`clock${activeClass}`);
     localStorage.setItem("ClockName", `clock${activeClass}`);
     localStorage.setItem("ClockID", activeClass);
-    setSnackbarMessage("Clock Updated Successfully");
+    showToast("Clock Updated Successfully", "green", "white");
     setShowClockModal(false);
   };
-
-  const [currentSound, setCurrentSound] = useState("Timer");
 
   const [showSoundModal, setShowSoundModal] = useState(false);
 
@@ -104,33 +99,22 @@ const NavbarComp = ({ tasks, setTasks }) => {
   const handleShowSoundModal = () => setShowSoundModal(true);
   const handleUpdateSoundModal = () => {
     setShowSoundModal(false);
-    if (currentSound === "Timer") {
-      const value = sounds.find((item) => {
-        return item.index === selectedSound;
-      });
-      if (value) {
-        localStorage.setItem("timerSound", JSON.stringify(value));
-      } else {
-        localStorage.setItem(
-          "timerSound",
-          JSON.stringify({
-            index: 1,
-            name: "classic-alarm",
-            src: "classic-alarm.wav",
-          })
-        );
-      }
+    const value = sounds.find((item) => {
+      return item.index === selectedSound;
+    });
+    if (value) {
+      localStorage.setItem("timerSound", JSON.stringify(value));
+    } else {
+      localStorage.setItem(
+        "timerSound",
+        JSON.stringify({
+          index: 1,
+          name: "classic-alarm",
+          src: "classic-alarm.wav",
+        })
+      );
     }
-    if (currentSound === "Alarm") {
-      // console.log("Hello222");
-      // console.log(selectedSound);
-
-      const value = sounds.find((item) => {
-        return item.index === selectedSound;
-      });
-      localStorage.setItem("alarmSound", JSON.stringify(value));
-    }
-    setSnackbarMessage("Updated Timer Sound");
+    showToast("Updated Timer Sound", "green", "white");
   };
 
   const [selectedSound, setSelectedSound] = useState(null);
@@ -139,17 +123,20 @@ const NavbarComp = ({ tasks, setTasks }) => {
     setSelectedSound(index);
   };
 
-  const SetCurrentSoundParent = (parent) => {
-    setCurrentSound(parent);
-  };
-
   const numberAtTodoTop = tasks.filter(
+    (task) => task.deletedAt === null && task.completed === false
+  );
+  useEffect(() => {
+    setNumberTodo(numberAtTodoTop.length);
+  }, [numberTodo, tasks]);
+
+  const numberAtIncognitoTodoTop = incognitoTasks.filter(
     (task) => task.deletedAt === null && task.completed === false
   );
 
   useEffect(() => {
-    setNumberTodo(numberAtTodoTop.length);
-  }, [numberTodo, tasks]);
+    setIncognitoNumberTodo(numberAtIncognitoTodoTop.length);
+  }, [incognitoNumberTodo, incognitoTasks]);
 
   return (
     <>
@@ -165,7 +152,13 @@ const NavbarComp = ({ tasks, setTasks }) => {
           />
           <Navbar.Collapse id="basic-navbar-nav" className={"btn-light"}>
             <Nav className="ms-auto gapNavItem">
-              <Nav.Link as={Link} to="/" className={textColorClass}>
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  `${textColorClass} nav-link
+                  fw-bold ${isActive ? "NavActiveCSS" : ""} navItemClass`
+                }
+              >
                 <div style={{ position: "relative" }}>
                   Todo
                   {numberTodo > 0 && (
@@ -178,19 +171,32 @@ const NavbarComp = ({ tasks, setTasks }) => {
                     </Badge>
                   )}
                 </div>
-              </Nav.Link>
-              <Nav.Link
-                as={Link}
+              </NavLink>
+              <NavLink
                 to="/incognito-todo"
-                className={`${textColorClass} marginNavItem`}
+                className={({ isActive }) =>
+                  `${textColorClass} nav-link marginNavItem
+                  fw-bold ${isActive ? "NavActiveCSS" : ""} navItemClass`
+                }
               >
-                Incognito Todo
-              </Nav.Link>
+                <div style={{ position: "relative" }}>
+                  Incognito Todo
+                  {incognitoNumberTodo > 0 && (
+                    <Badge
+                      pill
+                      className={bgColor}
+                      style={{ marginTop: "-4px", position: "absolute" }}
+                    >
+                      {"!!"}
+                    </Badge>
+                  )}
+                </div>
+              </NavLink>
             </Nav>
             <Form className="togglePosition" name="togglePosition">
               <Form.Check
                 name="themeMode"
-                checked={theme === "Dark"} // Adjust this based on your theme values
+                checked={theme === "Dark"}
                 onChange={toggleTheme}
                 type="switch"
                 label={`${theme} Mode`}
@@ -250,12 +256,9 @@ const NavbarComp = ({ tasks, setTasks }) => {
             showSoundModal={showSoundModal}
             handleCloseSoundModal={handleCloseSoundModal}
             handleUpdateSoundModal={handleUpdateSoundModal}
-            currentSound={currentSound}
-            setCurrentSound={setCurrentSound}
             handleRadioChange={handleRadioChange}
             selectedSound={selectedSound}
             setSelectedSound={selectedSound}
-            SetCurrentSoundParent={SetCurrentSoundParent}
             sounds={sounds}
           />
         </Container>

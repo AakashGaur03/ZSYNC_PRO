@@ -1,17 +1,14 @@
 import { useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import AudioPlayer from "../Audio/AudioPlayer";
-import ThemeContext from "../../Contexts/ThemeContext";
+import { AudioPlayer } from "../index";
+import { ThemeContext } from "../../Contexts";
 
 // Props coming from NavbarComp
 function SoundModal({
   showSoundModal,
   handleCloseSoundModal,
   handleUpdateSoundModal,
-  SetCurrentSoundParent,
-  currentSound,
-  setCurrentSound,
   handleRadioChange,
   selectedSound,
   setSelectedSound,
@@ -25,7 +22,7 @@ function SoundModal({
 
   return (
     <>
-      <Modal 
+      <Modal
         show={showSoundModal}
         onHide={handleCloseSoundModal}
         centered
@@ -34,24 +31,31 @@ function SoundModal({
         backdrop="static"
         keyboard={false}
       >
-        <div className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow`}>
+        <div
+          className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow`}
+        >
           <Modal.Body>
             <AudioPlayer
-              currentSound={currentSound}
-              setCurrentSound={setCurrentSound}
               handleRadioChange={handleRadioChange}
               selectedSound={selectedSound}
               setSelectedSound={setSelectedSound}
-              SetCurrentSoundParent={SetCurrentSoundParent}
               sounds={sounds}
             />
           </Modal.Body>
 
           <Modal.Footer className="border-0 pe-4 pb-3">
-            <Button variant="danger" className="RedModal" onClick={handleCloseSoundModal}>
+            <Button
+              variant="danger"
+              className="RedModal"
+              onClick={handleCloseSoundModal}
+            >
               Close
             </Button>
-            <Button variant="primary" className={`GreenModal ${btnColor}`} onClick={handleUpdateSoundModal}>
+            <Button
+              variant="primary"
+              className={`GreenModal ${btnColor}`}
+              onClick={handleUpdateSoundModal}
+            >
               Save Changes
             </Button>
           </Modal.Footer>

@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Button } from "react-bootstrap";
 import { VscDebugStart } from "react-icons/vsc";
 import { IoIosPause } from "react-icons/io";
 import { GrPowerReset } from "react-icons/gr";
 import { FaRegStopCircle, FaQuestion } from "react-icons/fa";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import ThemeContext from "../../Contexts/ThemeContext";
+import { ThemeContext } from "../../Contexts";
 
-export const Timer = () => {
+const Timer = () => {
   const { theme } = useContext(ThemeContext);
   const btnColor = theme === "Light" ? "btnLightTheme" : "btnDarkTheme";
   const [timer, setTimer] = useState(0);
@@ -145,6 +144,12 @@ export const Timer = () => {
         <div>
           <button
             className={`btn me-2 my-2 btn-outline-secondary ${btnColor}`}
+            onClick={() => addMins(0.17)}
+          >
+            +10 sec
+          </button>
+          <button
+            className={`btn me-2 my-2 btn-outline-secondary ${btnColor}`}
             onClick={() => addMins(0.5)}
           >
             +30 sec
@@ -172,3 +177,5 @@ export const Timer = () => {
     </>
   );
 };
+
+export default Timer;
