@@ -10,6 +10,8 @@ import {
 import { FaTrash, FaEdit, FaStar, FaFilter } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
 import { ThemeContext, ToastContext } from "../../Contexts";
+import {DownloadPDF} from '../index'
+
 
 const Tasks = ({ tasks, setTasks, storage, type }) => {
   const { theme } = useContext(ThemeContext);
@@ -240,6 +242,7 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
       setModalTitle("Add Incognito Task");
     }
   };
+  
   return (
     <>
       {type === "incognito" && (
@@ -452,6 +455,9 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
       {/* <div>{newTask}</div> */}
       {/* <ul style={{ overflowY: "auto", maxHeight: "75vh" }} className="ps-2"> */}
       <ul className="ps-2">
+
+        {/* {filteredTasks.length>0 && <DownloadPDF content={filteredTasks.filter((task)=>(task.deletedAt === null || task.deletedAt === undefined))} />
+        } */}
         {filteredTasks.map((task) => {
           return (
             (task.deletedAt === null || task.deletedAt === undefined) && (
@@ -460,8 +466,14 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
                 key={task.id}
                 className={`${task.important ? "imptodoDiv" : ""} todoDiv`}
               >
+                <Form.Check
+                  name="toggleTaskStatus"
+                  className="me-3 toggleTaskStatus ps-3"
+                  checked={task.completed}
+                  onChange={() => toggleTaskStatus(task.id)}
+                />
                 <div
-                  className="cursorPointer ps-3"
+                  className="cursorPointer "
                   style={{ width: "82%" }}
                   onClick={() => handleViewTask(task)}
                 >
@@ -478,12 +490,12 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
                     {truncateStr(task.title,60)}
                   </span>
                 </div>
-                <Form.Check
+                {/* <Form.Check
                   name="toggleTaskStatus"
-                  className="me-3"
+                  className="me-3 toggleTaskStatus"
                   checked={task.completed}
                   onChange={() => toggleTaskStatus(task.id)}
-                />
+                /> */}
                 <FaStar
                   size={20}
                   className={`me-3 cursorPointer ${

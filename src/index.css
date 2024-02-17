@@ -465,3 +465,6 @@
 .text-black.navbarFixed{
   background: linear-gradient(90deg, rgb(95 161 179) 0%, rgba(128,255,217,1) 100%);
 }
+.toggleTaskStatus input{
+  border-radius: 50px !important;
+}

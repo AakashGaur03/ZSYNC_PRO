@@ -570,7 +570,7 @@ const Alarm = () => {
                   <div>&nbsp;{alarm.minutes}</div>
                   <div>&nbsp;{alarm.hours.slice(2, 5)}</div>
                 </div>
-                <div className="text-center">{truncateStr(alarm.title,22)}</div>
+                <div className="text-center">{truncateStr(alarm.title,15)}</div>
                 <div className="d-flex align-items-center">
                   <div>
                     <Form.Check

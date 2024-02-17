@@ -9,5 +9,6 @@ import Stopwatch from "./CLockSubModules/Stopwatch";
 import NavbarComp from "./Navbar/NavbarComp";
 import RecentltyDeletedModal from "./RecentlyDeleted/RecentlyDeletedModal";
 import Tasks from "./Tasks/Tasks";
+import DownloadPDF from "./DownloadPDF/DownloadPDF";
 
-export {AudioPlayer,Clock,ClockData,ClockModal,Alarm,SoundModal,Timer,Stopwatch,NavbarComp,RecentltyDeletedModal,Tasks};
+export {AudioPlayer,Clock,ClockData,ClockModal,Alarm,SoundModal,Timer,Stopwatch,NavbarComp,RecentltyDeletedModal,Tasks,DownloadPDF};
