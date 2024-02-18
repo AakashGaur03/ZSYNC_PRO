@@ -5,8 +5,11 @@
   /* background-image: linear-gradient(45deg, #52644f, #00adff); */
   /* background-image: linear-gradient(45deg, #ffeb00,#8e8deb, #04ff00); */
 
-
-  background: linear-gradient(90deg, rgb(92 178 201) 0%, rgba(128,255,217,1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgb(92 178 201) 0%,
+    rgba(128, 255, 217, 1) 100%
+  );
 }
 .bg-mid {
   backdrop-filter: brightness(0.7);
@@ -441,31 +444,49 @@
   color: wheat !important;
 }
 
-.fw600{
+.fw600 {
   font-weight: 600 !important;
 }
 
-.backgroundLight .badge{
+.backgroundLight .badge {
   color: black;
   font-weight: 700;
 }
 
-
-
 /* fw-600    white*/
 
-
-.navbarFixed{
-
+.navbarFixed {
   border-bottom: 2px solid black;
   position: fixed;
   width: 100%;
-  
 }
-.text-black.navbarFixed{
-  background: linear-gradient(90deg, rgb(95 161 179) 0%, rgba(128,255,217,1) 100%);
+.text-black.navbarFixed {
+  background: linear-gradient(
+    90deg,
+    rgb(95 161 179) 0%,
+    rgba(128, 255, 217, 1) 100%
+  );
 }
-.toggleTaskStatus input{
+.toggleTaskStatus input {
   border-radius: 50px !important;
   cursor: pointer;
+}
+
+/* width: 88%;
+    margin: 0 auto;
+    overflow-y: auto;
+    max-height: 80vh; */
+
+.contentDoesntOverflow {
+  width: 95%;
+  margin: 0 auto;
+  overflow-y: auto;
+  max-height: 80vh;
+  word-wrap: break-word; /* For older browsers */
+  overflow-wrap: break-word; /* For newer browsers */
+}
+
+.downloadButton:hover{
+  /* border: 1px solid black; */
+  color: rgb(110, 183, 105);
 }

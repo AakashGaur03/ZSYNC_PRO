@@ -10,8 +10,7 @@ import {
 import { FaTrash, FaEdit, FaStar, FaFilter } from "react-icons/fa";
 import { CiCirclePlus } from "react-icons/ci";
 import { ThemeContext, ToastContext } from "../../Contexts";
-import {DownloadPDF} from '../index'
-
+import { DownloadPDF } from "../index";
 
 const Tasks = ({ tasks, setTasks, storage, type }) => {
   const { theme } = useContext(ThemeContext);
@@ -65,7 +64,6 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
     type === "normal" ? "Add Task" : "Add Incognito Task"
   );
 
-
   const truncateStr = (word, maxLength) => {
     if (word.length <= maxLength) {
       return word; // No truncation needed
@@ -74,20 +72,20 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
     }
   };
 
-  const addSpaceAfterLength = (value, maxLength) => {
-    let newValue = value;
-    let words = newValue.split(" ");
-    for (let i = 0; i < words.length; i++) {
-      if (words[i].length > maxLength) {
-        let newWord = "";
-        for (let j = 0; j < words[i].length; j += maxLength) {
-          newWord += words[i].substring(j, j + maxLength) + " ";
-        }
-        words[i] = newWord.trim();
-      }
-    }
-    return words.join(" ");
-  };
+  // const addSpaceAfterLength = (value, maxLength) => {
+  //   let newValue = value;
+  //   let words = newValue.split(" ");
+  //   for (let i = 0; i < words.length; i++) {
+  //     if (words[i].length > maxLength) {
+  //       let newWord = "";
+  //       for (let j = 0; j < words[i].length; j += maxLength) {
+  //         newWord += words[i].substring(j, j + maxLength) + " ";
+  //       }
+  //       words[i] = newWord.trim();
+  //     }
+  //   }
+  //   return words.join(" ");
+  // };
 
   useEffect(() => {
     setModalTitle(type === "normal" ? "Add Task" : "Add Incognito Task");
@@ -242,7 +240,7 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
       setModalTitle("Add Incognito Task");
     }
   };
-  
+
   return (
     <>
       {type === "incognito" && (
@@ -255,7 +253,7 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
         </div>
       )}
       {/* <div className="fs-4">Add Todo</div> */}
-      <div className="d-flex justify-content-between mx-4 mt-3">
+      <div className="d-flex justify-content-between mx-4 mt-3 p-3">
         <div className="align-self-center">
           <CiCirclePlus
             size={40}
@@ -271,87 +269,186 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
             </Badge>
           </h5>
         )}
-        <div className="pt-2 pb-3 text-end me-4">
-          {tasks.some((task) => task.deletedAt == null) && (
-            <Dropdown>
-              <Dropdown.Toggle id="dropdown-basic2" className={`${btnColor}`}>
-                <FaFilter />
-              </Dropdown.Toggle>
+        <div className="text-end me-4">
+            {tasks.some((task) => task.deletedAt == null) && (
+              <div className="d-flex">
+                <div className="d-flex align-self-end me-4">
+                  <DownloadPDF
+                    content={filteredTasks.filter(
+                      (task) =>
+                        task.deletedAt === null || task.deletedAt === undefined
+                    )}
+                  />
+                </div>
+                <Dropdown>
+                <Dropdown.Toggle id="dropdown-basic2" className={`${btnColor}`}>
+                  <FaFilter />
+                </Dropdown.Toggle>
 
-              <Dropdown.Menu className="text-center dropdownFilterMain">
-                <Dropdown.Item
-                  className={`${
-                    selectedFilter === "All" ? "filterdropdownActive" : ""
-                  } dropdownFilter topDropdownFilter`}
-                  onClick={() => setSelectedFilter("All")}
-                >
-                  <div className="d-flex justify-content-between">
-                    <div className="ms-2">All</div>
-                    <Badge className={`badgeClassFilter ${bgColor}`}>
-                      {" "}
-                      {tasks.filter((task) => task.deletedAt === null).length}
-                    </Badge>
-                  </div>
-                </Dropdown.Item>
-                <Dropdown.Item
-                  className={`${
-                    selectedFilter === "Important" ? "filterdropdownActive" : ""
-                  } dropdownFilter`}
-                  onClick={() => setSelectedFilter("Important")}
-                >
-                  <div className="d-flex justify-content-between">
-                    <div className="ms-2">Important</div>
-                    <Badge className={`badgeClassFilter ${bgColor}`}>
-                      {" "}
-                      {
-                        tasks.filter(
-                          (task) => task.deletedAt === null && task.important
-                        ).length
-                      }
-                    </Badge>
-                  </div>
-                </Dropdown.Item>
-                <Dropdown.Item
-                  className={`${
-                    selectedFilter === "Completed" ? "filterdropdownActive" : ""
-                  } dropdownFilter `}
-                  onClick={() => setSelectedFilter("Completed")}
-                >
-                  <div className="d-flex justify-content-between">
-                    <div className="ms-2">Completed</div>
-                    <Badge className={`badgeClassFilter ${bgColor}`}>
-                      {" "}
-                      {
-                        tasks.filter(
-                          (task) => task.deletedAt === null && task.completed
-                        ).length
-                      }
-                    </Badge>
-                  </div>
-                </Dropdown.Item>
-                <Dropdown.Item
-                  className={`${
-                    selectedFilter === "Uncompleted"
-                      ? "filterdropdownActive"
-                      : ""
-                  } dropdownFilter bottomDropdownFilter`}
-                  onClick={() => setSelectedFilter("Uncompleted")}
-                >
-                  <div className="d-flex justify-content-between">
-                    <div className="ms-2">Pending</div>
-                    <Badge className={`badgeClassFilter ${bgColor}`}>
-                      {" "}
-                      {
-                        tasks.filter(
-                          (task) => task.deletedAt === null && !task.completed
-                        ).length
-                      }
-                    </Badge>
-                  </div>
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          )}
+                <Dropdown.Menu className="text-center dropdownFilterMain">
+                  <Dropdown.Item
+                    className={`${
+                      selectedFilter === "All" ? "filterdropdownActive" : ""
+                    } dropdownFilter topDropdownFilter`}
+                    onClick={() => setSelectedFilter("All")}
+                  >
+                    <div className="d-flex justify-content-between">
+                      <div className="ms-2">All</div>
+                      <Badge className={`badgeClassFilter ${bgColor}`}>
+                        {" "}
+                        {tasks.filter((task) => task.deletedAt === null).length}
+                      </Badge>
+                    </div>
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    className={`${
+                      selectedFilter === "Important"
+                        ? "filterdropdownActive"
+                        : ""
+                    } dropdownFilter`}
+                    onClick={() => setSelectedFilter("Important")}
+                  >
+                    <div className="d-flex justify-content-between">
+                      <div className="ms-2">Important</div>
+                      <Badge className={`badgeClassFilter ${bgColor}`}>
+                        {" "}
+                        {
+                          tasks.filter(
+                            (task) => task.deletedAt === null && task.important
+                          ).length
+                        }
+                      </Badge>
+                    </div>
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    className={`${
+                      selectedFilter === "Completed"
+                        ? "filterdropdownActive"
+                        : ""
+                    } dropdownFilter `}
+                    onClick={() => setSelectedFilter("Completed")}
+                  >
+                    <div className="d-flex justify-content-between">
+                      <div className="ms-2">Completed</div>
+                      <Badge className={`badgeClassFilter ${bgColor}`}>
+                        {" "}
+                        {
+                          tasks.filter(
+                            (task) => task.deletedAt === null && task.completed
+                          ).length
+                        }
+                      </Badge>
+                    </div>
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    className={`${
+                      selectedFilter === "Uncompleted"
+                        ? "filterdropdownActive"
+                        : ""
+                    } dropdownFilter bottomDropdownFilter`}
+                    onClick={() => setSelectedFilter("Uncompleted")}
+                  >
+                    <div className="d-flex justify-content-between">
+                      <div className="ms-2">Pending</div>
+                      <Badge className={`badgeClassFilter ${bgColor}`}>
+                        {" "}
+                        {
+                          tasks.filter(
+                            (task) => task.deletedAt === null && !task.completed
+                          ).length
+                        }
+                      </Badge>
+                    </div>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+
+              </div>
+            )}
+            {/* {tasks.some((task) => task.deletedAt == null) && (
+              // <Dropdown>
+              //   <Dropdown.Toggle id="dropdown-basic2" className={`${btnColor}`}>
+              //     <FaFilter />
+              //   </Dropdown.Toggle>
+
+              //   <Dropdown.Menu className="text-center dropdownFilterMain">
+              //     <Dropdown.Item
+              //       className={`${
+              //         selectedFilter === "All" ? "filterdropdownActive" : ""
+              //       } dropdownFilter topDropdownFilter`}
+              //       onClick={() => setSelectedFilter("All")}
+              //     >
+              //       <div className="d-flex justify-content-between">
+              //         <div className="ms-2">All</div>
+              //         <Badge className={`badgeClassFilter ${bgColor}`}>
+              //           {" "}
+              //           {tasks.filter((task) => task.deletedAt === null).length}
+              //         </Badge>
+              //       </div>
+              //     </Dropdown.Item>
+              //     <Dropdown.Item
+              //       className={`${
+              //         selectedFilter === "Important"
+              //           ? "filterdropdownActive"
+              //           : ""
+              //       } dropdownFilter`}
+              //       onClick={() => setSelectedFilter("Important")}
+              //     >
+              //       <div className="d-flex justify-content-between">
+              //         <div className="ms-2">Important</div>
+              //         <Badge className={`badgeClassFilter ${bgColor}`}>
+              //           {" "}
+              //           {
+              //             tasks.filter(
+              //               (task) => task.deletedAt === null && task.important
+              //             ).length
+              //           }
+              //         </Badge>
+              //       </div>
+              //     </Dropdown.Item>
+              //     <Dropdown.Item
+              //       className={`${
+              //         selectedFilter === "Completed"
+              //           ? "filterdropdownActive"
+              //           : ""
+              //       } dropdownFilter `}
+              //       onClick={() => setSelectedFilter("Completed")}
+              //     >
+              //       <div className="d-flex justify-content-between">
+              //         <div className="ms-2">Completed</div>
+              //         <Badge className={`badgeClassFilter ${bgColor}`}>
+              //           {" "}
+              //           {
+              //             tasks.filter(
+              //               (task) => task.deletedAt === null && task.completed
+              //             ).length
+              //           }
+              //         </Badge>
+              //       </div>
+              //     </Dropdown.Item>
+              //     <Dropdown.Item
+              //       className={`${
+              //         selectedFilter === "Uncompleted"
+              //           ? "filterdropdownActive"
+              //           : ""
+              //       } dropdownFilter bottomDropdownFilter`}
+              //       onClick={() => setSelectedFilter("Uncompleted")}
+              //     >
+              //       <div className="d-flex justify-content-between">
+              //         <div className="ms-2">Pending</div>
+              //         <Badge className={`badgeClassFilter ${bgColor}`}>
+              //           {" "}
+              //           {
+              //             tasks.filter(
+              //               (task) => task.deletedAt === null && !task.completed
+              //             ).length
+              //           }
+              //         </Badge>
+              //       </div>
+              //     </Dropdown.Item>
+              //   </Dropdown.Menu>
+              // </Dropdown>
+            )} */}
         </div>
       </div>
       <Modal
@@ -378,8 +475,9 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
                   type="text"
                   value={newTaskTitle}
                   onChange={(e) => {
-                    const newValue = addSpaceAfterLength(e.target.value, 18);
-                    setNewTaskTitle(newValue);
+                    // const newValue = addSpaceAfterLength(e.target.value, 18);
+                    // setNewTaskTitle(newValue);
+                    setNewTaskTitle(e.target.value);
                   }}
                   placeholder="Add Title"
                   aria-label=""
@@ -396,8 +494,9 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
                   type="text"
                   value={newTask}
                   onChange={(e) => {
-                    const newValue = addSpaceAfterLength(e.target.value, 20);
-                    setNewTask(newValue)
+                    // const newValue = addSpaceAfterLength(e.target.value, 20);
+                    // setNewTask(newValue)
+                    setNewTask(e.target.value);
                   }}
                   placeholder="Add Task"
                 ></Form.Control>
@@ -433,10 +532,10 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
         <div
           className={`${modalBgColor} ${textColorClass} ConfirmModalColor modalBorderRadiusAndShadow`}
         >
-          <Modal.Title className="text-center mt-4 mb-4">
+          <Modal.Title className="text-center mt-4 mb-4 contentDoesntOverflow w-75">
             <strong>{viewedTask ? viewedTask.title.toUpperCase() : ""}</strong>
           </Modal.Title>
-          <Modal.Body className="ms-3 fs-5 mb-5">
+          <Modal.Body className="ms-3 fs-5 mb-5 contentDoesntOverflow">
             {viewedTask ? viewedTask.text : ""}
           </Modal.Body>
           <div className="d-flex mb-4 justify-content-center">
@@ -456,8 +555,6 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
       {/* <ul style={{ overflowY: "auto", maxHeight: "75vh" }} className="ps-2"> */}
       <ul className="ps-2">
 
-        {/* {filteredTasks.length>0 && <DownloadPDF content={filteredTasks.filter((task)=>(task.deletedAt === null || task.deletedAt === undefined))} />
-        } */}
         {filteredTasks.map((task) => {
           return (
             (task.deletedAt === null || task.deletedAt === undefined) && (
@@ -487,7 +584,7 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
                       overflowWrap: "break-word", // Allow word breaks within the span
                     }}
                   >
-                    {truncateStr(task.title,60)}
+                    {truncateStr(task.title, 60)}
                   </span>
                 </div>
                 {/* <Form.Check

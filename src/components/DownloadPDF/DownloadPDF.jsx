@@ -6,7 +6,10 @@ import {
   View,
   StyleSheet,
   BlobProvider,
+  Image,
 } from "@react-pdf/renderer";
+import { MdFileDownload } from "react-icons/md";
+
 
 const DownloadPDF = ({ content }) => {
   const handleDownlaodPDF = ({ blob, url }) => {
@@ -30,9 +33,8 @@ const DownloadPDF = ({ content }) => {
       <BlobProvider document={<PDFDocument content={content} />}>
         {(blob, url, loading, error) => (
           <div>
-            <button onClick={() => handleDownlaodPDF({ blob, url })}>
-              Download PDF
-            </button>
+            <MdFileDownload size={30} className="cursorPointer downloadButton"  onClick={() => handleDownlaodPDF({ blob, url })}/>
+              {/* Download PDF */}
             {loading && <div>Loading...</div>}
             {error && <div>Error: {error.message}</div>}
           </div>
@@ -44,22 +46,101 @@ const DownloadPDF = ({ content }) => {
 
 const PDFDocument = ({ content }) => (
   <Document>
-        <Page>
+    <Page>
+      <View
+        style={{
+          flexDirection: "row",
+          marginTop: "15px",
+          justifyContent: "center",
+          fontWeight: "900",
+          fontSize: "30px",
+        }}
+      >
+        <Text>TASKS</Text>
+      </View>
       {content.map((item) => (
-        <View key={item.id} style={styles.container}>
-          <View style={styles.row}>
-            <Text style={styles.title}>Title : {item.title}</Text>
+        <View key={item.id}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            {/* Checkbox */}
+            <View>
+              {item.completed ? (
+                <Image
+                  src="checkboxCircle.png"
+                  style={{
+                    marginRight:"10px",
+                    marginLeft: "10px",
+                    marginBottom: "20px",
+                    marginTop: "40px",
+                    height: "20px",
+                    width: "20px",
+                  }}
+                />
+              ) : (
+                <Image
+                  src="Circle.png"
+                  style={{
+                    marginRight:"10px",
+                    marginLeft: "10px",
+                    marginBottom: "20px",
+                    marginTop: "40px",
+                    height: "20px",
+                    width: "20px",
+                  }}
+                />
+              )}
+            </View>
+
+            {/* Title */}
+            <View style={{ marginLeft: 10 }}>
+              {item.important ? (
+                <Text
+                  style={{
+                    width: "450px",
+                    color: "goldenrod",
+                    marginBottom: "20px",
+                    marginTop: "40px",
+                    fontSize: "25px",
+                    fontWeight: "800",
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
+                    overflow: "hidden",
+                  }}
+                >
+                  {item.title}
+                </Text>
+              ) : (
+                <Text
+                  style={{
+                    width: "450px",
+                    color: "black",
+                    marginBottom: "20px",
+                    marginTop: "40px",
+                    fontSize: "25px",
+                    fontWeight: "800",
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
+                    overflow: "hidden",
+                  }}
+                >
+                  {item.title}
+                </Text>
+              )}
+            </View>
           </View>
-          <View style={styles.row}>
-            <Text style={styles.status}>
-              Status: {item.completed ? "Completed" : "Uncompleted"}
+
+          {/* Task */}
+          <View>
+            <Text
+              style={{
+                width: "85%",
+                marginLeft: "45px",
+                wordWrap: "break-word",
+                overflowWrap: "break-word",
+                overflow: "hidden",
+              }}
+            >
+              {item.text}
             </Text>
-            <Text style={styles.important}>
-              Important: {item.important ? "YES" : "NO"}
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.text}>Task : {item.text}</Text>
           </View>
         </View>
       ))}
@@ -67,21 +148,4 @@ const PDFDocument = ({ content }) => (
   </Document>
 );
 
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: 10,
-    marginTop: 30,
-  },
-  row: {
-    flexDirection: "row",
-    marginBottom: 12,
-  },
-  title: {
-    // textAlign: "center",
-    marginBottom: 12,
-  },
-  status: {},
-  important: {},
-  text: {},
-});
 export default DownloadPDF;
