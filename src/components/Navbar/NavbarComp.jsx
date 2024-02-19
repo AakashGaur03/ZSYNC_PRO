@@ -145,7 +145,9 @@ const NavbarComp = ({ tasks, setTasks, incognitoTasks }) => {
         className={`zindex2 navbarFixed ${navbarColorClass} ${textColorClass} fw600`}
       >
         <Container>
-          <Navbar.Brand className={textColorClass}>ZSYNC PRO</Navbar.Brand>
+          <Navbar.Brand className={textColorClass}>
+          ZSYNC PRO
+          </Navbar.Brand>
           <Navbar.Toggle
             aria-controls="basic-navbar-nav"
             className="bg-light"
