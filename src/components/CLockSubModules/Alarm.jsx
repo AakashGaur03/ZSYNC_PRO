@@ -221,7 +221,7 @@ const Alarm = () => {
   }, [activeAlarms]);
 
   const pauseWhenRunOut = () => {
-    document.getElementById("alarmRing").classList.remove("shake-image");
+    // document.getElementById("alarmRing").classList.remove("shake-image");
     setIsSoundPlaying(false);
     if (audioElement) {
       audioElement.pause();
@@ -257,7 +257,7 @@ const Alarm = () => {
     handleAlarmModalRingShow();
     let alarmRing = document.getElementById("alarmRing");
     if (alarmRing) {
-      alarmRing.classList.add("shake-image");
+      // alarmRing.classList.add("shake-image");
     }
 
     const soundToBePlayed = sounds.find((sound) => sound.index == soundIndex);
@@ -546,7 +546,7 @@ const Alarm = () => {
               // height={100}
               // width={100}
               id="alarmRing"
-              className=" "
+              className="shake-image"
             />
           </div>
           <div className="d-flex justify-content-center">

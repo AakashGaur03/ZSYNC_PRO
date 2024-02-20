@@ -72,21 +72,6 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
     }
   };
 
-  // const addSpaceAfterLength = (value, maxLength) => {
-  //   let newValue = value;
-  //   let words = newValue.split(" ");
-  //   for (let i = 0; i < words.length; i++) {
-  //     if (words[i].length > maxLength) {
-  //       let newWord = "";
-  //       for (let j = 0; j < words[i].length; j += maxLength) {
-  //         newWord += words[i].substring(j, j + maxLength) + " ";
-  //       }
-  //       words[i] = newWord.trim();
-  //     }
-  //   }
-  //   return words.join(" ");
-  // };
-
   useEffect(() => {
     setModalTitle(type === "normal" ? "Add Task" : "Add Incognito Task");
   }, [type]);
@@ -270,17 +255,17 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
           </h5>
         )}
         <div className="text-end me-4">
-            {tasks.some((task) => task.deletedAt == null) && (
-              <div className="d-flex">
-                <div className="d-flex align-self-end me-4">
-                  <DownloadPDF
-                    content={filteredTasks.filter(
-                      (task) =>
-                        task.deletedAt === null || task.deletedAt === undefined
-                    )}
-                  />
-                </div>
-                <Dropdown>
+          {tasks.some((task) => task.deletedAt == null) && (
+            <div className="d-flex">
+              <div className="d-flex align-self-end me-4">
+                <DownloadPDF
+                  content={filteredTasks.filter(
+                    (task) =>
+                      task.deletedAt === null || task.deletedAt === undefined
+                  )}
+                />
+              </div>
+              <Dropdown>
                 <Dropdown.Toggle id="dropdown-basic2" className={`${btnColor}`}>
                   <FaFilter />
                 </Dropdown.Toggle>
@@ -362,10 +347,9 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-
-              </div>
-            )}
-            {/* {tasks.some((task) => task.deletedAt == null) && (
+            </div>
+          )}
+          {/* {tasks.some((task) => task.deletedAt == null) && (
               // <Dropdown>
               //   <Dropdown.Toggle id="dropdown-basic2" className={`${btnColor}`}>
               //     <FaFilter />
@@ -554,7 +538,6 @@ const Tasks = ({ tasks, setTasks, storage, type }) => {
       {/* <div>{newTask}</div> */}
       {/* <ul style={{ overflowY: "auto", maxHeight: "75vh" }} className="ps-2"> */}
       <ul className="ps-2">
-
         {filteredTasks.map((task) => {
           return (
             (task.deletedAt === null || task.deletedAt === undefined) && (

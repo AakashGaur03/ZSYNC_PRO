@@ -77,7 +77,7 @@ function RecentltyDeletedModal({
                 >
                   {/* <p>ID: {task.id}</p> */}
                   <div style={{ maxWidth: "80%" }}>
-                    <p className="fs-5">
+                    <p className="fs-5 contentDoesntOverflowRecentlyDeleted">
                       <strong>{task.title}</strong>
                     </p>
                   </div>

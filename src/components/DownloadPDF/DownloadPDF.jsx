@@ -10,7 +10,6 @@ import {
 } from "@react-pdf/renderer";
 import { MdFileDownload } from "react-icons/md";
 
-
 const DownloadPDF = ({ content }) => {
   const handleDownlaodPDF = ({ blob, url }) => {
     console.log(content);
@@ -33,8 +32,12 @@ const DownloadPDF = ({ content }) => {
       <BlobProvider document={<PDFDocument content={content} />}>
         {(blob, url, loading, error) => (
           <div>
-            <MdFileDownload size={30} className="cursorPointer downloadButton"  onClick={() => handleDownlaodPDF({ blob, url })}/>
-              {/* Download PDF */}
+            <MdFileDownload
+              size={30}
+              className="cursorPointer downloadButton"
+              onClick={() => handleDownlaodPDF({ blob, url })}
+            />
+            {/* Download PDF */}
             {loading && <div>Loading...</div>}
             {error && <div>Error: {error.message}</div>}
           </div>
@@ -66,26 +69,12 @@ const PDFDocument = ({ content }) => (
               {item.completed ? (
                 <Image
                   src="checkboxCircle.png"
-                  style={{
-                    marginRight:"10px",
-                    marginLeft: "10px",
-                    marginBottom: "20px",
-                    marginTop: "40px",
-                    height: "20px",
-                    width: "20px",
-                  }}
+                  style={styles.checkBoxImg}
                 />
               ) : (
                 <Image
                   src="Circle.png"
-                  style={{
-                    marginRight:"10px",
-                    marginLeft: "10px",
-                    marginBottom: "20px",
-                    marginTop: "40px",
-                    height: "20px",
-                    width: "20px",
-                  }}
+                  style={styles.checkBoxImg}
                 />
               )}
             </View>
@@ -94,33 +83,13 @@ const PDFDocument = ({ content }) => (
             <View style={{ marginLeft: 10 }}>
               {item.important ? (
                 <Text
-                  style={{
-                    width: "450px",
-                    color: "goldenrod",
-                    marginBottom: "20px",
-                    marginTop: "40px",
-                    fontSize: "25px",
-                    fontWeight: "800",
-                    wordWrap: "break-word",
-                    overflowWrap: "break-word",
-                    overflow: "hidden",
-                  }}
+                  style={styles.impTitleText}
                 >
                   {item.title}
                 </Text>
               ) : (
                 <Text
-                  style={{
-                    width: "450px",
-                    color: "black",
-                    marginBottom: "20px",
-                    marginTop: "40px",
-                    fontSize: "25px",
-                    fontWeight: "800",
-                    wordWrap: "break-word",
-                    overflowWrap: "break-word",
-                    overflow: "hidden",
-                  }}
+                  style={styles.titleText}
                 >
                   {item.title}
                 </Text>
@@ -130,17 +99,7 @@ const PDFDocument = ({ content }) => (
 
           {/* Task */}
           <View>
-            <Text
-              style={{
-                width: "85%",
-                marginLeft: "45px",
-                wordWrap: "break-word",
-                overflowWrap: "break-word",
-                overflow: "hidden",
-              }}
-            >
-              {item.text}
-            </Text>
+            <Text style={styles.taskText}>{item.text}</Text>
           </View>
         </View>
       ))}
@@ -149,3 +108,43 @@ const PDFDocument = ({ content }) => (
 );
 
 export default DownloadPDF;
+
+const styles = StyleSheet.create({
+  taskText: {
+    width: "85%",
+    marginLeft: "45px",
+    wordWrap: "break-word",
+    overflowWrap: "break-word",
+    overflow: "hidden",
+  },
+  impTitleText: {
+    width: "450px",
+    color: "goldenrod",
+    marginBottom: "20px",
+    marginTop: "40px",
+    fontSize: "25px",
+    fontWeight: "800",
+    wordWrap: "break-word",
+    overflowWrap: "break-word",
+    overflow: "hidden",
+  },
+  titleText:{
+    width: "450px",
+    color: "black",
+    marginBottom: "20px",
+    marginTop: "40px",
+    fontSize: "25px",
+    fontWeight: "800",
+    wordWrap: "break-word",
+    overflowWrap: "break-word",
+    overflow: "hidden",
+  },
+  checkBoxImg:{
+    marginRight: "10px",
+    marginLeft: "10px",
+    marginBottom: "20px",
+    marginTop: "40px",
+    height: "20px",
+    width: "20px",
+  }
+});

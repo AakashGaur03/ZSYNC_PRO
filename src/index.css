@@ -485,6 +485,13 @@
   word-wrap: break-word; /* For older browsers */
   overflow-wrap: break-word; /* For newer browsers */
 }
+.contentDoesntOverflowRecentlyDeleted {
+  margin: 0 auto;
+  overflow-y: auto;
+  max-height: 80vh;
+  word-wrap: break-word; /* For older browsers */
+  overflow-wrap: break-word; /* For newer browsers */
+}
 
 .downloadButton:hover{
   /* border: 1px solid black; */
