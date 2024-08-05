@@ -3,7 +3,7 @@ import React, { useState,useEffect } from "react";
 import ThemeContext from "./ThemeContext";
 
 const ThemeContextProvider = ({ children }) => {
-  const [theme, setTheme] = useState(localStorage.getItem("ThemeMode")?localStorage.getItem("ThemeMode"):"Light");
+  const [theme, setTheme] = useState(localStorage.getItem("ThemeMode")?localStorage.getItem("ThemeMode"):"Dark");
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "Light" ? "Dark" : "Light"));
   };
